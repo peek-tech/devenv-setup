@@ -43,28 +43,111 @@ check_claude_installation() {
     fi
 }
 
-# Install Claude Code
-install_claude() {
-    print_info "Installing Claude Code..."
+# Install Claude applications
+install_claude_apps() {
+    print_info "Installing Claude applications..."
     
     OS="$(uname -s)"
     case "${OS}" in
         Darwin*)
             print_info "Detected macOS"
-            if command -v brew &> /dev/null; then
-                brew install claude
-            else
-                print_error "Homebrew not found. Please install Homebrew first or download Claude Code from https://claude.ai/code"
+            if ! command -v brew &> /dev/null; then
+                print_error "Homebrew not found. Please install Homebrew first."
                 return 1
+            fi
+            
+            # Install Claude desktop app (chat interface)
+            print_info "Installing Claude desktop app..."
+            if brew list --cask claude &>/dev/null 2>&1; then
+                print_status "Claude desktop app already installed"
+            else
+                if brew install --cask claude 2>/dev/null; then
+                    print_status "Claude desktop app installed successfully"
+                else
+                    print_warning "Claude desktop app not available via Homebrew cask"
+                    print_info "You can download it manually from https://claude.ai"
+                fi
+            fi
+            
+            # Install Claude Code CLI
+            print_info "Installing Claude Code CLI..."
+            if command -v claude &> /dev/null; then
+                print_status "Claude Code CLI already installed: $(claude --version 2>/dev/null || echo 'version unknown')"
+            else
+                # Try to install via Homebrew first
+                if brew install claude-code 2>/dev/null; then
+                    print_status "Claude Code CLI installed via Homebrew"
+                else
+                    print_info "Claude Code CLI not available via Homebrew"
+                    print_info "Downloading Claude Code CLI manually..."
+                    
+                    # Create a directory for Claude Code
+                    CLAUDE_DIR="$HOME/.local/bin"
+                    mkdir -p "$CLAUDE_DIR"
+                    
+                    # Download based on architecture
+                    ARCH=$(uname -m)
+                    if [[ "$ARCH" == "arm64" ]]; then
+                        CLAUDE_URL="https://github.com/anthropics/claude-code/releases/latest/download/claude-macos-arm64"
+                    else
+                        CLAUDE_URL="https://github.com/anthropics/claude-code/releases/latest/download/claude-macos-x64"
+                    fi
+                    
+                    print_info "Downloading from $CLAUDE_URL..."
+                    if curl -fsSL "$CLAUDE_URL" -o "$CLAUDE_DIR/claude" 2>/dev/null; then
+                        chmod +x "$CLAUDE_DIR/claude"
+                        
+                        # Add to PATH if not already there
+                        if [[ ":$PATH:" != *":$CLAUDE_DIR:"* ]]; then
+                            echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zprofile
+                            export PATH="$HOME/.local/bin:$PATH"
+                        fi
+                        
+                        print_status "Claude Code CLI installed to $CLAUDE_DIR/claude"
+                    else
+                        print_warning "Failed to download Claude Code CLI"
+                        print_info "Please download manually from https://claude.ai/code"
+                    fi
+                fi
             fi
             ;;
         Linux*)
             print_info "Detected Linux"
-            # Download Claude Code for Linux
-            print_info "Downloading Claude Code for Linux..."
-            # Add actual download commands when available
-            print_warning "Please download Claude Code manually from https://claude.ai/code"
-            return 1
+            
+            # Install Claude Code CLI for Linux
+            print_info "Installing Claude Code CLI..."
+            if command -v claude &> /dev/null; then
+                print_status "Claude Code CLI already installed"
+            else
+                CLAUDE_DIR="$HOME/.local/bin"
+                mkdir -p "$CLAUDE_DIR"
+                
+                ARCH=$(uname -m)
+                if [[ "$ARCH" == "aarch64" ]]; then
+                    CLAUDE_URL="https://github.com/anthropics/claude-code/releases/latest/download/claude-linux-arm64"
+                else
+                    CLAUDE_URL="https://github.com/anthropics/claude-code/releases/latest/download/claude-linux-x64"
+                fi
+                
+                print_info "Downloading Claude Code CLI..."
+                if curl -fsSL "$CLAUDE_URL" -o "$CLAUDE_DIR/claude" 2>/dev/null; then
+                    chmod +x "$CLAUDE_DIR/claude"
+                    
+                    # Add to PATH
+                    if [[ ":$PATH:" != *":$CLAUDE_DIR:"* ]]; then
+                        echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
+                        export PATH="$HOME/.local/bin:$PATH"
+                    fi
+                    
+                    print_status "Claude Code CLI installed"
+                else
+                    print_warning "Failed to download Claude Code CLI"
+                    print_info "Please download manually from https://claude.ai/code"
+                fi
+            fi
+            
+            # Desktop app for Linux
+            print_info "For Claude desktop app, please visit https://claude.ai in your browser"
             ;;
         *)
             print_error "Unsupported operating system: ${OS}"
@@ -143,13 +226,8 @@ main() {
     echo -e "${BLUE}🤖 Claude Code Setup${NC}"
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     
-    # Check/Install Claude Code
-    if ! check_claude_installation; then
-        if ! install_claude; then
-            print_error "Failed to install Claude Code"
-            exit 1
-        fi
-    fi
+    # Install Claude applications
+    install_claude_apps
     
     # Setup agents
     setup_agents

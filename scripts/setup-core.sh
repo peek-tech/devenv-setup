@@ -35,6 +35,14 @@ if [ "$OS_TYPE" = "macos" ]; then
     if ! command -v brew &> /dev/null; then
         print_info "Installing Homebrew..."
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        
+        # Add Homebrew to PATH for Apple Silicon Macs
+        if [[ $(uname -m) == 'arm64' ]]; then
+            echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
+            eval "$(/opt/homebrew/bin/brew shellenv)"
+        fi
+    else
+        print_status "Homebrew already installed"
     fi
     
     print_info "Installing core tools via Homebrew..."
@@ -48,11 +56,14 @@ if [ "$OS_TYPE" = "macos" ]; then
         "tree"
         "htop"
         "tmux"
+        "neovim"       # Neovim editor
         "ripgrep"      # Better grep
         "fd"           # Better find
         "bat"          # Better cat
         "exa"          # Better ls
         "fzf"          # Fuzzy finder
+        "lazygit"      # Terminal UI for git
+        "delta"        # Better git diff
     )
     
     for tool in "${tools[@]}"; do
