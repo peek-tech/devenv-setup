@@ -1,0 +1,12 @@
+# GitHub Pages Configuration
+theme: minima
+title: Developer Environment Setup
+description: Automated setup scripts for developer environment
+baseurl: "/devenv-setup"
+url: "https://peek-tech.github.io"
+
+# Exclude files from site build
+exclude:
+  - README.md
+  - LICENSE
+  - .gitignore
