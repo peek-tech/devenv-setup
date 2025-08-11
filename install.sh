@@ -108,7 +108,7 @@ show_menu() {
     echo ""
     echo "  1) Full Installation (Recommended)"
     echo "  2) Core Development Tools (Homebrew, Git, Neovim, etc.)"
-    echo "  3) Programming Languages (Python 3.11, Node.js 20/22, Go, Bun)"
+    echo "  3) Programming Languages (Python + Poetry, Node.js + Yarn, Go, Bun)"
     echo "  4) Web Browsers (Chrome, Firefox, Edge, Brave)"
     echo "  5) Design Tools (Figma, image tools, fonts)"
     echo "  6) Claude Code + Agent Orchestration"

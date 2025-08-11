@@ -196,7 +196,7 @@ add_go_to_shell() {
     fi
 }
 
-# Install Python versions
+# Install Python versions and Poetry
 install_python_versions() {
     if ! command -v pyenv &> /dev/null; then
         print_warning "pyenv not available, skipping Python version installation"
@@ -218,9 +218,56 @@ install_python_versions() {
     # Set Python 3.11 as global default
     pyenv global "$python_version"
     print_status "Set Python $python_version as system default"
+    
+    # Install Poetry for dependency management
+    install_poetry
 }
 
-# Install Node.js versions and Bun
+# Install Poetry
+install_poetry() {
+    if command -v poetry &> /dev/null; then
+        print_status "Poetry already installed: $(poetry --version)"
+        return 0
+    fi
+    
+    print_info "Installing Poetry..."
+    
+    # Install Poetry using the official installer
+    curl -sSL https://install.python-poetry.org | python3 -
+    
+    # Add Poetry to PATH
+    add_poetry_to_shell
+    
+    print_status "Poetry installed successfully"
+}
+
+# Add Poetry to shell configuration
+add_poetry_to_shell() {
+    local shell_config=""
+    
+    if [[ "$SHELL" == *"zsh"* ]]; then
+        shell_config="$HOME/.zprofile"
+    elif [[ "$SHELL" == *"bash"* ]]; then
+        shell_config="$HOME/.bashrc"
+    else
+        print_warning "Unknown shell. Please add Poetry to your PATH manually."
+        return
+    fi
+    
+    if ! grep -q 'poetry' "$shell_config" 2>/dev/null; then
+        print_info "Adding Poetry to $shell_config..."
+        {
+            echo ''
+            echo '# Poetry'
+            echo 'export PATH="$HOME/.local/bin:$PATH"'
+        } >> "$shell_config"
+        
+        # Source for current session
+        export PATH="$HOME/.local/bin:$PATH"
+    fi
+}
+
+# Install Node.js versions and Yarn
 install_node_versions() {
     # Source nvm if available
     export NVM_DIR="$HOME/.nvm"
@@ -249,6 +296,41 @@ install_node_versions() {
     nvm use 20
     nvm alias default 20
     print_status "Set Node.js 20 as system default"
+    
+    # Install Yarn for dependency management
+    install_yarn
+}
+
+# Install Yarn
+install_yarn() {
+    # Make sure we're using the default Node.js version
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    nvm use default 2>/dev/null || true
+    
+    if command -v yarn &> /dev/null; then
+        print_status "Yarn already installed: $(yarn --version)"
+        return 0
+    fi
+    
+    print_info "Installing Yarn..."
+    
+    case "$OS_TYPE" in
+        macos)
+            if command -v brew &> /dev/null; then
+                brew install yarn
+            else
+                # Install via npm as fallback
+                npm install -g yarn
+            fi
+            ;;
+        linux)
+            # Install via npm
+            npm install -g yarn
+            ;;
+    esac
+    
+    print_status "Yarn installed successfully"
 }
 
 # Install Bun
@@ -315,7 +397,9 @@ setup_directories() {
 main() {
     print_info "This will install language version managers and runtimes:"
     echo "  • pyenv (Python version management)"
+    echo "  • Poetry (Python dependency management)"
     echo "  • nvm (Node.js version management)"  
+    echo "  • Yarn (Node.js package management)"
     echo "  • Go programming language"
     echo "  • Bun (fast JavaScript runtime)"
     echo ""
@@ -343,7 +427,9 @@ main() {
     echo ""
     echo "Installed tools:"
     echo "  • pyenv (Python version manager)"
+    echo "  • Poetry (Python dependency management)"
     echo "  • nvm (Node.js version manager)"
+    echo "  • Yarn (Node.js package management)"
     echo "  • Go programming language"
     echo "  • Bun (fast JavaScript runtime)"
     echo ""
@@ -358,9 +444,17 @@ main() {
     echo "  • Restart your terminal or run: source ~/.zprofile (zsh) or ~/.bashrc (bash)"
     echo "  • Verify installations:"
     echo "    - python --version"
+    echo "    - poetry --version"
     echo "    - node --version"
+    echo "    - yarn --version"
     echo "    - go version"
     echo "    - bun --version"
+    echo ""
+    echo "Package management commands:"
+    echo "  • poetry new myproject     # Create new Python project"
+    echo "  • poetry install           # Install Python dependencies"
+    echo "  • yarn install             # Install Node.js dependencies"
+    echo "  • yarn add package-name    # Add Node.js package"
     echo ""
     echo "Version management commands:"
     echo "  • pyenv versions          # List installed Python versions"

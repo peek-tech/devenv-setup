@@ -12,7 +12,7 @@ curl -fsSL https://peek-tech.github.io/devenv-setup/install.sh | bash
 
 - **Claude Code**: AI-powered coding assistant with agent orchestration
 - **Core Development Tools**: Homebrew, Git, Neovim, terminal utilities
-- **Programming Languages**: Python 3.11, Node.js 20/22, Go, Bun with version management
+- **Programming Languages**: Python 3.11 + Poetry, Node.js 20/22 + Yarn, Go, Bun
 - **Web Browsers**: Chrome, Firefox, Edge, Brave with dev tools
 - **Design Tools**: Figma, image optimization, developer fonts
 - **Cloud Tools**: AWS CLI, SAM, CDK
@@ -26,7 +26,7 @@ Install specific components:
 # Core development tools
 curl -fsSL https://peek-tech.github.io/devenv-setup/scripts/setup-core.sh | bash
 
-# Programming languages (Python 3.11, Node.js 20/22, Go, Bun)
+# Programming languages (Python 3.11 + Poetry, Node.js 20/22 + Yarn, Go, Bun)
 curl -fsSL https://peek-tech.github.io/devenv-setup/scripts/setup-languages.sh | bash
 
 # Web browsers
