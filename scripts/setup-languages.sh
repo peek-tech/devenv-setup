@@ -196,33 +196,31 @@ add_go_to_shell() {
     fi
 }
 
-# Install common Python versions
+# Install Python versions
 install_python_versions() {
     if ! command -v pyenv &> /dev/null; then
         print_warning "pyenv not available, skipping Python version installation"
         return
     fi
     
-    print_info "Installing common Python versions..."
+    print_info "Installing Python 3.11..."
     
-    # Get latest Python 3.11 and 3.12
-    local python_versions=("3.11.10" "3.12.7")
+    # Install Python 3.11 (latest patch version)
+    local python_version="3.11.10"
     
-    for version in "${python_versions[@]}"; do
-        if pyenv versions | grep -q "$version"; then
-            print_status "Python $version already installed"
-        else
-            print_info "Installing Python $version..."
-            pyenv install "$version"
-        fi
-    done
+    if pyenv versions | grep -q "$python_version"; then
+        print_status "Python $python_version already installed"
+    else
+        print_info "Installing Python $python_version..."
+        pyenv install "$python_version"
+    fi
     
-    # Set latest as global default
-    pyenv global "${python_versions[-1]}"
-    print_status "Set Python ${python_versions[-1]} as global default"
+    # Set Python 3.11 as global default
+    pyenv global "$python_version"
+    print_status "Set Python $python_version as system default"
 }
 
-# Install common Node.js versions
+# Install Node.js versions and Bun
 install_node_versions() {
     # Source nvm if available
     export NVM_DIR="$HOME/.nvm"
@@ -233,14 +231,70 @@ install_node_versions() {
         return
     fi
     
-    print_info "Installing Node.js LTS version..."
+    print_info "Installing Node.js versions..."
     
-    # Install and use LTS
-    nvm install --lts
-    nvm use --lts
-    nvm alias default node
+    # Install specific Node.js versions
+    local node_versions=("20" "22")
     
-    print_status "Node.js LTS installed and set as default"
+    for version in "${node_versions[@]}"; do
+        if nvm list | grep -q "v$version"; then
+            print_status "Node.js $version already installed"
+        else
+            print_info "Installing Node.js $version..."
+            nvm install "$version"
+        fi
+    done
+    
+    # Set Node.js 20 as default
+    nvm use 20
+    nvm alias default 20
+    print_status "Set Node.js 20 as system default"
+}
+
+# Install Bun
+install_bun() {
+    if command -v bun &> /dev/null; then
+        print_status "Bun already installed: $(bun --version)"
+        return 0
+    fi
+    
+    print_info "Installing Bun..."
+    
+    # Install Bun using the official installer
+    curl -fsSL https://bun.sh/install | bash
+    
+    # Source bun for current session
+    export BUN_INSTALL="$HOME/.bun"
+    export PATH="$BUN_INSTALL/bin:$PATH"
+    
+    # Add to shell configuration
+    add_bun_to_shell
+    
+    print_status "Bun installed successfully"
+}
+
+# Add Bun to shell configuration
+add_bun_to_shell() {
+    local shell_config=""
+    
+    if [[ "$SHELL" == *"zsh"* ]]; then
+        shell_config="$HOME/.zprofile"
+    elif [[ "$SHELL" == *"bash"* ]]; then
+        shell_config="$HOME/.bashrc"
+    else
+        print_warning "Unknown shell. Please add Bun to your PATH manually."
+        return
+    fi
+    
+    if ! grep -q 'BUN_INSTALL' "$shell_config" 2>/dev/null; then
+        print_info "Adding Bun to $shell_config..."
+        {
+            echo ''
+            echo '# Bun'
+            echo 'export BUN_INSTALL="$HOME/.bun"'
+            echo 'export PATH="$BUN_INSTALL/bin:$PATH"'
+        } >> "$shell_config"
+    fi
 }
 
 # Setup language directories
@@ -263,6 +317,7 @@ main() {
     echo "  • pyenv (Python version management)"
     echo "  • nvm (Node.js version management)"  
     echo "  • Go programming language"
+    echo "  • Bun (fast JavaScript runtime)"
     echo ""
     
     read -p "Continue? (y/N): " -n 1 -r
@@ -276,17 +331,13 @@ main() {
     install_pyenv
     install_nvm
     install_go
+    install_bun
     setup_directories
     
-    # Install common versions (optional)
-    echo ""
-    read -p "Install common language versions? (y/N): " -n 1 -r
-    echo ""
-    
-    if [[ $REPLY =~ ^[Yy]$ ]]; then
-        install_python_versions
-        install_node_versions
-    fi
+    # Install specific language versions
+    print_info "Installing specific language versions..."
+    install_python_versions  # Python 3.11 as default
+    install_node_versions    # Node.js 20, 22 with 20 as default
     
     print_status "Programming languages setup complete!"
     echo ""
@@ -294,19 +345,28 @@ main() {
     echo "  • pyenv (Python version manager)"
     echo "  • nvm (Node.js version manager)"
     echo "  • Go programming language"
+    echo "  • Bun (fast JavaScript runtime)"
+    echo ""
+    echo "Installed versions:"
+    echo "  • Python 3.11 (system default)"
+    echo "  • Node.js 20 (system default)"
+    echo "  • Node.js 22"
+    echo "  • Latest Go version"
+    echo "  • Latest Bun version"
     echo ""
     echo "Next steps:"
     echo "  • Restart your terminal or run: source ~/.zprofile (zsh) or ~/.bashrc (bash)"
-    echo "  • Install Python versions: pyenv install 3.12.7"
-    echo "  • Install Node.js versions: nvm install 18"
-    echo "  • Create Go projects in ~/go/src/"
+    echo "  • Verify installations:"
+    echo "    - python --version"
+    echo "    - node --version"
+    echo "    - go version"
+    echo "    - bun --version"
     echo ""
     echo "Version management commands:"
     echo "  • pyenv versions          # List installed Python versions"
-    echo "  • pyenv global 3.12.7     # Set global Python version"
+    echo "  • pyenv global 3.11.10    # Set global Python version"
     echo "  • nvm list                # List installed Node.js versions"
-    echo "  • nvm use 18              # Switch to Node.js 18"
-    echo "  • go version              # Check Go version"
+    echo "  • nvm use 22              # Switch to Node.js 22"
 }
 
 main "$@"
