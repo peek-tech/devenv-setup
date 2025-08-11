@@ -108,15 +108,16 @@ show_menu() {
     echo ""
     echo "  1) Full Installation (Recommended)"
     echo "  2) Core Development Tools (Homebrew, Git, Neovim, etc.)"
-    echo "  3) Web Browsers (Chrome, Firefox, Edge, Brave)"
-    echo "  4) Design Tools (Figma, image tools, fonts)"
-    echo "  5) Claude Code + Agent Orchestration"
-    echo "  6) AWS Development Tools"
-    echo "  7) Container Tools (Docker, Kubernetes)"
-    echo "  8) Custom Selection"
+    echo "  3) Programming Languages (pyenv, nvm, Go)"
+    echo "  4) Web Browsers (Chrome, Firefox, Edge, Brave)"
+    echo "  5) Design Tools (Figma, image tools, fonts)"
+    echo "  6) Claude Code + Agent Orchestration"
+    echo "  7) AWS Development Tools"
+    echo "  8) Container Tools (Docker, Kubernetes)"
+    echo "  9) Custom Selection"
     echo "  0) Exit"
     echo ""
-    read -p "Enter your choice [1-8, 0]: " choice
+    read -p "Enter your choice [1-9, 0]: " choice
     
     case $choice in
         1)
@@ -126,21 +127,24 @@ show_menu() {
             run_installer "core" "setup-core.sh" "Core Development Tools"
             ;;
         3)
-            run_installer "browsers" "setup-browsers.sh" "Web Browsers"
+            run_installer "languages" "setup-languages.sh" "Programming Languages"
             ;;
         4)
-            run_installer "design" "setup-design.sh" "Design and Creative Tools"
+            run_installer "browsers" "setup-browsers.sh" "Web Browsers"
             ;;
         5)
-            run_installer "claude" "setup-claude.sh" "Claude Code with Agent Orchestration"
+            run_installer "design" "setup-design.sh" "Design and Creative Tools"
             ;;
         6)
-            run_installer "aws" "setup-aws.sh" "AWS Development Tools"
+            run_installer "claude" "setup-claude.sh" "Claude Code with Agent Orchestration"
             ;;
         7)
-            run_installer "containers" "setup-containers.sh" "Container Tools"
+            run_installer "aws" "setup-aws.sh" "AWS Development Tools"
             ;;
         8)
+            run_installer "containers" "setup-containers.sh" "Container Tools"
+            ;;
+        9)
             custom_installation
             ;;
         0)
@@ -160,6 +164,7 @@ install_full() {
     
     local components=(
         "core:setup-core.sh:Core Development Tools"
+        "languages:setup-languages.sh:Programming Languages"
         "browsers:setup-browsers.sh:Web Browsers"
         "design:setup-design.sh:Design and Creative Tools"
         "claude:setup-claude.sh:Claude Code with Agent Orchestration"
@@ -195,13 +200,12 @@ custom_installation() {
     
     local components=(
         "Core Development Tools:setup-core.sh"
+        "Programming Languages:setup-languages.sh"
         "Web Browsers:setup-browsers.sh"
         "Design Tools:setup-design.sh"
         "Claude Code + Agents:setup-claude.sh"
         "AWS Tools:setup-aws.sh"
         "Container Tools:setup-containers.sh"
-        "Node.js Environment:setup-node.sh"
-        "Python Environment:setup-python.sh"
     )
     
     local selected=()

@@ -11,23 +11,35 @@ curl -fsSL https://peek-tech.github.io/devenv-setup/install.sh | bash
 ## What Gets Installed
 
 - **Claude Code**: AI-powered coding assistant with agent orchestration
-- **Development Tools**: Git, Docker, Node.js, Python, etc.
-- **Cloud Tools**: AWS CLI, Terraform, kubectl
-- **Editor Configurations**: VS Code extensions and settings
+- **Core Development Tools**: Homebrew, Git, Neovim, terminal utilities
+- **Programming Languages**: pyenv, nvm, Go with version management
+- **Web Browsers**: Chrome, Firefox, Edge, Brave with dev tools
+- **Design Tools**: Figma, image optimization, developer fonts
+- **Cloud Tools**: AWS CLI, SAM, CDK
+- **Container Tools**: Docker, kubectl
 
 ## Individual Components
 
 Install specific components:
 
 ```bash
+# Core development tools
+curl -fsSL https://peek-tech.github.io/devenv-setup/scripts/setup-core.sh | bash
+
+# Programming languages (pyenv, nvm, Go)
+curl -fsSL https://peek-tech.github.io/devenv-setup/scripts/setup-languages.sh | bash
+
+# Web browsers
+curl -fsSL https://peek-tech.github.io/devenv-setup/scripts/setup-browsers.sh | bash
+
+# Design tools
+curl -fsSL https://peek-tech.github.io/devenv-setup/scripts/setup-design.sh | bash
+
 # Claude Code with agent orchestration
 curl -fsSL https://peek-tech.github.io/devenv-setup/scripts/setup-claude.sh | bash
 
 # AWS development tools
 curl -fsSL https://peek-tech.github.io/devenv-setup/scripts/setup-aws.sh | bash
-
-# Container tools (Docker, kubectl)
-curl -fsSL https://peek-tech.github.io/devenv-setup/scripts/setup-containers.sh | bash
 ```
 
 ## Configuration
