@@ -78,7 +78,7 @@ if [ "$OS_TYPE" = "macos" ]; then
     # Install useful casks
     casks=(
         "visual-studio-code"
-        "iterm2"
+        "ghostty"      # Modern terminal
         "rectangle"    # Window management
     )
     
@@ -162,6 +162,57 @@ if [ -z "$(git config --global user.email)" ]; then
     git config --global user.email "$git_email"
 fi
 
+# Install specific Nerd Fonts
+install_nerd_fonts() {
+    print_info "Installing specific Nerd Fonts..."
+    
+    # Create fonts directory
+    local fonts_dir="$HOME/Library/Fonts"
+    mkdir -p "$fonts_dir"
+    
+    # Create temp directory for downloads
+    local temp_dir=$(mktemp -d)
+    
+    # Define font URLs
+    local font_urls=(
+        "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/OpenDyslexic.zip"
+        "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/JetBrainsMono.zip"
+        "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/Hack.zip"
+        "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/NerdFontsSymbolsOnly.zip"
+        "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/CodeNewRoman.zip"
+    )
+    
+    for url in "${font_urls[@]}"; do
+        local font_name=$(basename "$url" .zip)
+        print_info "Installing $font_name..."
+        
+        # Download font
+        local zip_file="$temp_dir/${font_name}.zip"
+        if curl -fsSL "$url" -o "$zip_file"; then
+            # Extract and install
+            local extract_dir="$temp_dir/$font_name"
+            mkdir -p "$extract_dir"
+            
+            if unzip -q "$zip_file" -d "$extract_dir"; then
+                # Copy .ttf and .otf files to fonts directory
+                find "$extract_dir" -name "*.ttf" -o -name "*.otf" | while read font_file; do
+                    cp "$font_file" "$fonts_dir/"
+                done
+                print_status "$font_name installed"
+            else
+                print_warning "Failed to extract $font_name"
+            fi
+        else
+            print_warning "Failed to download $font_name"
+        fi
+    done
+    
+    # Cleanup
+    rm -rf "$temp_dir"
+    
+    print_status "Nerd Fonts installation complete"
+}
+
 # Setup useful git aliases
 print_info "Setting up git aliases..."
 git config --global alias.co checkout
@@ -169,6 +220,11 @@ git config --global alias.br branch
 git config --global alias.ci commit
 git config --global alias.st status
 git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+
+# Install specific Nerd Fonts (macOS only)
+if [ "$OS_TYPE" = "macos" ]; then
+    install_nerd_fonts
+fi
 
 # Create common directories
 print_info "Creating common development directories..."
@@ -182,8 +238,11 @@ echo "Installed tools:"
 echo "  • Git with useful aliases"
 echo "  • GitHub CLI (gh)"
 echo "  • JSON processor (jq)"
-echo "  • Enhanced terminal tools"
+echo "  • Enhanced terminal tools (ripgrep, fd, bat, exa, fzf, lazygit, delta)"
+echo "  • Neovim editor"
 if [ "$OS_TYPE" = "macos" ]; then
     echo "  • VS Code"
-    echo "  • iTerm2"
+    echo "  • Ghostty terminal"
+    echo "  • Rectangle (window management)"
+    echo "  • Specific Nerd Fonts (OpenDyslexic, JetBrains Mono, Hack, CodeNewRoman, Symbols)"
 fi
