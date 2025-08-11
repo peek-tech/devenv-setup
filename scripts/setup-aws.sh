@@ -125,28 +125,6 @@ install_cdk() {
     fi
 }
 
-# Install Terraform
-install_terraform() {
-    if command -v terraform &> /dev/null; then
-        print_status "Terraform already installed: $(terraform --version | head -n1)"
-    else
-        print_info "Installing Terraform..."
-        
-        case "${OS}" in
-            Darwin*)
-                brew tap hashicorp/tap
-                brew install hashicorp/tap/terraform
-                ;;
-            Linux*)
-                wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor | sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg
-                echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
-                sudo apt update && sudo apt install terraform
-                ;;
-        esac
-        
-        print_status "Terraform installed"
-    fi
-}
 
 # Configure AWS CLI
 configure_aws() {
@@ -201,7 +179,6 @@ main() {
     install_session_manager
     install_sam_cli
     install_cdk
-    install_terraform
     install_additional_tools
     configure_aws
     
@@ -212,7 +189,6 @@ main() {
     echo "  • AWS Session Manager Plugin"
     echo "  • AWS SAM CLI"
     echo "  • AWS CDK"
-    echo "  • Terraform"
     echo "  • aws-vault"
     echo ""
     echo "Next steps:"
