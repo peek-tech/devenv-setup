@@ -221,10 +221,150 @@ git config --global alias.ci commit
 git config --global alias.st status
 git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
 
+# Configure VS Code extensions and settings
+configure_vscode() {
+    if ! command -v code &> /dev/null; then
+        print_warning "VS Code not found, skipping extension installation"
+        return
+    fi
+    
+    print_info "Installing VS Code extensions..."
+    
+    # Essential extensions
+    local extensions=(
+        # Claude Code
+        "Anthropic.claude-dev"
+        
+        # Python development
+        "ms-python.python"
+        "ms-python.black-formatter"
+        "ms-python.pylint"
+        "ms-python.isort"
+        "ms-toolsai.jupyter"
+        "ms-toolsai.vscode-jupyter-cell-tags"
+        "ms-toolsai.vscode-jupyter-slideshow"
+        
+        # Node.js/JavaScript development
+        "ms-vscode.vscode-typescript-next"
+        "bradlc.vscode-tailwindcss"
+        "esbenp.prettier-vscode"
+        "dbaeumer.vscode-eslint"
+        "ms-vscode.vscode-json"
+        "formulahendry.auto-rename-tag"
+        "christian-kohler.path-intellisense"
+        
+        # General development
+        "ms-vscode.vscode-git-graph"
+        "eamodio.gitlens"
+        "ms-vsliveshare.vsliveshare"
+        "ms-vscode-remote.remote-containers"
+        "ms-vscode-remote.remote-ssh"
+        "ms-vscode-remote.remote-wsl"
+        
+        # Productivity
+        "ms-vscode.vscode-todo-highlight"
+        "streetsidesoftware.code-spell-checker"
+        "ms-vscode.theme-github-plus"
+    )
+    
+    for extension in "${extensions[@]}"; do
+        print_info "Installing $extension..."
+        if code --install-extension "$extension" --force &>/dev/null; then
+            print_status "$extension installed"
+        else
+            print_warning "Failed to install $extension"
+        fi
+    done
+    
+    print_status "VS Code extensions installation complete"
+}
+
+# Set Ghostty as default terminal (macOS only)
+set_ghostty_default() {
+    if [ "$OS_TYPE" != "macos" ]; then
+        return
+    fi
+    
+    print_info "Setting Ghostty as default terminal..."
+    
+    # Set Ghostty as default terminal handler
+    local ghostty_path="/Applications/Ghostty.app"
+    if [ -d "$ghostty_path" ]; then
+        # Use duti to set default terminal (if available)
+        if command -v duti &> /dev/null; then
+            duti -s com.mitchellh.ghostty public.shell-script all
+            duti -s com.mitchellh.ghostty com.apple.terminal.shell-script all
+        else
+            # Install duti for setting default apps
+            if command -v brew &> /dev/null; then
+                brew install duti
+                duti -s com.mitchellh.ghostty public.shell-script all
+                duti -s com.mitchellh.ghostty com.apple.terminal.shell-script all
+            fi
+        fi
+        
+        # Also set in VS Code settings
+        configure_vscode_terminal_default
+        
+        print_status "Ghostty set as default terminal"
+    else
+        print_warning "Ghostty not found, skipping default terminal setup"
+    fi
+}
+
+# Configure VS Code to use Ghostty as integrated terminal
+configure_vscode_terminal_default() {
+    local vscode_settings_dir="$HOME/Library/Application Support/Code/User"
+    local settings_file="$vscode_settings_dir/settings.json"
+    
+    mkdir -p "$vscode_settings_dir"
+    
+    # Create or update VS Code settings
+    if [ -f "$settings_file" ]; then
+        # Backup existing settings
+        cp "$settings_file" "$settings_file.backup"
+    fi
+    
+    # Create basic settings with Ghostty as default terminal
+    cat > "$settings_file" << 'EOF'
+{
+    "terminal.integrated.defaultProfile.osx": "ghostty",
+    "terminal.integrated.profiles.osx": {
+        "ghostty": {
+            "path": "/Applications/Ghostty.app/Contents/MacOS/ghostty",
+            "args": [],
+            "icon": "terminal"
+        }
+    },
+    "terminal.external.osxExec": "Ghostty.app",
+    "python.defaultInterpreterPath": "python",
+    "python.formatting.provider": "black",
+    "python.linting.enabled": true,
+    "python.linting.pylintEnabled": true,
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": true
+    },
+    "files.associations": {
+        "*.json": "jsonc"
+    },
+    "git.enableSmartCommit": true,
+    "git.confirmSync": false,
+    "workbench.startupEditor": "welcomePageInEmptyWorkbench"
+}
+EOF
+    
+    print_info "VS Code configured to use Ghostty as default terminal"
+}
+
 # Install specific Nerd Fonts (macOS only)
 if [ "$OS_TYPE" = "macos" ]; then
     install_nerd_fonts
+    set_ghostty_default
 fi
+
+# Configure VS Code
+configure_vscode
 
 # Create common directories
 print_info "Creating common development directories..."
@@ -241,8 +381,20 @@ echo "  • JSON processor (jq)"
 echo "  • Enhanced terminal tools (ripgrep, fd, bat, exa, fzf, lazygit, delta)"
 echo "  • Neovim editor"
 if [ "$OS_TYPE" = "macos" ]; then
-    echo "  • VS Code"
-    echo "  • Ghostty terminal"
+    echo "  • VS Code with extensions:"
+    echo "    - Claude Code (Anthropic.claude-dev)"
+    echo "    - Python development (Python, Black, Pylint, Jupyter)"
+    echo "    - Node.js development (TypeScript, Prettier, ESLint, Tailwind)"
+    echo "    - Git tools (GitLens, Git Graph)"
+    echo "    - Remote development (Containers, SSH)"
+    echo "  • Ghostty terminal (set as system default)"
     echo "  • Rectangle (window management)"
     echo "  • Specific Nerd Fonts (OpenDyslexic, JetBrains Mono, Hack, CodeNewRoman, Symbols)"
+fi
+echo ""
+echo "Next steps:"
+echo "  • Restart your terminal to use new tools"
+if [ "$OS_TYPE" = "macos" ]; then
+    echo "  • Open VS Code to use installed extensions"
+    echo "  • Ghostty is now your default terminal"
 fi

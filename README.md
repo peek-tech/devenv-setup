@@ -11,7 +11,7 @@ curl -fsSL https://peek-tech.github.io/devenv-setup/install.sh | bash
 ## What Gets Installed
 
 - **Claude Code**: AI-powered coding assistant with agent orchestration
-- **Core Development Tools**: Homebrew, Git, Neovim, Ghostty terminal, Nerd Fonts
+- **Core Development Tools**: VS Code + extensions, Ghostty (default terminal), Nerd Fonts
 - **Programming Languages**: Python 3.11 + Poetry, Node.js 20/22 + Yarn, Go, Bun
 - **Web Browsers**: Chrome, Firefox, Edge, Brave with dev tools
 - **Design Tools**: Figma, image optimization, developer fonts
@@ -23,7 +23,7 @@ curl -fsSL https://peek-tech.github.io/devenv-setup/install.sh | bash
 Install specific components:
 
 ```bash
-# Core development tools (Homebrew, Git, Neovim, Ghostty, Nerd Fonts)
+# Core development tools (VS Code + extensions, Ghostty terminal, Nerd Fonts)
 curl -fsSL https://peek-tech.github.io/devenv-setup/scripts/setup-core.sh | bash
 
 # Programming languages (Python 3.11 + Poetry, Node.js 20/22 + Yarn, Go, Bun)
