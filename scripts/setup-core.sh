@@ -221,6 +221,71 @@ git config --global alias.ci commit
 git config --global alias.st status
 git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
 
+# Configure Ghostty terminal with OpenDyslexic font
+configure_ghostty() {
+    print_info "Configuring Ghostty terminal..."
+    
+    # Create Ghostty config directory
+    local ghostty_config_dir="$HOME/.config/ghostty"
+    local ghostty_config_file="$ghostty_config_dir/config"
+    
+    mkdir -p "$ghostty_config_dir"
+    
+    # Check if config already exists
+    if [ -f "$ghostty_config_file" ]; then
+        # Backup existing config
+        cp "$ghostty_config_file" "$ghostty_config_file.backup"
+        print_info "Existing Ghostty config backed up to config.backup"
+    fi
+    
+    # Create Ghostty configuration with OpenDyslexic font
+    cat > "$ghostty_config_file" << 'EOF'
+# Ghostty Configuration
+
+# Font Configuration - OpenDyslexic for better readability
+font-family = "OpenDyslexicM Nerd Font"
+font-size = 14
+
+# Fallback fonts in case OpenDyslexic isn't available
+font-family-bold = "OpenDyslexicM Nerd Font Bold"
+font-family-italic = "OpenDyslexicM Nerd Font Italic"
+font-family-bold-italic = "OpenDyslexicM Nerd Font Bold Italic"
+
+# Alternative font stack (will fall back if OpenDyslexic not found)
+# You can uncomment these if you prefer a different font:
+# font-family = "JetBrainsMono Nerd Font"
+# font-family = "Hack Nerd Font"
+
+# Window Configuration
+window-decoration = true
+window-padding-x = 10
+window-padding-y = 10
+
+# Theme Configuration (optional - add your preferred theme)
+# theme = "dark"
+
+# Performance
+gpu-renderer = auto
+
+# Cursor
+cursor-style = block
+cursor-blink = true
+
+# Scrollback
+scrollback-limit = 10000
+
+# Bell
+audible-bell = false
+visual-bell = true
+
+# MacOS specific settings
+macos-option-as-alt = true
+EOF
+    
+    print_status "Ghostty configured with OpenDyslexic font as default"
+    print_info "Configuration file: $ghostty_config_file"
+}
+
 # Configure VS Code extensions and settings
 configure_vscode() {
     if ! command -v code &> /dev/null; then
@@ -384,6 +449,8 @@ EOF
 # Install specific Nerd Fonts (macOS only)
 if [ "$OS_TYPE" = "macos" ]; then
     install_nerd_fonts
+    # Configure Ghostty after fonts are installed
+    configure_ghostty
 fi
 
 # Configure VS Code
@@ -410,7 +477,7 @@ if [ "$OS_TYPE" = "macos" ]; then
     echo "    - Node.js development (TypeScript, Prettier, ESLint, Tailwind)"
     echo "    - Git tools (GitLens, Git Graph)"
     echo "    - Remote development (Containers, SSH)"
-    echo "  • Ghostty terminal (configured in VS Code)"
+    echo "  • Ghostty terminal (OpenDyslexic font configured, VS Code integrated)"
     echo "  • Rectangle (window management)"
     echo "  • Specific Nerd Fonts (OpenDyslexic, JetBrains Mono, Hack, CodeNewRoman, Symbols)"
 fi
@@ -423,7 +490,8 @@ if [ "$OS_TYPE" = "macos" ]; then
     echo "🚀 Ghostty Terminal Features:"
     echo "  • Quick Terminal: Press ⌘ + \` (Command + Backtick) for instant access"
     echo "  • Right-click context menu: 'Services > New Ghostty Tab/Window here'"
-    echo "  • Configuration: ~/.config/ghostty/config (create if needed)"
+    echo "  • Configuration: ~/.config/ghostty/config (OpenDyslexic font preconfigured)"
+    echo "  • Font: OpenDyslexic Nerd Font for improved readability"
     echo ""
     echo "📝 To set Ghostty as your system-wide default terminal (optional):"
     echo "  • Currently requires manual setup - no automated way available"
