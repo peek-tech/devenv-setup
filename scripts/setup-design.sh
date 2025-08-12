@@ -151,7 +151,6 @@ print_info "Installing developer-friendly fonts..."
 
 fonts=(
     "font-fira-code"
-    "font-jetbrains-mono"
     "font-source-code-pro"
     "font-cascadia-code"
     "font-inter"

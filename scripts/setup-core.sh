@@ -164,51 +164,35 @@ fi
 
 # Install specific Nerd Fonts
 install_nerd_fonts() {
-    print_info "Installing specific Nerd Fonts..."
+    print_info "Installing specific Nerd Fonts via Homebrew..."
     
-    # Create fonts directory
-    local fonts_dir="$HOME/Library/Fonts"
-    mkdir -p "$fonts_dir"
+    # Tap the fonts cask if not already tapped
+    if ! brew tap | grep -q "homebrew/cask-fonts"; then
+        print_info "Adding Homebrew font repository..."
+        brew tap homebrew/cask-fonts
+    fi
     
-    # Create temp directory for downloads
-    local temp_dir=$(mktemp -d)
-    
-    # Define font URLs
-    local font_urls=(
-        "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/OpenDyslexic.zip"
-        "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/JetBrainsMono.zip"
-        "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/Hack.zip"
-        "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/NerdFontsSymbolsOnly.zip"
-        "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/CodeNewRoman.zip"
+    # Define Nerd Font casks to install
+    local nerd_fonts=(
+        "font-open-dyslexic-nerd-font"
+        "font-jetbrains-mono-nerd-font"
+        "font-hack-nerd-font"
+        "font-symbols-only-nerd-font"
+        "font-code-new-roman-nerd-font"
     )
     
-    for url in "${font_urls[@]}"; do
-        local font_name=$(basename "$url" .zip)
-        print_info "Installing $font_name..."
-        
-        # Download font
-        local zip_file="$temp_dir/${font_name}.zip"
-        if curl -fsSL "$url" -o "$zip_file"; then
-            # Extract and install
-            local extract_dir="$temp_dir/$font_name"
-            mkdir -p "$extract_dir"
-            
-            if unzip -q "$zip_file" -d "$extract_dir"; then
-                # Copy .ttf and .otf files to fonts directory
-                find "$extract_dir" -name "*.ttf" -o -name "*.otf" | while read font_file; do
-                    cp "$font_file" "$fonts_dir/"
-                done
-                print_status "$font_name installed"
-            else
-                print_warning "Failed to extract $font_name"
-            fi
+    for font in "${nerd_fonts[@]}"; do
+        if brew list --cask "$font" &>/dev/null 2>&1; then
+            print_status "$font already installed"
         else
-            print_warning "Failed to download $font_name"
+            print_info "Installing $font..."
+            if brew install --cask "$font" 2>/dev/null; then
+                print_status "$font installed successfully"
+            else
+                print_warning "Failed to install $font (may not be available)"
+            fi
         fi
     done
-    
-    # Cleanup
-    rm -rf "$temp_dir"
     
     print_status "Nerd Fonts installation complete"
 }
