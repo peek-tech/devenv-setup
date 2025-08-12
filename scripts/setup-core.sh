@@ -279,38 +279,6 @@ configure_vscode() {
     print_status "VS Code extensions installation complete"
 }
 
-# Set Ghostty as default terminal (macOS only)
-set_ghostty_default() {
-    if [ "$OS_TYPE" != "macos" ]; then
-        return
-    fi
-    
-    print_info "Setting Ghostty as default terminal..."
-    
-    # Set Ghostty as default terminal handler
-    local ghostty_path="/Applications/Ghostty.app"
-    if [ -d "$ghostty_path" ]; then
-        # Use duti to set default terminal (if available)
-        if command -v duti &> /dev/null; then
-            duti -s com.mitchellh.ghostty public.shell-script all
-            duti -s com.mitchellh.ghostty com.apple.terminal.shell-script all
-        else
-            # Install duti for setting default apps
-            if command -v brew &> /dev/null; then
-                brew install duti
-                duti -s com.mitchellh.ghostty public.shell-script all
-                duti -s com.mitchellh.ghostty com.apple.terminal.shell-script all
-            fi
-        fi
-        
-        # Also set in VS Code settings
-        configure_vscode_terminal_default
-        
-        print_status "Ghostty set as default terminal"
-    else
-        print_warning "Ghostty not found, skipping default terminal setup"
-    fi
-}
 
 # Configure VS Code to use Ghostty as integrated terminal
 configure_vscode_terminal_default() {
@@ -319,14 +287,26 @@ configure_vscode_terminal_default() {
     
     mkdir -p "$vscode_settings_dir"
     
-    # Create or update VS Code settings
-    if [ -f "$settings_file" ]; then
-        # Backup existing settings
-        cp "$settings_file" "$settings_file.backup"
+    # Check if Ghostty is installed
+    local ghostty_path="/Applications/Ghostty.app/Contents/MacOS/ghostty"
+    local use_ghostty=false
+    
+    if [ -f "$ghostty_path" ]; then
+        use_ghostty=true
+        print_info "Ghostty found, configuring as VS Code default terminal"
+    else
+        print_warning "Ghostty not found, using default terminal configuration"
     fi
     
-    # Create basic settings with Ghostty as default terminal
-    cat > "$settings_file" << 'EOF'
+    # Backup existing settings if they exist
+    if [ -f "$settings_file" ]; then
+        cp "$settings_file" "$settings_file.backup"
+        print_info "Existing VS Code settings backed up to settings.json.backup"
+    fi
+    
+    # Create VS Code settings with conditional Ghostty configuration
+    if [ "$use_ghostty" = true ]; then
+        cat > "$settings_file" << 'EOF'
 {
     "terminal.integrated.defaultProfile.osx": "ghostty",
     "terminal.integrated.profiles.osx": {
@@ -334,6 +314,16 @@ configure_vscode_terminal_default() {
             "path": "/Applications/Ghostty.app/Contents/MacOS/ghostty",
             "args": [],
             "icon": "terminal"
+        },
+        "zsh": {
+            "path": "zsh",
+            "args": ["-l"],
+            "icon": "terminal-bash"
+        },
+        "bash": {
+            "path": "bash",
+            "args": ["-l"],
+            "icon": "terminal-bash"
         }
     },
     "terminal.external.osxExec": "Ghostty.app",
@@ -353,14 +343,47 @@ configure_vscode_terminal_default() {
     "workbench.startupEditor": "welcomePageInEmptyWorkbench"
 }
 EOF
+    else
+        # Fallback configuration without Ghostty
+        cat > "$settings_file" << 'EOF'
+{
+    "terminal.integrated.defaultProfile.osx": "zsh",
+    "terminal.integrated.profiles.osx": {
+        "zsh": {
+            "path": "zsh",
+            "args": ["-l"],
+            "icon": "terminal-bash"
+        },
+        "bash": {
+            "path": "bash",
+            "args": ["-l"],
+            "icon": "terminal-bash"
+        }
+    },
+    "python.defaultInterpreterPath": "python",
+    "python.formatting.provider": "black",
+    "python.linting.enabled": true,
+    "python.linting.pylintEnabled": true,
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": true
+    },
+    "files.associations": {
+        "*.json": "jsonc"
+    },
+    "git.enableSmartCommit": true,
+    "git.confirmSync": false,
+    "workbench.startupEditor": "welcomePageInEmptyWorkbench"
+}
+EOF
+    fi
     
-    print_info "VS Code configured to use Ghostty as default terminal"
+    print_status "VS Code terminal configuration complete"
 }
 
 # Install specific Nerd Fonts (macOS only)
 if [ "$OS_TYPE" = "macos" ]; then
     install_nerd_fonts
-    set_ghostty_default
 fi
 
 # Configure VS Code
@@ -387,7 +410,7 @@ if [ "$OS_TYPE" = "macos" ]; then
     echo "    - Node.js development (TypeScript, Prettier, ESLint, Tailwind)"
     echo "    - Git tools (GitLens, Git Graph)"
     echo "    - Remote development (Containers, SSH)"
-    echo "  • Ghostty terminal (set as system default)"
+    echo "  • Ghostty terminal (configured in VS Code)"
     echo "  • Rectangle (window management)"
     echo "  • Specific Nerd Fonts (OpenDyslexic, JetBrains Mono, Hack, CodeNewRoman, Symbols)"
 fi
@@ -395,6 +418,15 @@ echo ""
 echo "Next steps:"
 echo "  • Restart your terminal to use new tools"
 if [ "$OS_TYPE" = "macos" ]; then
-    echo "  • Open VS Code to use installed extensions"
-    echo "  • Ghostty is now your default terminal"
+    echo "  • Open VS Code - Ghostty is configured as the integrated terminal"
+    echo ""
+    echo "🚀 Ghostty Terminal Features:"
+    echo "  • Quick Terminal: Press ⌘ + \` (Command + Backtick) for instant access"
+    echo "  • Right-click context menu: 'Services > New Ghostty Tab/Window here'"
+    echo "  • Configuration: ~/.config/ghostty/config (create if needed)"
+    echo ""
+    echo "📝 To set Ghostty as your system-wide default terminal (optional):"
+    echo "  • Currently requires manual setup - no automated way available"
+    echo "  • Use Ghostty's Services menu integration for most terminal tasks"
+    echo "  • VS Code integration is already configured automatically"
 fi
