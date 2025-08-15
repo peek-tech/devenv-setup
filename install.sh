@@ -257,6 +257,26 @@ custom_installation() {
 
 # Main execution
 main() {
+    # Check if we're being piped from curl/wget
+    if [ ! -t 0 ]; then
+        # We're being piped - download and re-execute
+        print_header
+        print_info "Downloading installer for interactive execution..."
+        
+        # Create temp script
+        local temp_installer=$(mktemp /tmp/devenv-installer-XXXXXX.sh)
+        
+        # Download the full script to temp file
+        cat > "$temp_installer"
+        
+        # Make it executable
+        chmod +x "$temp_installer"
+        
+        # Execute it with a flag to indicate it's been downloaded
+        exec bash "$temp_installer" --downloaded "$@"
+    fi
+    
+    # If we get here, we're running from a file (not piped)
     print_header
     
     detect_os
@@ -281,6 +301,11 @@ main() {
     print_section "Installation Complete"
     print_info "Please restart your terminal or run: source ~/.bashrc"
     print_info "For help and documentation, visit: https://peek-tech.github.io/devenv-setup"
+    
+    # Clean up temp file if we were downloaded
+    if [ "$1" = "--downloaded" ] && [[ "$0" == /tmp/devenv-installer-* ]]; then
+        rm -f "$0"
+    fi
 }
 
 # Run main function
