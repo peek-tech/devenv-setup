@@ -34,9 +34,12 @@ install_aws_cli() {
         
         case "${OS}" in
             Darwin*)
-                curl "https://awscli.amazonaws.com/AWSCLIV2.pkg" -o "AWSCLIV2.pkg"
-                sudo installer -pkg AWSCLIV2.pkg -target /
-                rm AWSCLIV2.pkg
+                if command -v brew &> /dev/null; then
+                    brew install awscli
+                else
+                    print_error "Homebrew not found. Please install Homebrew first."
+                    return 1
+                fi
                 ;;
             Linux*)
                 curl "https://awscli.amazonaws.com/awscli-exe-linux-${ARCH}.zip" -o "awscliv2.zip"
@@ -56,13 +59,12 @@ install_session_manager() {
     
     case "${OS}" in
         Darwin*)
-            if [ "$ARCH" = "arm64" ]; then
-                curl "https://s3.amazonaws.com/session-manager-downloads/plugin/latest/mac_arm64/session-manager-plugin.pkg" -o "session-manager-plugin.pkg"
+            if command -v brew &> /dev/null; then
+                brew install --cask session-manager-plugin
             else
-                curl "https://s3.amazonaws.com/session-manager-downloads/plugin/latest/mac/session-manager-plugin.pkg" -o "session-manager-plugin.pkg"
+                print_error "Homebrew not found. Please install Homebrew first."
+                return 1
             fi
-            sudo installer -pkg session-manager-plugin.pkg -target /
-            rm session-manager-plugin.pkg
             ;;
         Linux*)
             curl "https://s3.amazonaws.com/session-manager-downloads/plugin/latest/ubuntu_64bit/session-manager-plugin.deb" -o "session-manager-plugin.deb"
@@ -83,8 +85,12 @@ install_sam_cli() {
         
         case "${OS}" in
             Darwin*)
-                brew tap aws/tap
-                brew install aws-sam-cli
+                if command -v brew &> /dev/null; then
+                    brew install aws-sam-cli
+                else
+                    print_error "Homebrew not found. Please install Homebrew first."
+                    return 1
+                fi
                 ;;
             Linux*)
                 wget https://github.com/aws/aws-sam-cli/releases/latest/download/aws-sam-cli-linux-x86_64.zip

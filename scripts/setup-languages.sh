@@ -107,15 +107,29 @@ add_pyenv_to_shell() {
 
 # Install nvm (Node.js version manager)
 install_nvm() {
-    if [ -d "$HOME/.nvm" ]; then
+    if [ -d "$HOME/.nvm" ] || command -v nvm &> /dev/null; then
         print_status "nvm already installed"
         return 0
     fi
     
     print_info "Installing nvm..."
     
-    # Download and install nvm
-    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+    case "$OS_TYPE" in
+        macos)
+            if command -v brew &> /dev/null; then
+                brew install nvm
+                # Create nvm directory for Homebrew version
+                mkdir -p ~/.nvm
+            else
+                print_error "Homebrew not found. Please install Homebrew first."
+                return 1
+            fi
+            ;;
+        linux)
+            # Download and install nvm
+            curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+            ;;
+    esac
     
     # Source nvm for current session
     export NVM_DIR="$HOME/.nvm"
@@ -232,11 +246,22 @@ install_poetry() {
     
     print_info "Installing Poetry..."
     
-    # Install Poetry using the official installer
-    curl -sSL https://install.python-poetry.org | python3 -
-    
-    # Add Poetry to PATH
-    add_poetry_to_shell
+    case "$OS_TYPE" in
+        macos)
+            if command -v brew &> /dev/null; then
+                brew install poetry
+            else
+                print_error "Homebrew not found. Please install Homebrew first."
+                return 1
+            fi
+            ;;
+        linux)
+            # Install Poetry using the official installer
+            curl -sSL https://install.python-poetry.org | python3 -
+            # Add Poetry to PATH
+            add_poetry_to_shell
+            ;;
+    esac
     
     print_status "Poetry installed successfully"
 }
@@ -342,15 +367,26 @@ install_bun() {
     
     print_info "Installing Bun..."
     
-    # Install Bun using the official installer
-    curl -fsSL https://bun.sh/install | bash
-    
-    # Source bun for current session
-    export BUN_INSTALL="$HOME/.bun"
-    export PATH="$BUN_INSTALL/bin:$PATH"
-    
-    # Add to shell configuration
-    add_bun_to_shell
+    case "$OS_TYPE" in
+        macos)
+            if command -v brew &> /dev/null; then
+                brew tap oven-sh/bun
+                brew install bun
+            else
+                print_error "Homebrew not found. Please install Homebrew first."
+                return 1
+            fi
+            ;;
+        linux)
+            # Install Bun using the official installer
+            curl -fsSL https://bun.sh/install | bash
+            # Source bun for current session
+            export BUN_INSTALL="$HOME/.bun"
+            export PATH="$BUN_INSTALL/bin:$PATH"
+            # Add to shell configuration
+            add_bun_to_shell
+            ;;
+    esac
     
     print_status "Bun installed successfully"
 }
