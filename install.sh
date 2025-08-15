@@ -91,71 +91,99 @@ run_installer() {
     
     print_section "Installing $description"
     
-    # Download and run the script
-    if curl -fsSL "${SCRIPTS_BASE_URL}/${script_name}" | bash; then
-        print_status "$description installed successfully"
-        return 0
+    # Create temp file for script
+    local temp_script=$(mktemp /tmp/devenv-setup-XXXXXX.sh)
+    
+    # Download the script
+    print_info "Downloading $script_name..."
+    if curl -fsSL "${SCRIPTS_BASE_URL}/${script_name}" -o "$temp_script"; then
+        # Make it executable
+        chmod +x "$temp_script"
+        
+        # Run the script
+        if bash "$temp_script"; then
+            print_status "$description installed successfully"
+            rm -f "$temp_script"
+            return 0
+        else
+            print_warning "Failed to install $description"
+            rm -f "$temp_script"
+            return 1
+        fi
     else
-        print_warning "Failed to install $description"
+        print_error "Failed to download $script_name"
+        rm -f "$temp_script"
         return 1
     fi
 }
 
 # Main installation menu
 show_menu() {
-    echo ""
-    echo "Select components to install:"
-    echo ""
-    echo "  1) Full Installation (Recommended)"
-    echo "  2) Core Development Tools (Homebrew, Git, Neovim, etc.)"
-    echo "  3) Programming Languages (Python + Poetry, Node.js + Yarn, Go, Bun)"
-    echo "  4) Web Browsers (Chrome, Firefox, Edge, Brave)"
-    echo "  5) Design Tools (Figma, image tools, fonts)"
-    echo "  6) Claude Code + Agent Orchestration"
-    echo "  7) AWS Development Tools"
-    echo "  8) Container Tools (Docker, Kubernetes)"
-    echo "  9) Custom Selection"
-    echo "  0) Exit"
-    echo ""
-    read -p "Enter your choice [1-9, 0]: " choice
-    
-    case $choice in
-        1)
-            install_full
-            ;;
-        2)
-            run_installer "core" "setup-core.sh" "Core Development Tools"
-            ;;
-        3)
-            run_installer "languages" "setup-languages.sh" "Programming Languages"
-            ;;
-        4)
-            run_installer "browsers" "setup-browsers.sh" "Web Browsers"
-            ;;
-        5)
-            run_installer "design" "setup-design.sh" "Design and Creative Tools"
-            ;;
-        6)
-            run_installer "claude" "setup-claude.sh" "Claude Code with Agent Orchestration"
-            ;;
-        7)
-            run_installer "aws" "setup-aws.sh" "AWS Development Tools"
-            ;;
-        8)
-            run_installer "containers" "setup-containers.sh" "Container Tools"
-            ;;
-        9)
-            custom_installation
-            ;;
-        0)
-            print_info "Installation cancelled"
-            exit 0
-            ;;
-        *)
-            print_error "Invalid choice"
-            show_menu
-            ;;
-    esac
+    while true; do
+        echo ""
+        echo "Select components to install:"
+        echo ""
+        echo "  1) Full Installation (Recommended)"
+        echo "  2) Core Development Tools (Homebrew, Git, Neovim, etc.)"
+        echo "  3) Programming Languages (Python + Poetry, Node.js + Yarn, Go, Bun)"
+        echo "  4) Web Browsers (Chrome, Firefox, Edge, Brave)"
+        echo "  5) Design Tools (Figma, image tools, fonts)"
+        echo "  6) Claude Code + Agent Orchestration"
+        echo "  7) AWS Development Tools"
+        echo "  8) Container Tools (Docker, Kubernetes)"
+        echo "  9) Custom Selection"
+        echo "  0) Exit"
+        echo ""
+        read -p "Enter your choice [1-9, 0]: " choice
+        
+        case $choice in
+            1)
+                install_full
+                break
+                ;;
+            2)
+                run_installer "core" "setup-core.sh" "Core Development Tools"
+                ;;
+            3)
+                run_installer "languages" "setup-languages.sh" "Programming Languages"
+                ;;
+            4)
+                run_installer "browsers" "setup-browsers.sh" "Web Browsers"
+                ;;
+            5)
+                run_installer "design" "setup-design.sh" "Design and Creative Tools"
+                ;;
+            6)
+                run_installer "claude" "setup-claude.sh" "Claude Code with Agent Orchestration"
+                ;;
+            7)
+                run_installer "aws" "setup-aws.sh" "AWS Development Tools"
+                ;;
+            8)
+                run_installer "containers" "setup-containers.sh" "Container Tools"
+                ;;
+            9)
+                custom_installation
+                ;;
+            0)
+                print_info "Exiting installer"
+                break
+                ;;
+            *)
+                print_error "Invalid choice, please try again"
+                ;;
+        esac
+        
+        # After each installation (except exit), ask if user wants to install more
+        if [ "$choice" != "0" ] && [ "$choice" != "1" ]; then
+            echo ""
+            read -p "Install another component? (y/N): " -n 1 -r
+            echo ""
+            if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+                break
+            fi
+        fi
+    done
 }
 
 # Full installation
