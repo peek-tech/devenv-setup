@@ -16,7 +16,7 @@ curl -fsSL https://peek-tech.github.io/devenv-setup/install.sh | bash
 - **Web Browsers**: Chrome, Firefox, Edge, Brave with dev tools
 - **Design Tools**: Figma, image optimization, developer fonts
 - **Cloud Tools**: AWS CLI, SAM, CDK
-- **Container Tools**: Docker, kubectl
+- **Container Tools**: Podman + Desktop, Docker compatibility, Compose support
 
 ## Individual Components
 
@@ -40,6 +40,9 @@ curl -fsSL https://peek-tech.github.io/devenv-setup/scripts/setup-claude.sh | ba
 
 # AWS development tools
 curl -fsSL https://peek-tech.github.io/devenv-setup/scripts/setup-aws.sh | bash
+
+# Container tools (Podman with Docker compatibility)
+curl -fsSL https://peek-tech.github.io/devenv-setup/scripts/setup-containers.sh | bash
 ```
 
 ## Configuration
@@ -47,6 +50,12 @@ curl -fsSL https://peek-tech.github.io/devenv-setup/scripts/setup-aws.sh | bash
 Set environment variables before running:
 
 ```bash
+# For automated/non-interactive installation
+export NONINTERACTIVE=1
+
+# For CI environments
+export CI=1
+
 # For private repository access (Claude agents)
 export GITHUB_CLIENT_ID=your_oauth_app_client_id
 
@@ -65,7 +74,18 @@ export AWS_PROFILE=development
 - macOS or Linux (Ubuntu 20.04+, CentOS 8+)
 - Bash 4.0+
 - Internet connection
-- Admin/sudo access for some components
+- Admin/sudo access for some components (see below)
+
+### Sudo Requirements
+
+**macOS**: Homebrew installation requires sudo access to install to system directories. The installer will prompt for your password when needed.
+
+**For automated/CI environments**, skip sudo prompts with:
+```bash
+curl -fsSL https://peek-tech.github.io/devenv-setup/install.sh | NONINTERACTIVE=1 bash
+```
+
+**Linux**: Package manager operations may require sudo for system package installation.
 
 ## License
 

@@ -83,6 +83,22 @@ check_prerequisites() {
     fi
 }
 
+# Request sudo access upfront for macOS installations
+request_sudo() {
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        print_info "This installer requires sudo access for Homebrew installation"
+        print_info "Please enter your password when prompted"
+        
+        if ! sudo -v; then
+            print_error "Sudo access is required for installation"
+            print_info "Please run with appropriate permissions or contact your system administrator"
+            exit 1
+        fi
+        
+        print_status "Sudo access granted"
+    fi
+}
+
 # Run component installer
 run_installer() {
     local component=$1
@@ -305,6 +321,11 @@ main() {
     print_info "Detected OS: $OS ($DISTRO)"
     
     check_prerequisites
+    
+    # Request sudo access upfront on macOS (unless running non-interactively)
+    if [ -z "$CI" ] && [ -z "$AUTOMATED_INSTALL" ] && [ -z "$NONINTERACTIVE" ]; then
+        request_sudo
+    fi
     
     # Check if running in CI/automated environment or non-interactive mode
     if [ -n "$CI" ] || [ -n "$AUTOMATED_INSTALL" ] || [ -n "$NONINTERACTIVE" ]; then

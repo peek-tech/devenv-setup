@@ -34,7 +34,10 @@ if [ "$OS_TYPE" = "macos" ]; then
     # Install Homebrew if not present
     if ! command -v brew &> /dev/null; then
         print_info "Installing Homebrew..."
-        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        
+        # Always use non-interactive mode to avoid TTY issues
+        print_info "Running Homebrew installation in non-interactive mode"
+        NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
         
         # Add Homebrew to PATH for Apple Silicon Macs
         if [[ $(uname -m) == 'arm64' ]]; then
