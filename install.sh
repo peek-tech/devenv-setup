@@ -134,7 +134,22 @@ show_menu() {
         echo "  9) Custom Selection"
         echo "  0) Exit"
         echo ""
-        read -p "Enter your choice [1-9, 0]: " choice
+        
+        # Read input from /dev/tty if stdin is piped
+        if [ ! -t 0 ]; then
+            # Try to read from /dev/tty
+            if read -p "Enter your choice [1-9, 0]: " choice </dev/tty 2>/dev/null; then
+                # Successfully read from /dev/tty
+                :
+            else
+                # /dev/tty not available, can't continue interactively
+                print_error "Cannot read input: no TTY available"
+                print_info "To run non-interactively, set NONINTERACTIVE=1"
+                exit 1
+            fi
+        else
+            read -p "Enter your choice [1-9, 0]: " choice
+        fi
         
         case $choice in
             1)
@@ -177,7 +192,17 @@ show_menu() {
         # After each installation (except exit), ask if user wants to install more
         if [ "$choice" != "0" ] && [ "$choice" != "1" ]; then
             echo ""
-            read -p "Install another component? (y/N): " -n 1 -r
+            # Read input from /dev/tty if stdin is piped
+            if [ ! -t 0 ]; then
+                if read -p "Install another component? (y/N): " -n 1 -r </dev/tty 2>/dev/null; then
+                    :
+                else
+                    print_error "Cannot read input: no TTY available"
+                    break
+                fi
+            else
+                read -p "Install another component? (y/N): " -n 1 -r
+            fi
             echo ""
             if [[ ! $REPLY =~ ^[Yy]$ ]]; then
                 break
@@ -245,7 +270,18 @@ custom_installation() {
     
     echo ""
     echo "Enter component numbers separated by spaces (e.g., 1 3 4):"
-    read -a selections
+    
+    # Read input from /dev/tty if stdin is piped
+    if [ ! -t 0 ]; then
+        if read -a selections </dev/tty 2>/dev/null; then
+            :
+        else
+            print_error "Cannot read input: no TTY available"
+            return 1
+        fi
+    else
+        read -a selections
+    fi
     
     for sel in "${selections[@]}"; do
         if [[ $sel -ge 1 && $sel -le ${#components[@]} ]]; then
@@ -257,26 +293,6 @@ custom_installation() {
 
 # Main execution
 main() {
-    # Check if we're being piped from curl/wget
-    if [ ! -t 0 ]; then
-        # We're being piped - download and re-execute
-        print_header
-        print_info "Downloading installer for interactive execution..."
-        
-        # Create temp script
-        local temp_installer=$(mktemp /tmp/devenv-installer-XXXXXX.sh)
-        
-        # Download the full script to temp file
-        cat > "$temp_installer"
-        
-        # Make it executable
-        chmod +x "$temp_installer"
-        
-        # Execute it with a flag to indicate it's been downloaded
-        exec bash "$temp_installer" --downloaded "$@"
-    fi
-    
-    # If we get here, we're running from a file (not piped)
     print_header
     
     detect_os
@@ -290,22 +306,33 @@ main() {
     
     check_prerequisites
     
-    # Check if running in CI/automated environment
-    if [ -n "$CI" ] || [ -n "$AUTOMATED_INSTALL" ]; then
+    # Check if running in CI/automated environment or non-interactive mode
+    if [ -n "$CI" ] || [ -n "$AUTOMATED_INSTALL" ] || [ -n "$NONINTERACTIVE" ]; then
         print_info "Running in automated mode - installing all components"
         install_full
     else
-        show_menu
+        # Try interactive mode
+        if [ ! -t 0 ]; then
+            # stdin is piped, check if we can use /dev/tty
+            if echo -n "" </dev/tty 2>/dev/null; then
+                print_info "Running interactively via /dev/tty (stdin is piped)"
+                show_menu
+            else
+                # No TTY available at all
+                print_warning "No TTY available for interactive mode"
+                print_info "To run non-interactively, set NONINTERACTIVE=1 or AUTOMATED_INSTALL=1"
+                print_info "Example: curl -fsSL https://peek-tech.github.io/devenv-setup/install.sh | NONINTERACTIVE=1 bash"
+                exit 1
+            fi
+        else
+            # Normal terminal mode
+            show_menu
+        fi
     fi
     
     print_section "Installation Complete"
     print_info "Please restart your terminal or run: source ~/.bashrc"
     print_info "For help and documentation, visit: https://peek-tech.github.io/devenv-setup"
-    
-    # Clean up temp file if we were downloaded
-    if [ "$1" = "--downloaded" ] && [[ "$0" == /tmp/devenv-installer-* ]]; then
-        rm -f "$0"
-    fi
 }
 
 # Run main function

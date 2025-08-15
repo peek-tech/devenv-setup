@@ -152,13 +152,33 @@ fi
 # Configure git (if not already configured)
 if [ -z "$(git config --global user.name)" ]; then
     print_info "Git user name not configured"
-    read -p "Enter your name for git commits: " git_name
+    # Read input from /dev/tty if stdin is piped
+    if [ ! -t 0 ]; then
+        if read -p "Enter your name for git commits: " git_name </dev/tty 2>/dev/null; then
+            :
+        else
+            print_warning "No TTY available, skipping git name configuration"
+            return 0
+        fi
+    else
+        read -p "Enter your name for git commits: " git_name
+    fi
     git config --global user.name "$git_name"
 fi
 
 if [ -z "$(git config --global user.email)" ]; then
     print_info "Git email not configured"
-    read -p "Enter your email for git commits: " git_email
+    # Read input from /dev/tty if stdin is piped
+    if [ ! -t 0 ]; then
+        if read -p "Enter your email for git commits: " git_email </dev/tty 2>/dev/null; then
+            :
+        else
+            print_warning "No TTY available, skipping git email configuration"
+            return 0
+        fi
+    else
+        read -p "Enter your email for git commits: " git_email
+    fi
     git config --global user.email "$git_email"
 fi
 

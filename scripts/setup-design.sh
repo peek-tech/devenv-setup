@@ -70,7 +70,17 @@ echo ""
 echo "  0) Install essential design tools (Figma + dev tools)"
 echo ""
 
-read -p "Select tools to install (e.g., 1 3 4 or 0 for essentials): " -a selections
+# Read input from /dev/tty if stdin is piped
+if [ ! -t 0 ]; then
+    if read -p "Select tools to install (e.g., 1 3 4 or 0 for essentials): " -a selections </dev/tty 2>/dev/null; then
+        :
+    else
+        print_warning "No TTY available, installing essential design tools by default"
+        selections=("0")
+    fi
+else
+    read -p "Select tools to install (e.g., 1 3 4 or 0 for essentials): " -a selections
+fi
 
 install_app() {
     local cask="$1"
