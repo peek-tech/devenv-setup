@@ -213,8 +213,8 @@
                 <h3>🛠️ Core Tools</h3>
                 <p>Essential development utilities</p>
                 <ul>
-                    <li>VS Code + Claude Code plugin</li>
-                    <li>Python & Node.js extensions</li>
+                    <li>VS Code + extensions</li>
+                    <li>Modern CLI tools (ripgrep, bat, exa, fzf, lazygit)</li>
                     <li>Ghostty terminal integration</li>
                     <li>Curated Nerd Fonts collection</li>
                 </ul>
@@ -222,10 +222,10 @@
             
             <div class="feature">
                 <h3>🔧 Programming Languages</h3>
-                <p>Language runtimes and package managers</p>
+                <p>Latest versions via version managers</p>
                 <ul>
-                    <li>Python 3.11 + Poetry (dependency mgmt)</li>
-                    <li>Node.js 20/22 + Yarn (package mgmt)</li>
+                    <li>Python (latest via pyenv) + Poetry</li>
+                    <li>Node.js (latest stable via nvm) + Yarn</li>
                     <li>Go programming language</li>
                     <li>Bun fast JavaScript runtime</li>
                 </ul>
@@ -233,11 +233,11 @@
             
             <div class="feature">
                 <h3>🌐 Browsers & Design</h3>
-                <p>Web browsers and creative tools</p>
+                <p>Web browsers and creative tools (macOS)</p>
                 <ul>
-                    <li>Chrome, Firefox, Edge, Brave</li>
-                    <li>Figma & design applications</li>
-                    <li>Developer fonts & utilities</li>
+                    <li>Chrome, Firefox, Edge, Brave, Arc + testing tools</li>
+                    <li>Interactive selection: Figma, Sketch, Adobe CC</li>
+                    <li>CLI tools: ImageMagick, FFmpeg, optimization</li>
                 </ul>
             </div>
             
@@ -245,9 +245,9 @@
                 <h3>☁️ Cloud Development</h3>
                 <p>AWS and cloud-native tools</p>
                 <ul>
-                    <li>AWS CLI & CDK</li>
-                    <li>Terraform</li>
-                    <li>Container tools</li>
+                    <li>AWS CLI, SAM, CDK & Vault</li>
+                    <li>Terraform for infrastructure</li>
+                    <li>Podman with Docker compatibility</li>
                 </ul>
             </div>
         </div>
@@ -257,7 +257,7 @@
             <div class="component-grid">
                 <div class="component">
                     <h4>Core Development Tools</h4>
-                    <p>VS Code + extensions, Ghostty terminal integration, Nerd Fonts</p>
+                    <p>VS Code, modern CLI tools, Ghostty terminal, Nerd Fonts (cross-platform)</p>
                     <div class="command">
                         curl -fsSL https://peek-tech.github.io/devenv-setup/scripts/setup-core.sh | bash
                         <button class="copy-btn" onclick="copyToClipboard('curl -fsSL https://peek-tech.github.io/devenv-setup/scripts/setup-core.sh | bash')">Copy</button>
@@ -266,7 +266,7 @@
                 
                 <div class="component">
                     <h4>Programming Languages</h4>
-                    <p>Python 3.11 + Poetry, Node.js 20/22 + Yarn, Go, Bun</p>
+                    <p>Latest Python (pyenv) + Poetry, Node.js (nvm) + Yarn, Go, Bun (cross-platform)</p>
                     <div class="command">
                         curl -fsSL https://peek-tech.github.io/devenv-setup/scripts/setup-languages.sh | bash
                         <button class="copy-btn" onclick="copyToClipboard('curl -fsSL https://peek-tech.github.io/devenv-setup/scripts/setup-languages.sh | bash')">Copy</button>
@@ -275,7 +275,7 @@
                 
                 <div class="component">
                     <h4>Web Browsers</h4>
-                    <p>Chrome, Firefox, Edge, Brave, and development tools</p>
+                    <p>Chrome, Firefox, Edge, Brave, Arc + testing tools (macOS only)</p>
                     <div class="command">
                         curl -fsSL https://peek-tech.github.io/devenv-setup/scripts/setup-browsers.sh | bash
                         <button class="copy-btn" onclick="copyToClipboard('curl -fsSL https://peek-tech.github.io/devenv-setup/scripts/setup-browsers.sh | bash')">Copy</button>
@@ -284,7 +284,7 @@
                 
                 <div class="component">
                     <h4>Design Tools</h4>
-                    <p>Figma, image optimization, fonts, and creative tools</p>
+                    <p>Interactive selection: Figma, Sketch, Adobe CC + CLI tools (macOS only)</p>
                     <div class="command">
                         curl -fsSL https://peek-tech.github.io/devenv-setup/scripts/setup-design.sh | bash
                         <button class="copy-btn" onclick="copyToClipboard('curl -fsSL https://peek-tech.github.io/devenv-setup/scripts/setup-design.sh | bash')">Copy</button>
@@ -302,10 +302,19 @@
                 
                 <div class="component">
                     <h4>AWS Development Tools</h4>
-                    <p>AWS CLI, SAM, CDK, and credential tools</p>
+                    <p>AWS CLI, SAM, CDK, Vault, and Terraform (cross-platform)</p>
                     <div class="command">
                         curl -fsSL https://peek-tech.github.io/devenv-setup/scripts/setup-aws.sh | bash
                         <button class="copy-btn" onclick="copyToClipboard('curl -fsSL https://peek-tech.github.io/devenv-setup/scripts/setup-aws.sh | bash')">Copy</button>
+                    </div>
+                </div>
+                
+                <div class="component">
+                    <h4>Container Tools</h4>
+                    <p>Podman + Desktop with Docker compatibility and Compose support (cross-platform)</p>
+                    <div class="command">
+                        curl -fsSL https://peek-tech.github.io/devenv-setup/scripts/setup-containers.sh | bash
+                        <button class="copy-btn" onclick="copyToClipboard('curl -fsSL https://peek-tech.github.io/devenv-setup/scripts/setup-containers.sh | bash')">Copy</button>
                     </div>
                 </div>
             </div>
