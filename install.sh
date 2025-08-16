@@ -1044,16 +1044,11 @@ configure_ssh_config() {
         print_warning "GitHub SSH config already exists in $ssh_config"
         
         local choice
-        if [ ! -t 0 ]; then
-            if read -p "> Update existing config? (y/N): " -n 1 -r choice </dev/tty 2>/dev/null; then
-                echo ""
-            else
-                print_warning "No TTY available, skipping config update"
-                return 0
-            fi
-        else
-            read -p "> Update existing config? (y/N): " -n 1 -r choice
+        if prompt_user "> Update existing config? (y/N): " choice "-n 1 -r"; then
             echo ""
+        else
+            print_warning "No TTY available, skipping config update"
+            return 0
         fi
         
         if [[ ! $choice =~ ^[Yy]$ ]]; then
@@ -1155,15 +1150,10 @@ wait_for_github_setup() {
                 echo ""
                 
                 local retry
-                if [ ! -t 0 ]; then
-                    if read -p "> Try again? (y/s/N): " -n 1 -r retry </dev/tty 2>/dev/null; then
-                        echo ""
-                    else
-                        retry="n"
-                    fi
-                else
-                    read -p "> Try again? (y)es, (s)kip test, (N)o: " -n 1 -r retry
+                if prompt_user "> Try again? (y)es, (s)kip test, (N)o: " retry "-n 1 -r"; then
                     echo ""
+                else
+                    retry="n"
                 fi
                 
                 if [[ $retry =~ ^[Ss]$ ]]; then
@@ -1471,16 +1461,11 @@ setup_database_services() {
     
     # Ask about MongoDB service
     local start_mongodb=false
-    if [ ! -t 0 ]; then
-        if prompt_user "> Start MongoDB Community Server at boot? (y/N): " mongodb_choice; then
-            [[ $mongodb_choice =~ ^[Yy]$ ]] && start_mongodb=true
-        else
-            print_info "Skipping MongoDB service setup (no TTY)"
-        fi
-    else
-        read -p "> Start MongoDB Community Server at boot? (y/N): " -n 1 -r mongodb_choice
+    if prompt_user "> Start MongoDB Community Server at boot? (y/N): " mongodb_choice "-n 1 -r"; then
         echo ""
         [[ $mongodb_choice =~ ^[Yy]$ ]] && start_mongodb=true
+    else
+        print_info "Skipping MongoDB service setup (no TTY)"
     fi
     
     if [ "$start_mongodb" = true ]; then
@@ -1498,16 +1483,11 @@ setup_database_services() {
     
     # Ask about PostgreSQL service
     local start_postgres=false
-    if [ ! -t 0 ]; then
-        if prompt_user "> Start PostgreSQL 16 Server at boot? (y/N): " postgres_choice; then
-            [[ $postgres_choice =~ ^[Yy]$ ]] && start_postgres=true
-        else
-            print_info "Skipping PostgreSQL service setup (no TTY)"
-        fi
-    else
-        read -p "> Start PostgreSQL 16 Server at boot? (y/N): " -n 1 -r postgres_choice
+    if prompt_user "> Start PostgreSQL 16 Server at boot? (y/N): " postgres_choice "-n 1 -r"; then
         echo ""
         [[ $postgres_choice =~ ^[Yy]$ ]] && start_postgres=true
+    else
+        print_info "Skipping PostgreSQL service setup (no TTY)"
     fi
     
     if [ "$start_postgres" = true ]; then
