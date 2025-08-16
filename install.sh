@@ -1403,37 +1403,132 @@ install_nerd_fonts() {
         return 0
     fi
     
-    print_info "Installing specific Nerd Fonts via Homebrew..."
+    print_info "Installing ALL Nerd Fonts and Roboto family via Homebrew..."
+    print_info "Note: homebrew/cask-fonts was deprecated in 2024 - using direct installation"
     
-    # Tap the fonts cask if not already tapped
-    if ! brew tap | grep -q "homebrew/cask-fonts"; then
-        print_info "Adding Homebrew font repository..."
-        brew tap homebrew/cask-fonts
-    fi
-    
-    # Define Nerd Font casks to install
+    # Complete list of ALL Nerd Fonts (based on nerdfonts.com/font-downloads + Homebrew search)
     local nerd_fonts=(
-        "font-open-dyslexic-nerd-font"
-        "font-jetbrains-mono-nerd-font"
-        "font-hack-nerd-font"
-        "font-symbols-only-nerd-font"
+        # Core Nerd Fonts from nerdfonts.com + additional available fonts
+        "font-0xproto-nerd-font"
+        "font-3270-nerd-font"
+        "font-adwaita-mono-nerd-font"
+        "font-agave-nerd-font"
+        "font-anonymice-nerd-font"
+        "font-arimo-nerd-font"
+        "font-aurulent-sans-mono-nerd-font"
+        "font-bigblue-terminal-nerd-font"
+        "font-bitstream-vera-sans-mono-nerd-font"
+        "font-blex-mono-nerd-font"
+        "font-caskaydia-cove-nerd-font"
+        "font-caskaydia-mono-nerd-font"
         "font-code-new-roman-nerd-font"
+        "font-comic-shanns-mono-nerd-font"
+        "font-commit-mono-nerd-font"
+        "font-cousine-nerd-font"
+        "font-d2coding-nerd-font"
+        "font-daddy-time-mono-nerd-font"
+        "font-dejavu-sans-mono-nerd-font"
+        "font-departure-mono-nerd-font"
+        "font-droid-sans-mono-nerd-font"
+        "font-envy-code-r-nerd-font"
+        "font-fantasque-sans-mono-nerd-font"
+        "font-fira-code-nerd-font"
+        "font-fira-mono-nerd-font"
+        "font-geist-mono-nerd-font"
+        "font-go-mono-nerd-font"
+        "font-gohufont-nerd-font"
+        "font-hack-nerd-font"
+        "font-hasklug-nerd-font"
+        "font-heavy-data-nerd-font"
+        "font-hurmit-nerd-font"
+        "font-im-writing-nerd-font"
+        "font-inconsolata-nerd-font"
+        "font-inconsolata-go-nerd-font"
+        "font-inconsolata-lgc-nerd-font"
+        "font-intone-mono-nerd-font"
+        "font-iosevka-nerd-font"
+        "font-iosevka-term-nerd-font"
+        "font-iosevka-term-slab-nerd-font"
+        "font-jetbrains-mono-nerd-font"
+        "font-lekton-nerd-font"
+        "font-liberation-nerd-font"
+        "font-lilex-nerd-font"
+        "font-martian-mono-nerd-font"
+        "font-meslo-lg-nerd-font"
+        "font-monaspice-nerd-font"
+        "font-monofur-nerd-font"
+        "font-monoid-nerd-font"
+        "font-mononoki-nerd-font"
+        "font-m+-nerd-font"
+        "font-noto-nerd-font"
+        "font-open-dyslexic-nerd-font"
+        "font-overpass-nerd-font"
+        "font-profont-nerd-font"
+        "font-proggy-clean-tt-nerd-font"
+        "font-rec-mono-nerd-font"
+        "font-roboto-mono-nerd-font"
+        "font-shure-tech-mono-nerd-font"
+        "font-sauce-code-pro-nerd-font"
+        "font-space-mono-nerd-font"
+        "font-symbols-only-nerd-font"
+        "font-terminess-ttf-nerd-font"
+        "font-tinos-nerd-font"
+        "font-ubuntu-nerd-font"
+        "font-ubuntu-mono-nerd-font"
+        "font-victor-mono-nerd-font"
+        "font-recursive-mono-nerd-font"
+        "font-zed-mono-nerd-font"
     )
+    
+    # Roboto font family (complete family)
+    local roboto_fonts=(
+        "font-roboto"
+        "font-roboto-mono"
+        "font-roboto-slab"
+        "font-roboto-serif"
+        "font-roboto-condensed"
+        "font-roboto-flex"
+    )
+    
+    # Install all Nerd Fonts
+    print_info "Installing ${#nerd_fonts[@]} Nerd Fonts..."
+    local installed_count=0
+    local failed_count=0
     
     for font in "${nerd_fonts[@]}"; do
         if brew list --cask "$font" &>/dev/null 2>&1; then
+            installed_count=$((installed_count + 1))
+        else
+            if brew install "$font" &>/dev/null; then
+                installed_count=$((installed_count + 1))
+                print_status "Installed $font"
+            else
+                failed_count=$((failed_count + 1))
+                print_warning "Failed to install $font (may not be available)"
+            fi
+        fi
+    done
+    
+    # Install Roboto font family
+    print_info "Installing Roboto font family..."
+    for font in "${roboto_fonts[@]}"; do
+        if brew list --cask "$font" &>/dev/null 2>&1; then
             print_status "$font already installed"
         else
-            print_info "Installing $font..."
-            if brew install --cask "$font" 2>/dev/null; then
-                print_status "$font installed successfully"
+            if brew install "$font" &>/dev/null; then
+                print_status "Installed $font"
             else
                 print_warning "Failed to install $font (may not be available)"
             fi
         fi
     done
     
-    print_status "Nerd Fonts installation complete"
+    print_status "Font installation complete!"
+    print_info "Installed: $installed_count Nerd Fonts"
+    if [ $failed_count -gt 0 ]; then
+        print_info "Failed: $failed_count fonts (names may have changed)"
+    fi
+    print_info "All fonts are now available system-wide"
 }
 
 setup_git_aliases() {
