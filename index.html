@@ -190,7 +190,7 @@
             counter-reset: install-counter;
         }
         
-        .install-options li {
+        .install-options > ol > li {
             counter-increment: install-counter;
             margin-bottom: 1.5rem;
             padding: 1rem;
@@ -199,7 +199,7 @@
             background: var(--bg-secondary);
         }
         
-        .install-options li::before {
+        .install-options > ol > li::before {
             content: counter(install-counter) ". ";
             color: var(--primary);
             font-weight: bold;
@@ -248,14 +248,14 @@
             list-style: disc;
         }
         
-        .details-content li {
+        .details-content ul li {
             margin: 0.25rem 0;
             padding: 0;
             border: none;
             background: none;
         }
         
-        .details-content li::before {
+        .details-content ul li::before {
             content: none;
         }
     </style>
