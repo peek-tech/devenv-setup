@@ -83,7 +83,12 @@ The installer provides an interactive menu to select components:
      - ncdu (disk usage)
      - just (command runner)
      - zoxide (smart cd)
-   - **Fonts:** Curated Nerd Fonts collection
+   - **Fonts:**
+     - Curated Nerd Fonts collection
+     - Fira Code (coding font with ligatures)
+     - Source Code Pro
+     - Cascadia Code
+     - Inter (modern UI font)
    - **Utilities:** jq, wget, tree, htop, tmux
    </details>
 
@@ -120,11 +125,6 @@ The installer provides an interactive menu to select components:
      - OptiPNG
      - JPEG optimization tools
      - FFmpeg (video processing)
-   - **Developer Fonts:**
-     - Fira Code
-     - Source Code Pro
-     - Cascadia Code
-     - Inter
    </details>
 
 6. **Claude Code + Agent Orchestration**

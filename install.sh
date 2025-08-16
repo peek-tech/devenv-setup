@@ -1516,6 +1516,7 @@ install_core_tools() {
         refresh_environment
         install_macos_core_tools
         install_nerd_fonts
+        install_developer_fonts
         configure_ghostty
         configure_vscode
         configure_vscode_terminal_default
@@ -2491,6 +2492,50 @@ setup_language_directories() {
     
     print_status "Development directories created"
 }
+install_developer_fonts() {
+    if [ "$OS_TYPE" != "macos" ]; then
+        return 0
+    fi
+    
+    print_info "Installing developer-friendly fonts..."
+    
+    local fonts=(
+        "font-fira-code"
+        "font-source-code-pro"
+        "font-cascadia-code"
+        "font-inter"
+    )
+    
+    # Tap font cask if not already tapped
+    if ! brew tap | grep -q "homebrew/cask-fonts"; then
+        print_info "Adding Homebrew font repository..."
+        brew tap homebrew/cask-fonts
+    fi
+    
+    local installed_count=0
+    local failed_count=0
+    
+    for font in "${fonts[@]}"; do
+        if brew list --cask "$font" &>/dev/null 2>&1; then
+            print_status "${font} already installed"
+            installed_count=$((installed_count + 1))
+        else
+            print_info "Installing ${font}..."
+            if brew install --cask "$font" 2>/dev/null; then
+                print_status "${font} installed successfully"
+                installed_count=$((installed_count + 1))
+            else
+                print_warning "${font} installation failed"
+                failed_count=$((failed_count + 1))
+            fi
+        fi
+    done
+    
+    print_status "Developer fonts installation complete: $installed_count installed"
+    if [ $failed_count -gt 0 ]; then
+        print_info "Failed: $failed_count fonts (may have been updated or renamed)"
+    fi
+}
 
 #=============================================================================
 # WEB BROWSERS INSTALLATION
@@ -2672,8 +2717,7 @@ install_design_tools() {
     # Install command-line design tools
     install_design_cli_tools
     
-    # Install fonts
-    install_design_fonts
+    # Note: Developer fonts moved to core development tools
     
     print_status "Design and creative tools installation complete!"
 }
@@ -2716,36 +2760,6 @@ install_design_cli_tools() {
                 print_status "$name installed successfully"
             else
                 print_warning "Failed to install $name"
-            fi
-        fi
-    done
-}
-
-install_design_fonts() {
-    print_info "Installing developer-friendly fonts..."
-    
-    local fonts=(
-        "font-fira-code"
-        "font-source-code-pro"
-        "font-cascadia-code"
-        "font-inter"
-    )
-    
-    # Tap font cask if not already tapped
-    if ! brew tap | grep -q "homebrew/cask-fonts"; then
-        print_info "Adding Homebrew font repository..."
-        brew tap homebrew/cask-fonts
-    fi
-    
-    for font in "${fonts[@]}"; do
-        if brew list --cask "$font" &>/dev/null 2>&1; then
-            print_status "$font already installed"
-        else
-            print_info "Installing $font..."
-            if brew install --cask "$font"; then
-                print_status "$font installed successfully"
-            else
-                print_warning "Failed to install $font"
             fi
         fi
     done
