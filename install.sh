@@ -682,25 +682,28 @@ fi
 
 # Source zoxide if available (special case - provides shell integration)
 if command -v zoxide &> /dev/null && [ -f "$HOME/.zoxide_completion" ]; then
-    source "$HOME/.zoxide_completion"
+    source "$HOME/.zoxide_completion" 2>/dev/null || true
 fi
 
 # Enable bash completion if available
 if [ -f /usr/share/bash-completion/bash_completion ]; then
-    source /usr/share/bash-completion/bash_completion
+    source /usr/share/bash-completion/bash_completion 2>/dev/null || true
 elif [ -f /etc/bash_completion ]; then
-    source /etc/bash_completion
+    source /etc/bash_completion 2>/dev/null || true
 fi
 
 # Load homebrew completions if available
 if command -v brew &> /dev/null; then
     HOMEBREW_PREFIX="$(brew --prefix)"
     if [[ -r "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh" ]]; then
-        source "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh"
+        source "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh" 2>/dev/null || true
     else
+        # Set nullglob to handle empty directory case
+        shopt -s nullglob 2>/dev/null || true
         for COMPLETION in "${HOMEBREW_PREFIX}/etc/bash_completion.d/"*; do
-            [[ -r "$COMPLETION" ]] && source "$COMPLETION"
+            [[ -r "$COMPLETION" ]] && source "$COMPLETION" 2>/dev/null || true
         done
+        shopt -u nullglob 2>/dev/null || true
     fi
 fi
 EOF
