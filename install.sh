@@ -818,15 +818,11 @@ select_or_generate_ssh_key() {
         
         # Read user choice
         local choice
-        if [ ! -t 0 ]; then
-            if read -p "> Select an option (1-$((${#keys[@]}+2))): " choice </dev/tty 2>/dev/null; then
-                :
-            else
-                print_warning "No TTY available, generating new key"
-                choice=$((${#keys[@]}+1))
-            fi
+        if prompt_user "Select an option (1-$((${#keys[@]}+2))): " choice; then
+            :  # Continue
         else
-            read -p "> Select an option (1-$((${#keys[@]}+2))): " choice
+            print_warning "No TTY available, generating new key"
+            choice=$((${#keys[@]}+1))
         fi
         
         if [[ "$choice" =~ ^[0-9]+$ ]] && [ "$choice" -ge 1 ] && [ "$choice" -le ${#keys[@]} ]; then
@@ -891,15 +887,11 @@ generate_ssh_key() {
     
     # Get email for the key
     print_info "Enter your email address for the SSH key (or press Enter for default):"
-    if [ ! -t 0 ]; then
-        if read -p "> Email [user@example.com]: " email </dev/tty 2>/dev/null; then
-            :
-        else
-            print_warning "No TTY available, using default email"
-            email="user@example.com"
-        fi
+    if prompt_user "Email [user@example.com]: " email; then
+        :  # Continue
     else
-        read -p "> Email [user@example.com]: " email
+        print_warning "No TTY available, using default email"
+        email="user@example.com"
     fi
     
     if [ -z "$email" ]; then
@@ -1586,15 +1578,11 @@ configure_git() {
     if [ -z "$(git config --global user.name)" ]; then
         print_info "Git user name not configured"
         # Read input from /dev/tty if stdin is piped
-        if [ ! -t 0 ]; then
-            if read -p "> Enter your name for git commits: " git_name </dev/tty 2>/dev/null; then
-                :
-            else
-                print_warning "No TTY available, skipping git name configuration"
-                return 0
-            fi
+        if prompt_user "Enter your name for git commits: " git_name; then
+            :  # Continue
         else
-            read -p "> Enter your name for git commits: " git_name
+            print_warning "No TTY available, skipping git name configuration"
+            return 0
         fi
         git config --global user.name "$git_name"
     fi
@@ -1602,15 +1590,11 @@ configure_git() {
     if [ -z "$(git config --global user.email)" ]; then
         print_info "Git email not configured"
         # Read input from /dev/tty if stdin is piped
-        if [ ! -t 0 ]; then
-            if read -p "> Enter your email for git commits: " git_email </dev/tty 2>/dev/null; then
-                :
-            else
-                print_warning "No TTY available, skipping git email configuration"
-                return 0
-            fi
+        if prompt_user "Enter your email for git commits: " git_email; then
+            :  # Continue
         else
-            read -p "> Enter your email for git commits: " git_email
+            print_warning "No TTY available, skipping git email configuration"
+            return 0
         fi
         git config --global user.email "$git_email"
     fi
@@ -3492,19 +3476,13 @@ show_menu() {
         echo ""
         
         # Read input from /dev/tty if stdin is piped
-        if [ ! -t 0 ]; then
-            # Try to read from /dev/tty
-            if read -p "Enter your choice [1-10, 0]: " choice </dev/tty 2>/dev/null; then
-                # Successfully read from /dev/tty
-                :
-            else
-                # /dev/tty not available, can't continue interactively
-                print_error "Cannot read input: no TTY available"
-                print_info "To run non-interactively, set NONINTERACTIVE=1"
-                exit 1
-            fi
+        if prompt_user "Enter your choice [1-10, 0]: " choice; then
+            :  # Continue
         else
-            read -p "Enter your choice [1-10, 0]: " choice
+            # /dev/tty not available, can't continue interactively
+            print_error "Cannot read input: no TTY available"
+            print_info "To run non-interactively, set NONINTERACTIVE=1"
+            exit 1
         fi
         
         case $choice in
