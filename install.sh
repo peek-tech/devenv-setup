@@ -2657,7 +2657,35 @@ install_web_browsers() {
         done
     fi
     
+    # Create bookmarks after installation
+    create_browser_bookmarks
+    
     print_status "Browser installation complete!"
+}
+create_browser_bookmarks() {
+    print_info "Creating development bookmarks..."
+    
+    # Create a bookmark HTML file that can be imported into any browser
+    cat > "$HOME/Downloads/Development_Bookmarks.html" << 'EOF'
+<!DOCTYPE NETSCAPE-Bookmark-file-1>
+<!-- This is an automatically generated file. -->
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<TITLE>Development Bookmarks</TITLE>
+<H1>Development Bookmarks</H1>
+<DT><H3>Development</H3>
+<DL><p>
+<DT><A HREF="https://piiq.atlassian.net/wiki">Wiki</A>
+<DT><A HREF="https://piiq.atlassian.net/jira/projects?page=1&sortKey=name&sortOrder=ASC&types=software%2Cbusiness">JIRA</A>
+</DL><p>
+EOF
+    
+    print_status "Development bookmarks saved to ~/Downloads/Development_Bookmarks.html"
+    print_info "Import instructions:"
+    echo "  Chrome:  Bookmarks > Import bookmarks and settings"
+    echo "  Firefox: Bookmarks > Show All Bookmarks > Import and Backup > Import Data from HTML File"
+    echo "  Edge:    Favorites > Import favorites"
+    echo "  Brave:   Bookmarks > Import bookmarks and settings"
+    echo "  Arc:     Import from other browsers"
 }
 
 install_browser_app() {
