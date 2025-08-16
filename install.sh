@@ -1565,7 +1565,11 @@ install_core_tools() {
     
     if [ "$OS_TYPE" = "macos" ]; then
         install_homebrew
+        # Temporarily disable exit on error for environment refresh
+        # Shell config files may contain commands that return non-zero exit codes
+        set +e
         refresh_environment
+        set -e
         install_macos_core_tools
         install_nerd_fonts
         install_developer_fonts
