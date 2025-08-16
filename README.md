@@ -56,7 +56,24 @@ curl -fsSL https://peek-tech.github.io/devenv-setup/install.sh | bash
 
 The installer provides an interactive menu to select components:
 
+### Quick Overview
+
 1. **Full Installation** - Installs all components (recommended for new setups)
+2. **Core Development Tools** - Homebrew, Git, VS Code, modern CLI tools, fonts
+3. **Programming Languages** - Python, Node.js, Go, Bun with version managers
+4. **Web Browsers** - Chrome, Firefox, Edge, Brave, Arc (macOS only)
+5. **Design Tools** - Figma, image processing tools (macOS only)
+6. **Claude Code** - AI assistant with agent orchestration
+7. **AWS Development Tools** - CLI, SAM, CDK, Session Manager
+8. **Container Tools** - Podman with Docker compatibility
+9. **Database Tools** - DBeaver, MongoDB Compass, PostgreSQL, MongoDB
+10. **Custom Selection** - Choose specific components to install
+
+### Detailed Installation Scripts
+
+Each option installs the following components:
+
+1. **Full Installation** - Installs all components below (recommended for new setups)
 
 2. **Core Development Tools**
    <details>

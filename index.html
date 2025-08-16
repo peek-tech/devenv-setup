@@ -181,6 +181,36 @@
             text-decoration: underline;
         }
         
+        .install-overview {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+        
+        .install-overview h3 {
+            margin-top: 0;
+            color: var(--primary);
+        }
+        
+        .install-overview ol {
+            margin: 1rem 0;
+        }
+        
+        .install-overview li {
+            margin: 0.5rem 0;
+            padding-left: 0.5rem;
+        }
+        
+        .install-details {
+            margin-top: 2rem;
+        }
+        
+        .install-details h3 {
+            color: var(--primary);
+        }
+        
         .install-options {
             margin-top: 1.5rem;
         }
@@ -344,12 +374,32 @@
             <h2>Installation Options</h2>
             <p>The installer provides an interactive menu to select components:</p>
             
-            <div class="install-options">
+            <div class="install-overview">
+                <h3>Quick Overview</h3>
                 <ol>
-                    <li>
-                        <h4>Full Installation</h4>
-                        <p>Installs all components - recommended for new setups</p>
-                    </li>
+                    <li><strong>Full Installation</strong> - Installs all components (recommended for new setups)</li>
+                    <li><strong>Core Development Tools</strong> - Homebrew, Git, VS Code, modern CLI tools, fonts</li>
+                    <li><strong>Programming Languages</strong> - Python, Node.js, Go, Bun with version managers</li>
+                    <li><strong>Web Browsers</strong> - Chrome, Firefox, Edge, Brave, Arc (macOS only)</li>
+                    <li><strong>Design Tools</strong> - Figma, image processing tools (macOS only)</li>
+                    <li><strong>Claude Code</strong> - AI assistant with agent orchestration</li>
+                    <li><strong>AWS Development Tools</strong> - CLI, SAM, CDK, Session Manager</li>
+                    <li><strong>Container Tools</strong> - Podman with Docker compatibility</li>
+                    <li><strong>Database Tools</strong> - DBeaver, MongoDB Compass, PostgreSQL, MongoDB</li>
+                    <li><strong>Custom Selection</strong> - Choose specific components to install</li>
+                </ol>
+            </div>
+            
+            <div class="install-details">
+                <h3>Detailed Installation Scripts</h3>
+                <p>Each option installs the following components:</p>
+                
+                <div class="install-options">
+                    <ol>
+                        <li>
+                            <h4>Full Installation</h4>
+                            <p>Installs all components below - recommended for new setups</p>
+                        </li>
                     
                     <li>
                         <details>
