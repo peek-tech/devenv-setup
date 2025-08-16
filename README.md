@@ -199,10 +199,10 @@ Each option installs the following components:
      - PostgreSQL 16 client tools
      - MongoDB Shell (mongosh)
      - LazySql (terminal UI for SQL databases)
-   - **Optional Database Servers:**
+   - **Database Servers (installed by default):**
      - PostgreSQL 16
      - MongoDB Community
-   - **Service Management:** Homebrew services integration
+   - **Service Management:** Optional auto-start at boot via Homebrew services
    </details>
 
 10. **Custom Selection** - Choose specific components to install from the above options

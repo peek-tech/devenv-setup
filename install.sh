@@ -1385,7 +1385,7 @@ install_database_tools() {
         "lazysql"                  # Terminal UI for SQL databases
     )
     
-    # Optional database servers (user choice)
+    # Database servers (installed by default)
     local db_servers=(
         "mongodb-community"        # MongoDB server
         "postgresql@16"            # PostgreSQL 16 server (already in CLI tools)
@@ -1423,58 +1423,110 @@ install_database_tools() {
         fi
     done
     
-    # Ask about installing database servers
-    setup_database_servers
+    # Install database servers by default
+    install_database_servers
     
     # Configure database tools
     configure_database_environment
     
+    # Ask about setting up database services
+    setup_database_services
+    
     print_status "Database tools installation complete!"
 }
-
-setup_database_servers() {
-    print_info "Database servers can be installed for local development..."
+install_database_servers() {
+    print_info "Installing database servers for local development..."
     
-    # Ask about MongoDB
-    local install_mongodb=false
-    if [ ! -t 0 ]; then
-        if read -p "> Install MongoDB Community Server for local development? (y/N): " -n 1 -r mongodb_choice </dev/tty 2>/dev/null; then
-            echo ""
-            [[ $mongodb_choice =~ ^[Yy]$ ]] && install_mongodb=true
+    # Add MongoDB tap and install
+    if ! brew tap | grep -q "mongodb/brew"; then
+        print_info "Adding MongoDB Homebrew tap..."
+        brew tap mongodb/brew
+    fi
+    
+    if brew list mongodb-community &>/dev/null 2>&1; then
+        print_status "MongoDB Community already installed"
+    else
+        print_info "Installing MongoDB Community Server..."
+        if brew install mongodb-community; then
+            print_status "MongoDB Community installed successfully"
         else
-            print_info "Skipping MongoDB server installation (no TTY)"
+            print_warning "Failed to install MongoDB Community"
+        fi
+    fi
+    
+    # PostgreSQL is already installed via CLI tools section
+    if brew list postgresql@16 &>/dev/null 2>&1; then
+        print_status "PostgreSQL 16 already installed"
+    else
+        print_info "Installing PostgreSQL 16..."
+        if brew install postgresql@16; then
+            print_status "PostgreSQL 16 installed successfully"
+        else
+            print_warning "Failed to install PostgreSQL 16"
+        fi
+    fi
+}
+setup_database_services() {
+    print_info "Database servers are installed. Would you like to start them as runtime services?"
+    
+    # Ask about MongoDB service
+    local start_mongodb=false
+    if [ ! -t 0 ]; then
+        if prompt_user "> Start MongoDB Community Server at boot? (y/N): " mongodb_choice; then
+            [[ $mongodb_choice =~ ^[Yy]$ ]] && start_mongodb=true
+        else
+            print_info "Skipping MongoDB service setup (no TTY)"
         fi
     else
-        read -p "> Install MongoDB Community Server for local development? (y/N): " -n 1 -r mongodb_choice
+        read -p "> Start MongoDB Community Server at boot? (y/N): " -n 1 -r mongodb_choice
         echo ""
-        [[ $mongodb_choice =~ ^[Yy]$ ]] && install_mongodb=true
+        [[ $mongodb_choice =~ ^[Yy]$ ]] && start_mongodb=true
     fi
     
-    if [ "$install_mongodb" = true ]; then
-        # Add MongoDB tap and install
-        if ! brew tap | grep -q "mongodb/brew"; then
-            print_info "Adding MongoDB Homebrew tap..."
-            brew tap mongodb/brew
-        fi
-        
+    if [ "$start_mongodb" = true ]; then
         if brew list mongodb-community &>/dev/null 2>&1; then
-            print_status "MongoDB Community already installed"
-        else
-            print_info "Installing MongoDB Community Server..."
-            if brew install mongodb-community; then
-                print_status "MongoDB Community installed successfully"
-                print_info "MongoDB can be started with: brew services start mongodb-community"
+            print_info "Starting MongoDB service..."
+            if brew services start mongodb-community; then
+                print_status "MongoDB service started and enabled at boot"
             else
-                print_warning "Failed to install MongoDB Community"
+                print_warning "Failed to start MongoDB service"
             fi
+        else
+            print_warning "MongoDB not installed, cannot start service"
         fi
     fi
     
-    # PostgreSQL is already installed via postgresql@16 in CLI tools
-    if brew list postgresql@16 &>/dev/null 2>&1; then
-        print_status "PostgreSQL 16 server available"
-        print_info "PostgreSQL can be started with: brew services start postgresql@16"
+    # Ask about PostgreSQL service
+    local start_postgres=false
+    if [ ! -t 0 ]; then
+        if prompt_user "> Start PostgreSQL 16 Server at boot? (y/N): " postgres_choice; then
+            [[ $postgres_choice =~ ^[Yy]$ ]] && start_postgres=true
+        else
+            print_info "Skipping PostgreSQL service setup (no TTY)"
+        fi
+    else
+        read -p "> Start PostgreSQL 16 Server at boot? (y/N): " -n 1 -r postgres_choice
+        echo ""
+        [[ $postgres_choice =~ ^[Yy]$ ]] && start_postgres=true
     fi
+    
+    if [ "$start_postgres" = true ]; then
+        if brew list postgresql@16 &>/dev/null 2>&1; then
+            print_info "Starting PostgreSQL service..."
+            if brew services start postgresql@16; then
+                print_status "PostgreSQL service started and enabled at boot"
+            else
+                print_warning "Failed to start PostgreSQL service"
+            fi
+        else
+            print_warning "PostgreSQL 16 not installed, cannot start service"
+        fi
+    fi
+    
+    # Provide manual commands for reference
+    print_info "Manual service management commands:"
+    echo "  MongoDB:    brew services [start|stop|restart] mongodb-community"
+    echo "  PostgreSQL: brew services [start|stop|restart] postgresql@16"
 }
 
 configure_database_environment() {
