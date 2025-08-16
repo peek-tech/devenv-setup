@@ -17,6 +17,37 @@ NC='\033[0m' # No Color
 VERSION="2.0.0"
 
 # Helper functions
+# Prompt helper that handles TTY correctly
+prompt_user() {
+    local prompt="$1"
+    local var_name="$2"
+    local read_args="$3"  # Optional: additional read arguments like "-n 1 -r"
+    
+    if [ ! -t 0 ]; then
+        # No TTY on stdin, try to use /dev/tty
+        if [ -t 1 ]; then
+            # stdout is a TTY, display prompt normally
+            echo -n "$prompt"
+        else
+            # No TTY available, print to stderr
+            echo -n "$prompt" >&2
+        fi
+        
+        if [ -n "$read_args" ]; then
+            read $read_args "$var_name" </dev/tty 2>/dev/null || return 1
+        else
+            read "$var_name" </dev/tty 2>/dev/null || return 1
+        fi
+    else
+        # stdin is a TTY, use normal read with prompt
+        if [ -n "$read_args" ]; then
+            read -p "$prompt" $read_args "$var_name"
+        else
+            read -p "$prompt" "$var_name"
+        fi
+    fi
+}
+
 print_header() {
     echo ""
     echo -e "${CYAN}╔══════════════════════════════════════════════════════════╗${NC}"
@@ -727,16 +758,11 @@ git_with_ssh_retry() {
         print_info "Error: $error_output"
         
         local retry
-        if [ ! -t 0 ]; then
-            if read -p "Retry SSH setup for GitHub? (y/N): " -n 1 -r retry </dev/tty 2>/dev/null; then
-                echo ""
-            else
-                print_warning "No TTY available, skipping SSH retry"
-                return 1
-            fi
-        else
-            read -p "Retry SSH setup for GitHub? (y/N): " -n 1 -r retry
+        if prompt_user "Retry SSH setup for GitHub? (y/N): " retry "-n 1 -r"; then
             echo ""
+        else
+            print_warning "No TTY available, skipping SSH retry"
+            return 1
         fi
         
         if [[ $retry =~ ^[Yy]$ ]]; then
@@ -790,14 +816,14 @@ select_or_generate_ssh_key() {
         # Read user choice
         local choice
         if [ ! -t 0 ]; then
-            if read -p "Select an option (1-$((${#keys[@]}+2))): " choice </dev/tty 2>/dev/null; then
+            if read -p "> Select an option (1-$((${#keys[@]}+2))): " choice </dev/tty 2>/dev/null; then
                 :
             else
                 print_warning "No TTY available, generating new key"
                 choice=$((${#keys[@]}+1))
             fi
         else
-            read -p "Select an option (1-$((${#keys[@]}+2))): " choice
+            read -p "> Select an option (1-$((${#keys[@]}+2))): " choice
         fi
         
         if [[ "$choice" =~ ^[0-9]+$ ]] && [ "$choice" -ge 1 ] && [ "$choice" -le ${#keys[@]} ]; then
@@ -824,15 +850,11 @@ select_or_generate_ssh_key() {
         print_info "  2. Skip SSH setup (you can configure manually later)"
         
         local choice
-        if [ ! -t 0 ]; then
-            if read -p "Select option (1-2): " choice </dev/tty 2>/dev/null; then
-                echo ""
-            else
-                print_warning "No TTY available, skipping SSH setup"
-                return 1
-            fi
+        if prompt_user "Select option (1-2): " choice; then
+            :  # Continue
         else
-            read -p "Select option (1-2): " choice
+            print_warning "No TTY available, skipping SSH setup"
+            return 1
         fi
         
         case "$choice" in
@@ -867,14 +889,14 @@ generate_ssh_key() {
     # Get email for the key
     print_info "Enter your email address for the SSH key (or press Enter for default):"
     if [ ! -t 0 ]; then
-        if read -p "Email [user@example.com]: " email </dev/tty 2>/dev/null; then
+        if read -p "> Email [user@example.com]: " email </dev/tty 2>/dev/null; then
             :
         else
             print_warning "No TTY available, using default email"
             email="user@example.com"
         fi
     else
-        read -p "Email [user@example.com]: " email
+        read -p "> Email [user@example.com]: " email
     fi
     
     if [ -z "$email" ]; then
@@ -919,14 +941,14 @@ configure_ssh_config() {
         
         local choice
         if [ ! -t 0 ]; then
-            if read -p "Update existing config? (y/N): " -n 1 -r choice </dev/tty 2>/dev/null; then
+            if read -p "> Update existing config? (y/N): " -n 1 -r choice </dev/tty 2>/dev/null; then
                 echo ""
             else
                 print_warning "No TTY available, skipping config update"
                 return 0
             fi
         else
-            read -p "Update existing config? (y/N): " -n 1 -r choice
+            read -p "> Update existing config? (y/N): " -n 1 -r choice
             echo ""
         fi
         
@@ -988,16 +1010,11 @@ wait_for_github_setup() {
     local ready=false
     while [ "$ready" = false ]; do
         local choice
-        if [ ! -t 0 ]; then
-            if read -p "Have you added the SSH key to GitHub? (y/N): " -n 1 -r choice </dev/tty 2>/dev/null; then
-                echo ""
-            else
-                print_warning "No TTY available, assuming key is configured"
-                choice="y"
-            fi
-        else
-            read -p "Have you added the SSH key to GitHub? (y/N): " -n 1 -r choice
+        if prompt_user "Have you added the SSH key to GitHub? (y/N): " choice "-n 1 -r"; then
             echo ""
+        else
+            print_warning "No TTY available, assuming key is configured"
+            choice="y"
         fi
         
         if [[ $choice =~ ^[Yy]$ ]]; then
@@ -1035,13 +1052,13 @@ wait_for_github_setup() {
                 
                 local retry
                 if [ ! -t 0 ]; then
-                    if read -p "Try again? (y/s/N): " -n 1 -r retry </dev/tty 2>/dev/null; then
+                    if read -p "> Try again? (y/s/N): " -n 1 -r retry </dev/tty 2>/dev/null; then
                         echo ""
                     else
                         retry="n"
                     fi
                 else
-                    read -p "Try again? (y)es, (s)kip test, (N)o: " -n 1 -r retry
+                    read -p "> Try again? (y)es, (s)kip test, (N)o: " -n 1 -r retry
                     echo ""
                 fi
                 
@@ -1317,14 +1334,14 @@ setup_database_servers() {
     # Ask about MongoDB
     local install_mongodb=false
     if [ ! -t 0 ]; then
-        if read -p "Install MongoDB Community Server for local development? (y/N): " -n 1 -r mongodb_choice </dev/tty 2>/dev/null; then
+        if read -p "> Install MongoDB Community Server for local development? (y/N): " -n 1 -r mongodb_choice </dev/tty 2>/dev/null; then
             echo ""
             [[ $mongodb_choice =~ ^[Yy]$ ]] && install_mongodb=true
         else
             print_info "Skipping MongoDB server installation (no TTY)"
         fi
     else
-        read -p "Install MongoDB Community Server for local development? (y/N): " -n 1 -r mongodb_choice
+        read -p "> Install MongoDB Community Server for local development? (y/N): " -n 1 -r mongodb_choice
         echo ""
         [[ $mongodb_choice =~ ^[Yy]$ ]] && install_mongodb=true
     fi
@@ -1567,14 +1584,14 @@ configure_git() {
         print_info "Git user name not configured"
         # Read input from /dev/tty if stdin is piped
         if [ ! -t 0 ]; then
-            if read -p "Enter your name for git commits: " git_name </dev/tty 2>/dev/null; then
+            if read -p "> Enter your name for git commits: " git_name </dev/tty 2>/dev/null; then
                 :
             else
                 print_warning "No TTY available, skipping git name configuration"
                 return 0
             fi
         else
-            read -p "Enter your name for git commits: " git_name
+            read -p "> Enter your name for git commits: " git_name
         fi
         git config --global user.name "$git_name"
     fi
@@ -1583,14 +1600,14 @@ configure_git() {
         print_info "Git email not configured"
         # Read input from /dev/tty if stdin is piped
         if [ ! -t 0 ]; then
-            if read -p "Enter your email for git commits: " git_email </dev/tty 2>/dev/null; then
+            if read -p "> Enter your email for git commits: " git_email </dev/tty 2>/dev/null; then
                 :
             else
                 print_warning "No TTY available, skipping git email configuration"
                 return 0
             fi
         else
-            read -p "Enter your email for git commits: " git_email
+            read -p "> Enter your email for git commits: " git_email
         fi
         git config --global user.email "$git_email"
     fi
@@ -2434,14 +2451,14 @@ install_web_browsers() {
     
     # Read input from /dev/tty if stdin is piped
     if [ ! -t 0 ]; then
-        if read -p "Select browsers to install (e.g., 1 3 4 or 0 for all): " -a selections </dev/tty 2>/dev/null; then
+        if read -p "> Select browsers to install (e.g., 1 3 4 or 0 for all): " -a selections </dev/tty 2>/dev/null; then
             :
         else
             print_warning "No TTY available, installing all browsers by default"
             selections=("0")
         fi
     else
-        read -p "Select browsers to install (e.g., 1 3 4 or 0 for all): " -a selections
+        read -p "> Select browsers to install (e.g., 1 3 4 or 0 for all): " -a selections
     fi
     
     if [[ "${selections[0]}" == "0" ]]; then
@@ -2557,14 +2574,14 @@ install_design_tools() {
     
     # Read input from /dev/tty if stdin is piped
     if [ ! -t 0 ]; then
-        if read -p "Select tools to install (e.g., 1 3 4 or 0 for essentials): " -a selections </dev/tty 2>/dev/null; then
+        if read -p "> Select tools to install (e.g., 1 3 4 or 0 for essentials): " -a selections </dev/tty 2>/dev/null; then
             :
         else
             print_warning "No TTY available, installing essential design tools by default"
             selections=("0")
         fi
     else
-        read -p "Select tools to install (e.g., 1 3 4 or 0 for essentials): " -a selections
+        read -p "> Select tools to install (e.g., 1 3 4 or 0 for essentials): " -a selections
     fi
     
     if [[ "${selections[0]}" == "0" ]]; then
