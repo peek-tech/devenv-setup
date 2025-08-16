@@ -33,47 +33,33 @@ curl -fsSL https://peek-tech.github.io/devenv-setup/install.sh | bash
   - ChromeDriver and GeckoDriver for Selenium testing
 
 - **Design Tools**: Creative applications and utilities (macOS only)
-  - Interactive selection: Figma, Sketch, Adobe Creative Cloud, Canva, Pixelmator Pro
-  - Development tools: ImageOptim, Color Oracle, IconJar
+  - Figma UI/UX design application
   - CLI tools: ImageMagick, GraphicsMagick, OptiPNG, JPEG optimization, FFmpeg
   - Developer fonts: Fira Code, Source Code Pro, Cascadia Code, Inter
 
-- **Cloud Tools**: AWS and infrastructure tools
-  - AWS CLI, SAM CLI, CDK
+- **AWS Development Tools**: AWS and infrastructure tools
+  - AWS CLI v2, SAM CLI, CDK
+  - AWS Session Manager Plugin
   - AWS Vault for credential management
-  - Terraform for infrastructure as code
 
 - **Container Tools**: Podman with full Docker compatibility
   - Podman + Podman Desktop
   - Docker command compatibility (symlinks/aliases)
   - Docker Compose support via Podman Compose
 
-## Individual Components
+## Installation Options
 
-Install specific components:
+The installer provides an interactive menu to select components:
 
-```bash
-# Core development tools (VS Code, CLI tools, Nerd Fonts - cross-platform)
-curl -fsSL https://peek-tech.github.io/devenv-setup/scripts/setup-core.sh | bash
-
-# Programming languages (Latest Python via pyenv, Node.js via nvm, Go, Bun - cross-platform)
-curl -fsSL https://peek-tech.github.io/devenv-setup/scripts/setup-languages.sh | bash
-
-# Web browsers (Chrome, Firefox, Edge, Brave, Arc + testing tools - macOS only)
-curl -fsSL https://peek-tech.github.io/devenv-setup/scripts/setup-browsers.sh | bash
-
-# Design tools (Interactive selection of apps + CLI tools - macOS only)
-curl -fsSL https://peek-tech.github.io/devenv-setup/scripts/setup-design.sh | bash
-
-# Claude Code with agent orchestration
-curl -fsSL https://peek-tech.github.io/devenv-setup/scripts/setup-claude.sh | bash
-
-# AWS development tools (CLI, SAM, CDK, Vault, Terraform - cross-platform)
-curl -fsSL https://peek-tech.github.io/devenv-setup/scripts/setup-aws.sh | bash
-
-# Container tools (Podman with Docker compatibility - cross-platform)
-curl -fsSL https://peek-tech.github.io/devenv-setup/scripts/setup-containers.sh | bash
-```
+1. **Full Installation** - Installs all components (recommended)
+2. **Core Development Tools** - Homebrew, Git, Neovim, VS Code, etc.
+3. **Programming Languages** - Python, Node.js, Go, Bun with version managers
+4. **Web Browsers** - Chrome, Firefox, Edge, Brave, Arc (macOS only)
+5. **Design Tools** - Figma, image tools, fonts (macOS only)
+6. **Claude Code** - AI assistant with agent orchestration
+7. **AWS Development Tools** - CLI, SAM, CDK, Session Manager
+8. **Container Tools** - Podman with Docker compatibility
+9. **Custom Selection** - Choose specific components to install
 
 ## Configuration
 
@@ -92,12 +78,6 @@ export GITHUB_CLIENT_ID=your_oauth_app_client_id
 # For AWS configuration
 export AWS_PROFILE=development
 ```
-
-## Documentation
-
-- [Installation Guide](docs/installation.md)
-- [Component Details](docs/components.md)
-- [Troubleshooting](docs/troubleshooting.md)
 
 ## Requirements
 

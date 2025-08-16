@@ -236,7 +236,7 @@
                 <p>Web browsers and creative tools (macOS)</p>
                 <ul>
                     <li>Chrome, Firefox, Edge, Brave, Arc + testing tools</li>
-                    <li>Interactive selection: Figma, Sketch, Adobe CC</li>
+                    <li>Figma UI/UX design application</li>
                     <li>CLI tools: ImageMagick, FFmpeg, optimization</li>
                 </ul>
             </div>
@@ -245,77 +245,60 @@
                 <h3>☁️ Cloud Development</h3>
                 <p>AWS and cloud-native tools</p>
                 <ul>
-                    <li>AWS CLI, SAM, CDK & Vault</li>
-                    <li>Terraform for infrastructure</li>
+                    <li>AWS CLI v2, SAM, CDK & Vault</li>
+                    <li>Session Manager Plugin</li>
                     <li>Podman with Docker compatibility</li>
                 </ul>
             </div>
         </div>
         
         <div class="components">
-            <h2>Individual Components</h2>
+            <h2>Installation Options</h2>
+            <p>The installer provides an interactive menu to select components:</p>
             <div class="component-grid">
                 <div class="component">
-                    <h4>Core Development Tools</h4>
-                    <p>VS Code, modern CLI tools, Ghostty terminal, Nerd Fonts (cross-platform)</p>
-                    <div class="command">
-                        curl -fsSL https://peek-tech.github.io/devenv-setup/scripts/setup-core.sh | bash
-                        <button class="copy-btn" onclick="copyToClipboard('curl -fsSL https://peek-tech.github.io/devenv-setup/scripts/setup-core.sh | bash')">Copy</button>
-                    </div>
+                    <h4>1. Full Installation</h4>
+                    <p>Installs all components - recommended for new setups</p>
                 </div>
                 
                 <div class="component">
-                    <h4>Programming Languages</h4>
-                    <p>Latest Python (pyenv) + Poetry, Node.js (nvm) + Yarn, Go, Bun (cross-platform)</p>
-                    <div class="command">
-                        curl -fsSL https://peek-tech.github.io/devenv-setup/scripts/setup-languages.sh | bash
-                        <button class="copy-btn" onclick="copyToClipboard('curl -fsSL https://peek-tech.github.io/devenv-setup/scripts/setup-languages.sh | bash')">Copy</button>
-                    </div>
+                    <h4>2. Core Development Tools</h4>
+                    <p>Homebrew, Git, Neovim, VS Code, CLI tools, Nerd Fonts</p>
                 </div>
                 
                 <div class="component">
-                    <h4>Web Browsers</h4>
-                    <p>Chrome, Firefox, Edge, Brave, Arc + testing tools (macOS only)</p>
-                    <div class="command">
-                        curl -fsSL https://peek-tech.github.io/devenv-setup/scripts/setup-browsers.sh | bash
-                        <button class="copy-btn" onclick="copyToClipboard('curl -fsSL https://peek-tech.github.io/devenv-setup/scripts/setup-browsers.sh | bash')">Copy</button>
-                    </div>
+                    <h4>3. Programming Languages</h4>
+                    <p>Python, Node.js, Go, Bun with version managers</p>
                 </div>
                 
                 <div class="component">
-                    <h4>Design Tools</h4>
-                    <p>Interactive selection: Figma, Sketch, Adobe CC + CLI tools (macOS only)</p>
-                    <div class="command">
-                        curl -fsSL https://peek-tech.github.io/devenv-setup/scripts/setup-design.sh | bash
-                        <button class="copy-btn" onclick="copyToClipboard('curl -fsSL https://peek-tech.github.io/devenv-setup/scripts/setup-design.sh | bash')">Copy</button>
-                    </div>
+                    <h4>4. Web Browsers</h4>
+                    <p>Chrome, Firefox, Edge, Brave, Arc (macOS only)</p>
                 </div>
                 
                 <div class="component">
-                    <h4>Claude Code + Agents</h4>
-                    <p>AI-powered coding assistant with agent orchestration</p>
-                    <div class="command">
-                        curl -fsSL https://peek-tech.github.io/devenv-setup/scripts/setup-claude.sh | bash
-                        <button class="copy-btn" onclick="copyToClipboard('curl -fsSL https://peek-tech.github.io/devenv-setup/scripts/setup-claude.sh | bash')">Copy</button>
-                    </div>
+                    <h4>5. Design Tools</h4>
+                    <p>Figma, image tools, fonts (macOS only)</p>
                 </div>
                 
                 <div class="component">
-                    <h4>AWS Development Tools</h4>
-                    <p>AWS CLI, SAM, CDK, Vault, and Terraform (cross-platform)</p>
-                    <div class="command">
-                        curl -fsSL https://peek-tech.github.io/devenv-setup/scripts/setup-aws.sh | bash
-                        <button class="copy-btn" onclick="copyToClipboard('curl -fsSL https://peek-tech.github.io/devenv-setup/scripts/setup-aws.sh | bash')">Copy</button>
-                    </div>
+                    <h4>6. Claude Code</h4>
+                    <p>AI assistant with agent orchestration</p>
                 </div>
                 
                 <div class="component">
-                    <h4>Container Tools</h4>
-                    <p>Podman + Desktop with Docker compatibility and Compose support (cross-platform)</p>
-                    <div class="command">
-                        curl -fsSL https://peek-tech.github.io/devenv-setup/scripts/setup-containers.sh | bash
-                        <button class="copy-btn" onclick="copyToClipboard('curl -fsSL https://peek-tech.github.io/devenv-setup/scripts/setup-containers.sh | bash')">Copy</button>
-                    </div>
+                    <h4>7. AWS Development Tools</h4>
+                    <p>AWS CLI, SAM, CDK, Session Manager</p>
+                </div>
+                
+                <div class="component">
+                    <h4>8. Container Tools</h4>
+                    <p>Podman with Docker compatibility</p>
+                </div>
+                
+                <div class="component">
+                    <h4>9. Custom Selection</h4>
+                    <p>Choose specific components to install</p>
                 </div>
             </div>
         </div>
