@@ -56,16 +56,139 @@ curl -fsSL https://peek-tech.github.io/devenv-setup/install.sh | bash
 
 The installer provides an interactive menu to select components:
 
-1. **Full Installation** - Installs all components (recommended)
-2. **Core Development Tools** - Homebrew, Git, Neovim, VS Code, etc.
-3. **Programming Languages** - Python, Node.js, Go, Bun with version managers
-4. **Web Browsers** - Chrome, Firefox, Edge, Brave, Arc (macOS only)
-5. **Design Tools** - Figma, image tools, fonts (macOS only)
-6. **Claude Code** - AI assistant with agent orchestration
-7. **AWS Development Tools** - CLI, SAM, CDK, Session Manager
-8. **Container Tools** - Podman with Docker compatibility
-9. **Database Tools** - DBeaver, MongoDB Compass, PostgreSQL, MongoDB
-10. **Custom Selection** - Choose specific components to install
+1. **Full Installation** - Installs all components (recommended for new setups)
+
+2. **Core Development Tools**
+   <details>
+   <summary>Click to expand details</summary>
+   
+   - **Package Manager:** Homebrew
+   - **Version Control:** Git, GitHub CLI
+   - **Editors:** VS Code with extensions, Neovim
+   - **Terminal:** Ghostty terminal
+   - **Modern CLI Tools:**
+     - eza (better ls)
+     - bat (better cat)
+     - ripgrep (better grep)
+     - fd (better find)
+     - fzf (fuzzy finder)
+     - delta (better git diff)
+     - dust (better du)
+     - procs (better ps)
+     - sd (better sed)
+     - tealdeer (better man)
+     - glances (better top)
+     - hyperfine (benchmarking)
+     - lazygit (git TUI)
+     - ncdu (disk usage)
+     - just (command runner)
+     - zoxide (smart cd)
+   - **Fonts:** Curated Nerd Fonts collection
+   - **Utilities:** jq, wget, tree, htop, tmux
+   </details>
+
+3. **Programming Languages**
+   <details>
+   <summary>Click to expand details</summary>
+   
+   - **Python:** Latest via pyenv + Poetry package manager
+   - **Node.js:** Latest stable via nvm + Yarn package manager
+   - **Go:** Latest stable version
+   - **Bun:** Fast JavaScript runtime and package manager
+   - **Version Managers:** pyenv, nvm
+   </details>
+
+4. **Web Browsers (macOS only)**
+   <details>
+   <summary>Click to expand details</summary>
+   
+   - Google Chrome
+   - Mozilla Firefox
+   - Microsoft Edge
+   - Brave Browser
+   - Arc Browser
+   </details>
+
+5. **Design Tools (macOS only)**
+   <details>
+   <summary>Click to expand details</summary>
+   
+   - **Design Applications:** Figma
+   - **Image Processing:**
+     - ImageMagick
+     - GraphicsMagick
+     - OptiPNG
+     - JPEG optimization tools
+     - FFmpeg (video processing)
+   - **Developer Fonts:**
+     - Fira Code
+     - Source Code Pro
+     - Cascadia Code
+     - Inter
+   </details>
+
+6. **Claude Code + Agent Orchestration**
+   <details>
+   <summary>Click to expand details</summary>
+   
+   - **AI Assistant:** Claude desktop app and CLI tool
+   - **VS Code Integration:** Official Claude extension
+   - **Agent System:** Multi-agent orchestration capabilities
+   - **Features:**
+     - Intelligent code assistance
+     - Automated workflows
+     - Project understanding
+     - Code generation and review
+   </details>
+
+7. **AWS Development Tools**
+   <details>
+   <summary>Click to expand details</summary>
+   
+   - **Core AWS Tools:**
+     - AWS CLI v2
+     - AWS SAM CLI (Serverless Application Model)
+     - AWS CDK (Cloud Development Kit)
+     - Session Manager Plugin
+     - AWS Vault (credential management)
+   - **Infrastructure as Code:** CDK, SAM templates
+   - **Serverless Development:** Lambda, API Gateway, DynamoDB
+   </details>
+
+8. **Container Tools**
+   <details>
+   <summary>Click to expand details</summary>
+   
+   - **Container Runtime:** Podman + Podman Desktop
+   - **Docker Compatibility:**
+     - Docker command aliases
+     - Docker Compose via Podman Compose
+     - Compatible API and CLI
+   - **Features:**
+     - Rootless containers
+     - Kubernetes YAML support
+     - Pod management
+     - Security-focused design
+   </details>
+
+9. **Database Tools**
+   <details>
+   <summary>Click to expand details</summary>
+   
+   - **GUI Clients:**
+     - DBeaver Community (universal database tool)
+     - MongoDB Compass (MongoDB GUI)
+   - **CLI Tools:**
+     - PostgreSQL 16 client tools
+     - MongoDB Shell (mongosh)
+     - LazySql (terminal UI for SQL databases)
+   - **Optional Database Servers:**
+     - PostgreSQL 16
+     - MongoDB Community
+   - **Service Management:** Homebrew services integration
+   </details>
+
+10. **Custom Selection** - Choose specific components to install from the above options
 
 ## Configuration
 

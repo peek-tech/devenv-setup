@@ -180,6 +180,84 @@
         a:hover {
             text-decoration: underline;
         }
+        
+        .install-options {
+            margin-top: 1.5rem;
+        }
+        
+        .install-options ol {
+            list-style: none;
+            counter-reset: install-counter;
+        }
+        
+        .install-options li {
+            counter-increment: install-counter;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--bg-secondary);
+        }
+        
+        .install-options li::before {
+            content: counter(install-counter) ". ";
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        
+        .install-options h4 {
+            margin: 0 0 0.5rem 0;
+            color: var(--primary);
+            display: inline;
+        }
+        
+        .install-options details {
+            margin-top: 0.5rem;
+        }
+        
+        .install-options summary {
+            cursor: pointer;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 1rem;
+        }
+        
+        .install-options summary:hover {
+            background: var(--bg);
+            padding: 0.5rem;
+            border-radius: 4px;
+            margin: 0 -0.5rem 1rem -0.5rem;
+        }
+        
+        .install-options summary h4 {
+            margin: 0;
+            display: inline;
+        }
+        
+        .details-content {
+            padding-top: 1rem;
+        }
+        
+        .details-content p {
+            margin-bottom: 0.75rem;
+        }
+        
+        .details-content ul {
+            margin: 0.5rem 0 1rem 1rem;
+            list-style: disc;
+        }
+        
+        .details-content li {
+            margin: 0.25rem 0;
+            padding: 0;
+            border: none;
+            background: none;
+        }
+        
+        .details-content li::before {
+            content: none;
+        }
     </style>
 </head>
 <body>
@@ -265,56 +343,188 @@
         <div class="components">
             <h2>Installation Options</h2>
             <p>The installer provides an interactive menu to select components:</p>
-            <div class="component-grid">
-                <div class="component">
-                    <h4>1. Full Installation</h4>
-                    <p>Installs all components - recommended for new setups</p>
-                </div>
-                
-                <div class="component">
-                    <h4>2. Core Development Tools</h4>
-                    <p>Homebrew, Git, Neovim, VS Code, CLI tools, Nerd Fonts</p>
-                </div>
-                
-                <div class="component">
-                    <h4>3. Programming Languages</h4>
-                    <p>Python, Node.js, Go, Bun with version managers</p>
-                </div>
-                
-                <div class="component">
-                    <h4>4. Web Browsers</h4>
-                    <p>Chrome, Firefox, Edge, Brave, Arc (macOS only)</p>
-                </div>
-                
-                <div class="component">
-                    <h4>5. Design Tools</h4>
-                    <p>Figma, image tools, fonts (macOS only)</p>
-                </div>
-                
-                <div class="component">
-                    <h4>6. Claude Code</h4>
-                    <p>AI assistant with agent orchestration</p>
-                </div>
-                
-                <div class="component">
-                    <h4>7. AWS Development Tools</h4>
-                    <p>AWS CLI, SAM, CDK, Session Manager</p>
-                </div>
-                
-                <div class="component">
-                    <h4>8. Container Tools</h4>
-                    <p>Podman with Docker compatibility</p>
-                </div>
-                
-                <div class="component">
-                    <h4>9. Database Tools</h4>
-                    <p>DBeaver, MongoDB Compass, PostgreSQL, MongoDB</p>
-                </div>
-                
-                <div class="component">
-                    <h4>10. Custom Selection</h4>
-                    <p>Choose specific components to install</p>
-                </div>
+            
+            <div class="install-options">
+                <ol>
+                    <li>
+                        <h4>Full Installation</h4>
+                        <p>Installs all components - recommended for new setups</p>
+                    </li>
+                    
+                    <li>
+                        <details>
+                            <summary><h4>Core Development Tools</h4></summary>
+                            <div class="details-content">
+                                <p><strong>Package Manager:</strong> Homebrew</p>
+                                <p><strong>Version Control:</strong> Git, GitHub CLI</p>
+                                <p><strong>Editors:</strong> VS Code with extensions, Neovim</p>
+                                <p><strong>Terminal:</strong> Ghostty terminal</p>
+                                <p><strong>Modern CLI Tools:</strong></p>
+                                <ul>
+                                    <li>eza (better ls)</li>
+                                    <li>bat (better cat)</li>
+                                    <li>ripgrep (better grep)</li>
+                                    <li>fd (better find)</li>
+                                    <li>fzf (fuzzy finder)</li>
+                                    <li>delta (better git diff)</li>
+                                    <li>dust (better du)</li>
+                                    <li>procs (better ps)</li>
+                                    <li>sd (better sed)</li>
+                                    <li>tealdeer (better man)</li>
+                                    <li>glances (better top)</li>
+                                    <li>hyperfine (benchmarking)</li>
+                                    <li>lazygit (git TUI)</li>
+                                    <li>ncdu (disk usage)</li>
+                                    <li>just (command runner)</li>
+                                    <li>zoxide (smart cd)</li>
+                                </ul>
+                                <p><strong>Fonts:</strong> Curated Nerd Fonts collection</p>
+                                <p><strong>Utilities:</strong> jq, wget, tree, htop, tmux</p>
+                            </div>
+                        </details>
+                    </li>
+                    
+                    <li>
+                        <details>
+                            <summary><h4>Programming Languages</h4></summary>
+                            <div class="details-content">
+                                <p><strong>Python:</strong> Latest via pyenv + Poetry package manager</p>
+                                <p><strong>Node.js:</strong> Latest stable via nvm + Yarn package manager</p>
+                                <p><strong>Go:</strong> Latest stable version</p>
+                                <p><strong>Bun:</strong> Fast JavaScript runtime and package manager</p>
+                                <p><strong>Version Managers:</strong> pyenv, nvm</p>
+                            </div>
+                        </details>
+                    </li>
+                    
+                    <li>
+                        <details>
+                            <summary><h4>Web Browsers (macOS only)</h4></summary>
+                            <div class="details-content">
+                                <p><strong>Browsers:</strong></p>
+                                <ul>
+                                    <li>Google Chrome</li>
+                                    <li>Mozilla Firefox</li>
+                                    <li>Microsoft Edge</li>
+                                    <li>Brave Browser</li>
+                                    <li>Arc Browser</li>
+                                </ul>
+                            </div>
+                        </details>
+                    </li>
+                    
+                    <li>
+                        <details>
+                            <summary><h4>Design Tools (macOS only)</h4></summary>
+                            <div class="details-content">
+                                <p><strong>Design Applications:</strong> Figma</p>
+                                <p><strong>Image Processing:</strong></p>
+                                <ul>
+                                    <li>ImageMagick</li>
+                                    <li>GraphicsMagick</li>
+                                    <li>OptiPNG</li>
+                                    <li>JPEG optimization tools</li>
+                                    <li>FFmpeg (video processing)</li>
+                                </ul>
+                                <p><strong>Developer Fonts:</strong></p>
+                                <ul>
+                                    <li>Fira Code</li>
+                                    <li>Source Code Pro</li>
+                                    <li>Cascadia Code</li>
+                                    <li>Inter</li>
+                                </ul>
+                            </div>
+                        </details>
+                    </li>
+                    
+                    <li>
+                        <details>
+                            <summary><h4>Claude Code + Agent Orchestration</h4></summary>
+                            <div class="details-content">
+                                <p><strong>AI Assistant:</strong> Claude desktop app and CLI tool</p>
+                                <p><strong>VS Code Integration:</strong> Official Claude extension</p>
+                                <p><strong>Agent System:</strong> Multi-agent orchestration capabilities</p>
+                                <p><strong>Features:</strong></p>
+                                <ul>
+                                    <li>Intelligent code assistance</li>
+                                    <li>Automated workflows</li>
+                                    <li>Project understanding</li>
+                                    <li>Code generation and review</li>
+                                </ul>
+                            </div>
+                        </details>
+                    </li>
+                    
+                    <li>
+                        <details>
+                            <summary><h4>AWS Development Tools</h4></summary>
+                            <div class="details-content">
+                                <p><strong>Core AWS Tools:</strong></p>
+                                <ul>
+                                    <li>AWS CLI v2</li>
+                                    <li>AWS SAM CLI (Serverless Application Model)</li>
+                                    <li>AWS CDK (Cloud Development Kit)</li>
+                                    <li>Session Manager Plugin</li>
+                                    <li>AWS Vault (credential management)</li>
+                                </ul>
+                                <p><strong>Infrastructure as Code:</strong> CDK, SAM templates</p>
+                                <p><strong>Serverless Development:</strong> Lambda, API Gateway, DynamoDB</p>
+                            </div>
+                        </details>
+                    </li>
+                    
+                    <li>
+                        <details>
+                            <summary><h4>Container Tools</h4></summary>
+                            <div class="details-content">
+                                <p><strong>Container Runtime:</strong> Podman + Podman Desktop</p>
+                                <p><strong>Docker Compatibility:</strong></p>
+                                <ul>
+                                    <li>Docker command aliases</li>
+                                    <li>Docker Compose via Podman Compose</li>
+                                    <li>Compatible API and CLI</li>
+                                </ul>
+                                <p><strong>Features:</strong></p>
+                                <ul>
+                                    <li>Rootless containers</li>
+                                    <li>Kubernetes YAML support</li>
+                                    <li>Pod management</li>
+                                    <li>Security-focused design</li>
+                                </ul>
+                            </div>
+                        </details>
+                    </li>
+                    
+                    <li>
+                        <details>
+                            <summary><h4>Database Tools</h4></summary>
+                            <div class="details-content">
+                                <p><strong>GUI Clients:</strong></p>
+                                <ul>
+                                    <li>DBeaver Community (universal database tool)</li>
+                                    <li>MongoDB Compass (MongoDB GUI)</li>
+                                </ul>
+                                <p><strong>CLI Tools:</strong></p>
+                                <ul>
+                                    <li>PostgreSQL 16 client tools</li>
+                                    <li>MongoDB Shell (mongosh)</li>
+                                    <li>LazySql (terminal UI for SQL databases)</li>
+                                </ul>
+                                <p><strong>Optional Database Servers:</strong></p>
+                                <ul>
+                                    <li>PostgreSQL 16</li>
+                                    <li>MongoDB Community</li>
+                                </ul>
+                                <p><strong>Service Management:</strong> Homebrew services integration</p>
+                            </div>
+                        </details>
+                    </li>
+                    
+                    <li>
+                        <h4>Custom Selection</h4>
+                        <p>Choose specific components to install from the above options</p>
+                    </li>
+                </ol>
             </div>
         </div>
         
