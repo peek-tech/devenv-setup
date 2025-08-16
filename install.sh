@@ -2467,9 +2467,6 @@ install_web_browsers() {
         done
     fi
     
-    # Install browser development tools
-    install_browser_dev_tools
-    
     print_status "Browser installation complete!"
 }
 
@@ -2489,29 +2486,6 @@ install_browser_app() {
     fi
 }
 
-install_browser_dev_tools() {
-    print_info "Installing browser development tools..."
-    
-    local dev_tools=(
-        "chromedriver:ChromeDriver for Selenium"
-        "geckodriver:GeckoDriver for Firefox"
-    )
-    
-    for tool_info in "${dev_tools[@]}"; do
-        IFS=':' read -r formula name <<< "$tool_info"
-        
-        if brew list "$formula" &>/dev/null; then
-            print_status "$name already installed"
-        else
-            print_info "Installing $name..."
-            if brew install "$formula"; then
-                print_status "$name installed successfully"
-            else
-                print_warning "Failed to install $name"
-            fi
-        fi
-    done
-}
 
 #=============================================================================
 # DESIGN TOOLS INSTALLATION

@@ -28,9 +28,8 @@ curl -fsSL https://peek-tech.github.io/devenv-setup/install.sh | bash
   - Go programming language
   - Bun fast JavaScript runtime
 
-- **Web Browsers**: Modern browsers with testing tools (macOS only)
+- **Web Browsers**: Modern browsers (macOS only)
   - Chrome, Firefox, Edge, Brave, Arc Browser
-  - ChromeDriver and GeckoDriver for Selenium testing
 
 - **Design Tools**: Creative applications and utilities (macOS only)
   - Figma UI/UX design application
