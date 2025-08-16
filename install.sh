@@ -1651,6 +1651,7 @@ install_macos_core_tools() {
         "visual-studio-code"
         "ghostty"      # Modern terminal
         "rectangle"    # Window management
+        "bruno"        # API client for testing REST, GraphQL, and gRPC
     )
     
     for cask in "${casks[@]}"; do
