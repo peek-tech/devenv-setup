@@ -3,7 +3,8 @@
 # Developer Environment Setup - Consolidated Installer
 # Usage: curl -fsSL https://peek-tech.github.io/devenv-setup/install.sh | bash
 
-set -e
+# Note: Removed 'set -e' as it's too aggressive for an installer that should continue
+# on individual component failures. We handle errors explicitly where needed.
 
 # Colors for output
 RED='\033[0;31m'
