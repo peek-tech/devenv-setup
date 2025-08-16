@@ -1652,6 +1652,7 @@ install_macos_core_tools() {
         "ghostty"      # Modern terminal
         "rectangle"    # Window management
         "bruno"        # API client for testing REST, GraphQL, and gRPC
+        "google-drive" # Google Drive for file sync and collaboration
     )
     
     for cask in "${casks[@]}"; do

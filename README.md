@@ -84,6 +84,7 @@ Each option installs the following components:
    - **Editors:** VS Code with extensions, Neovim
    - **Terminal:** Ghostty terminal
    - **API Client:** Bruno (REST, GraphQL, gRPC testing)
+   - **File Sync:** Google Drive (cloud storage and collaboration)
    - **Modern CLI Tools:**
      - eza (better ls)
      - bat (better cat)
