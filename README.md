@@ -47,6 +47,12 @@ curl -fsSL https://peek-tech.github.io/devenv-setup/install.sh | bash
   - Docker command compatibility (symlinks/aliases)
   - Docker Compose support via Podman Compose
 
+- **Database Tools**: Development database tools and clients
+  - GUI clients: DBeaver Community, MongoDB Compass
+  - CLI tools: PostgreSQL 16, MongoDB Shell, LazySql
+  - Optional database servers: MongoDB, PostgreSQL 16
+  - Database service management aliases
+
 ## Installation Options
 
 The installer provides an interactive menu to select components:
@@ -59,7 +65,8 @@ The installer provides an interactive menu to select components:
 6. **Claude Code** - AI assistant with agent orchestration
 7. **AWS Development Tools** - CLI, SAM, CDK, Session Manager
 8. **Container Tools** - Podman with Docker compatibility
-9. **Custom Selection** - Choose specific components to install
+9. **Database Tools** - DBeaver, MongoDB Compass, PostgreSQL, MongoDB
+10. **Custom Selection** - Choose specific components to install
 
 ## Configuration
 

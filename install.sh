@@ -819,27 +819,39 @@ select_or_generate_ssh_key() {
         fi
     else
         print_info "No existing SSH keys found"
+        print_info "Options:"
+        print_info "  1. Generate new SSH key"
+        print_info "  2. Skip SSH setup (you can configure manually later)"
+        
         local choice
         if [ ! -t 0 ]; then
-            if read -p "Generate new SSH key? (y/N): " -n 1 -r choice </dev/tty 2>/dev/null; then
+            if read -p "Select option (1-2): " choice </dev/tty 2>/dev/null; then
                 echo ""
             else
-                print_warning "No TTY available, generating new key"
-                choice="y"
-            fi
-        else
-            read -p "Generate new SSH key? (y/N): " -n 1 -r choice
-            echo ""
-        fi
-        
-        if [[ $choice =~ ^[Yy]$ ]]; then
-            if ! generate_ssh_key; then
+                print_warning "No TTY available, skipping SSH setup"
                 return 1
             fi
         else
-            print_info "Skipping SSH setup"
-            return 1
+            read -p "Select option (1-2): " choice
         fi
+        
+        case "$choice" in
+            1)
+                if ! generate_ssh_key; then
+                    print_error "Failed to generate SSH key"
+                    return 1
+                fi
+                ;;
+            2)
+                print_info "Skipping SSH setup - you can configure manually later"
+                print_info "Visit: https://docs.github.com/en/authentication/connecting-to-github-with-ssh"
+                return 1
+                ;;
+            *)
+                print_error "Invalid choice, skipping SSH setup"
+                return 1
+                ;;
+        esac
     fi
     
     return 0
@@ -853,15 +865,16 @@ generate_ssh_key() {
     print_info "Generating new SSH key for GitHub..."
     
     # Get email for the key
+    print_info "Enter your email address for the SSH key (or press Enter for default):"
     if [ ! -t 0 ]; then
-        if read -p "Enter email for SSH key: " email </dev/tty 2>/dev/null; then
+        if read -p "Email [user@example.com]: " email </dev/tty 2>/dev/null; then
             :
         else
-            print_warning "No TTY available, using default"
+            print_warning "No TTY available, using default email"
             email="user@example.com"
         fi
     else
-        read -p "Enter email for SSH key: " email
+        read -p "Email [user@example.com]: " email
     fi
     
     if [ -z "$email" ]; then
@@ -871,16 +884,22 @@ generate_ssh_key() {
     
     # Generate the key
     local key_path="$HOME/.ssh/$keyname"
+    print_info "🔐 Generating SSH key pair..."
+    
     if ssh-keygen -t ed25519 -C "$email" -f "$key_path" -N ""; then
         selected_ssh_key="$keyname"
-        print_status "Generated new SSH key: $keyname"
+        print_status "✅ Generated new SSH key: $keyname"
+        print_info "📁 Private key: $key_path"
+        print_info "📄 Public key: ${key_path}.pub"
         
         # Add to ssh-agent
-        ssh-add "$key_path" 2>/dev/null || {
-            print_warning "Could not add key to ssh-agent (this may be normal)"
-        }
+        if ssh-add "$key_path" 2>/dev/null; then
+            print_status "🔑 Added key to ssh-agent"
+        else
+            print_warning "⚠️  Could not add key to ssh-agent (may need to start ssh-agent)"
+        fi
     else
-        print_error "Failed to generate SSH key"
+        print_error "❌ Failed to generate SSH key"
         return 1
     fi
     
@@ -946,16 +965,19 @@ wait_for_github_setup() {
     
     # Display the public key
     if [ -f "$pub_key_path" ]; then
-        print_info "Your SSH public key:"
-        echo "----------------------------------------"
-        cat "$pub_key_path"
-        echo "----------------------------------------"
+        print_info "📋 Your SSH public key (copy the entire block below):"
+        echo "" 
+        echo "┌─────────────────────────────────────────────────────────────────────────────┐"
+        echo "│ $(cat "$pub_key_path") │"
+        echo "└─────────────────────────────────────────────────────────────────────────────┘"
         echo ""
-        print_info "Please follow these steps:"
-        echo "1. Copy the SSH key above (including ssh-ed25519)"
-        echo "2. Go to: https://github.com/settings/ssh/new"
-        echo "3. Paste the key and give it a title (e.g., 'Development Machine')"
-        echo "4. Click 'Add SSH key'"
+        print_info "🔧 Setup Steps:"
+        echo "   1. 📋 Copy the ENTIRE SSH key above (starts with 'ssh-ed25519')"
+        echo "   2. 🌐 Open: https://github.com/settings/ssh/new"
+        echo "   3. 📝 Title: 'Development Machine' (or any name you prefer)"
+        echo "   4. 📋 Paste the key in the 'Key' field"
+        echo "   5. ✅ Click 'Add SSH key'"
+        echo "   6. 🔐 Enter your GitHub password if prompted"
         echo ""
     else
         print_error "SSH public key not found at $pub_key_path"
@@ -980,15 +1002,27 @@ wait_for_github_setup() {
         
         if [[ $choice =~ ^[Yy]$ ]]; then
             # Test SSH connection
-            print_info "Testing SSH connection to GitHub..."
-            if ssh -T git@github.com 2>&1 | grep -q "successfully authenticated"; then
-                print_status "SSH connection to GitHub successful!"
+            print_info "🔍 Testing SSH connection to GitHub..."
+            local ssh_output
+            ssh_output=$(ssh -T git@github.com 2>&1)
+            
+            if echo "$ssh_output" | grep -q "successfully authenticated"; then
+                print_status "✅ SSH connection to GitHub successful!"
+                local username=$(echo "$ssh_output" | grep "Hi" | cut -d' ' -f2 | cut -d'!' -f1)
+                if [ -n "$username" ]; then
+                    print_info "🎉 Connected as GitHub user: $username"
+                fi
                 ready=true
             else
-                print_warning "SSH connection failed. Please check:"
-                echo "1. The SSH key was added correctly to GitHub"
-                echo "2. You're using the correct GitHub account"
-                echo "3. Try again in a moment (GitHub may need time to sync)"
+                print_warning "❌ SSH connection failed"
+                print_info "Debug info: $ssh_output"
+                echo ""
+                print_info "🔧 Troubleshooting checklist:"
+                echo "   1. ✅ SSH key was copied completely (including 'ssh-ed25519' prefix)"
+                echo "   2. ✅ Key was pasted into GitHub settings correctly"
+                echo "   3. ✅ You're logged into the correct GitHub account"
+                echo "   4. ⏱️  Wait 30 seconds and try again (GitHub sync delay)"
+                echo "   5. 🔄 Refresh the GitHub SSH keys page to confirm key was added"
                 echo ""
                 
                 local retry
@@ -1009,8 +1043,9 @@ wait_for_github_setup() {
                 fi
             fi
         else
-            print_info "Please complete the GitHub SSH setup before continuing"
-            echo "Visit: https://github.com/settings/ssh/new"
+            print_info "⏳ Please complete the GitHub SSH setup first"
+            print_info "🌐 Visit: https://github.com/settings/ssh/new"
+            print_info "💡 Or press Ctrl+C to skip SSH setup and continue installation"
         fi
     done
     
@@ -1197,6 +1232,161 @@ EOF
     fi
     
     print_status "Tool themes configuration complete!"
+}
+
+#=============================================================================
+# DATABASE TOOLS INSTALLATION
+#=============================================================================
+
+install_database_tools() {
+    print_section "Installing Database Development Tools"
+    
+    # Database GUI clients and CLI tools
+    local db_gui_tools=(
+        "dbeaver-community"        # Universal database GUI client
+        "mongodb-compass"          # MongoDB official GUI client
+    )
+    
+    local db_cli_tools=(
+        "postgresql@16"            # PostgreSQL 16 server and psql CLI
+        "mongosh"                  # MongoDB shell
+        "lazysql"                  # Terminal UI for SQL databases
+    )
+    
+    # Optional database servers (user choice)
+    local db_servers=(
+        "mongodb-community"        # MongoDB server
+        "postgresql@16"            # PostgreSQL 16 server (already in CLI tools)
+    )
+    
+    if [ "$OS_TYPE" = "macos" ]; then
+        # Install GUI tools
+        print_info "Installing database GUI clients..."
+        for tool in "${db_gui_tools[@]}"; do
+            if brew list --cask "$tool" &>/dev/null 2>&1; then
+                print_status "$tool already installed"
+            else
+                print_info "Installing $tool..."
+                if brew install --cask "$tool" 2>/dev/null; then
+                    print_status "$tool installed successfully"
+                else
+                    print_warning "Failed to install $tool"
+                fi
+            fi
+        done
+    fi
+    
+    # Install CLI tools (cross-platform)
+    print_info "Installing database CLI tools..."
+    for tool in "${db_cli_tools[@]}"; do
+        if brew list "$tool" &>/dev/null 2>&1; then
+            print_status "$tool already installed"
+        else
+            print_info "Installing $tool..."
+            if brew install "$tool" 2>/dev/null; then
+                print_status "$tool installed successfully"
+            else
+                print_warning "Failed to install $tool"
+            fi
+        fi
+    done
+    
+    # Ask about installing database servers
+    setup_database_servers
+    
+    # Configure database tools
+    configure_database_environment
+    
+    print_status "Database tools installation complete!"
+}
+
+setup_database_servers() {
+    print_info "Database servers can be installed for local development..."
+    
+    # Ask about MongoDB
+    local install_mongodb=false
+    if [ ! -t 0 ]; then
+        if read -p "Install MongoDB Community Server for local development? (y/N): " -n 1 -r mongodb_choice </dev/tty 2>/dev/null; then
+            echo ""
+            [[ $mongodb_choice =~ ^[Yy]$ ]] && install_mongodb=true
+        else
+            print_info "Skipping MongoDB server installation (no TTY)"
+        fi
+    else
+        read -p "Install MongoDB Community Server for local development? (y/N): " -n 1 -r mongodb_choice
+        echo ""
+        [[ $mongodb_choice =~ ^[Yy]$ ]] && install_mongodb=true
+    fi
+    
+    if [ "$install_mongodb" = true ]; then
+        # Add MongoDB tap and install
+        if ! brew tap | grep -q "mongodb/brew"; then
+            print_info "Adding MongoDB Homebrew tap..."
+            brew tap mongodb/brew
+        fi
+        
+        if brew list mongodb-community &>/dev/null 2>&1; then
+            print_status "MongoDB Community already installed"
+        else
+            print_info "Installing MongoDB Community Server..."
+            if brew install mongodb-community; then
+                print_status "MongoDB Community installed successfully"
+                print_info "MongoDB can be started with: brew services start mongodb-community"
+            else
+                print_warning "Failed to install MongoDB Community"
+            fi
+        fi
+    fi
+    
+    # PostgreSQL is already installed via postgresql@16 in CLI tools
+    if brew list postgresql@16 &>/dev/null 2>&1; then
+        print_status "PostgreSQL 16 server available"
+        print_info "PostgreSQL can be started with: brew services start postgresql@16"
+    fi
+}
+
+configure_database_environment() {
+    print_info "Configuring database environment..."
+    
+    # Add PostgreSQL 16 to PATH
+    if brew list postgresql@16 &>/dev/null 2>&1; then
+        local pg_path="/opt/homebrew/opt/postgresql@16/bin"
+        if [ "$OS_TYPE" = "macos" ] && [ -d "$pg_path" ]; then
+            add_to_shell_config "export PATH=\"$pg_path:\$PATH\"" "PostgreSQL 16 PATH"
+            print_status "PostgreSQL 16 added to PATH"
+        fi
+    fi
+    
+    # Add useful database aliases
+    local db_aliases="
+# Database development aliases
+alias psql16='psql'
+alias mongosh='mongosh'
+alias lazysql='lazysql'
+
+# Database service management (macOS)
+alias start-postgres='brew services start postgresql@16'
+alias stop-postgres='brew services stop postgresql@16'
+alias restart-postgres='brew services restart postgresql@16'
+alias start-mongo='brew services start mongodb-community'
+alias stop-mongo='brew services stop mongodb-community'
+alias restart-mongo='brew services restart mongodb-community'
+"
+    
+    add_to_shell_config "$db_aliases" "Database Development Aliases"
+    print_status "Database aliases configured"
+    
+    print_info "Database tools configured successfully!"
+    print_info "Available commands:"
+    echo "  • psql - PostgreSQL command line"
+    echo "  • mongosh - MongoDB shell"
+    echo "  • lazysql - Terminal UI for SQL databases"
+    echo "  • DBeaver Community - Universal database GUI"
+    echo "  • MongoDB Compass - MongoDB GUI client"
+    echo ""
+    print_info "Service management aliases:"
+    echo "  • start-postgres / stop-postgres / restart-postgres"
+    echo "  • start-mongo / stop-mongo / restart-mongo"
 }
 
 #=============================================================================
@@ -1394,8 +1584,11 @@ configure_git() {
         git config --global user.email "$git_email"
     fi
     
-    # Setup SSH for GitHub
-    setup_ssh_for_github
+    # Setup SSH for GitHub (optional, non-blocking)
+    if ! setup_ssh_for_github; then
+        print_warning "SSH setup failed or was skipped - you can configure it manually later"
+        print_info "Visit https://docs.github.com/en/authentication/connecting-to-github-with-ssh for manual setup"
+    fi
 }
 
 install_nerd_fonts() {
@@ -1455,7 +1648,6 @@ install_nerd_fonts() {
         "font-lilex-nerd-font"
         "font-martian-mono-nerd-font"
         "font-meslo-lg-nerd-font"
-        "font-monaspice-nerd-font"
         "font-monofur-nerd-font"
         "font-monoid-nerd-font"
         "font-mononoki-nerd-font"
@@ -1465,7 +1657,6 @@ install_nerd_fonts() {
         "font-overpass-nerd-font"
         "font-profont-nerd-font"
         "font-proggy-clean-tt-nerd-font"
-        "font-rec-mono-nerd-font"
         "font-roboto-mono-nerd-font"
         "font-shure-tech-mono-nerd-font"
         "font-sauce-code-pro-nerd-font"
@@ -1618,9 +1809,6 @@ configure_vscode() {
     
     # Essential extensions
     local extensions=(
-        # Claude Code
-        "Anthropic.claude-dev"
-        
         # Python development
         "ms-python.python"
         "ms-python.black-formatter"
@@ -1635,12 +1823,11 @@ configure_vscode() {
         "bradlc.vscode-tailwindcss"
         "esbenp.prettier-vscode"
         "dbaeumer.vscode-eslint"
-        "ms-vscode.vscode-json"
         "formulahendry.auto-rename-tag"
         "christian-kohler.path-intellisense"
         
         # General development
-        "ms-vscode.vscode-git-graph"
+        "mhutchie.git-graph"
         "eamodio.gitlens"
         "ms-vsliveshare.vsliveshare"
         "ms-vscode-remote.remote-containers"
@@ -1648,9 +1835,9 @@ configure_vscode() {
         "ms-vscode-remote.remote-wsl"
         
         # Productivity
-        "ms-vscode.vscode-todo-highlight"
+        "wayou.vscode-todo-highlight"
         "streetsidesoftware.code-spell-checker"
-        "ms-vscode.theme-github-plus"
+        "thenikso.github-plus-theme"
     )
     
     for extension in "${extensions[@]}"; do
@@ -3268,14 +3455,15 @@ show_menu() {
         echo "  6) Claude Code + Agent Orchestration"
         echo "  7) AWS Development Tools"
         echo "  8) Container Tools (Docker, Kubernetes)"
-        echo "  9) Custom Selection"
+        echo "  9) Database Tools (DBeaver, MongoDB Compass, PostgreSQL, MongoDB)"
+        echo " 10) Custom Selection"
         echo "  0) Exit"
         echo ""
         
         # Read input from /dev/tty if stdin is piped
         if [ ! -t 0 ]; then
             # Try to read from /dev/tty
-            if read -p "Enter your choice [1-9, 0]: " choice </dev/tty 2>/dev/null; then
+            if read -p "Enter your choice [1-10, 0]: " choice </dev/tty 2>/dev/null; then
                 # Successfully read from /dev/tty
                 :
             else
@@ -3285,7 +3473,7 @@ show_menu() {
                 exit 1
             fi
         else
-            read -p "Enter your choice [1-9, 0]: " choice
+            read -p "Enter your choice [1-10, 0]: " choice
         fi
         
         case $choice in
@@ -3315,6 +3503,9 @@ show_menu() {
                 install_container_tools
                 ;;
             9)
+                install_database_tools
+                ;;
+            10)
                 custom_installation
                 ;;
             0)
@@ -3348,25 +3539,47 @@ show_menu() {
     done
 }
 
+# Robust installation wrapper that continues on component failures
+install_with_error_handling() {
+    local component_name="$1"
+    local install_function="$2"
+    
+    print_info "Installing $component_name..."
+    if $install_function; then
+        print_status "$component_name installed successfully"
+        refresh_environment
+        return 0
+    else
+        print_warning "$component_name installation failed - continuing with other components"
+        return 1
+    fi
+}
+
 # Full installation
 install_full() {
     print_section "Starting Full Installation"
     
-    install_core_tools
-    refresh_environment
-    install_programming_languages
-    refresh_environment
-    install_web_browsers
-    refresh_environment
-    install_design_tools
-    refresh_environment
-    install_claude_code
-    refresh_environment
-    install_aws_tools
-    refresh_environment
-    install_container_tools
+    local failed_components=()
     
-    print_status "All components installed successfully!"
+    install_with_error_handling "Core Development Tools" "install_core_tools" || failed_components+=("Core Tools")
+    install_with_error_handling "Programming Languages" "install_programming_languages" || failed_components+=("Programming Languages")
+    install_with_error_handling "Web Browsers" "install_web_browsers" || failed_components+=("Web Browsers")
+    install_with_error_handling "Design Tools" "install_design_tools" || failed_components+=("Design Tools")
+    install_with_error_handling "Claude Code" "install_claude_code" || failed_components+=("Claude Code")
+    install_with_error_handling "AWS Tools" "install_aws_tools" || failed_components+=("AWS Tools")
+    install_with_error_handling "Container Tools" "install_container_tools" || failed_components+=("Container Tools")
+    install_with_error_handling "Database Tools" "install_database_tools" || failed_components+=("Database Tools")
+    
+    print_section "Installation Summary"
+    if [ ${#failed_components[@]} -eq 0 ]; then
+        print_status "All components installed successfully!"
+    else
+        print_warning "Installation completed with some failures:"
+        for component in "${failed_components[@]}"; do
+            print_warning "  - $component failed to install"
+        done
+        print_info "You can try running individual components again from the menu"
+    fi
 }
 
 # Custom installation
