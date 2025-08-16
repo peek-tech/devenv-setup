@@ -3,8 +3,10 @@
 # Developer Environment Setup - Consolidated Installer
 # Usage: curl -fsSL https://peek-tech.github.io/devenv-setup/install.sh | bash
 
-# Note: Removed 'set -e' as it's too aggressive for an installer that should continue
-# on individual component failures. We handle errors explicitly where needed.
+set -e
+
+# Trap to debug where script exits
+trap 'echo "DEBUG: Script exited at line $LINENO in function ${FUNCNAME[1]:-main} with exit code $?" >&2' ERR
 
 # Colors for output
 RED='\033[0;31m'
