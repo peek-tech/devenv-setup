@@ -3010,23 +3010,24 @@ install_aws_cdk() {
     else
         print_info "Installing AWS CDK..."
         
-        # Check if npm is installed
-        if ! command -v npm &> /dev/null; then
-            print_warning "npm not found. Installing Node.js first..."
-            
-            case "${OS_TYPE}" in
-                macos)
-                    brew install node
-                    ;;
-                linux)
-                    curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
-                    sudo apt-get install -y nodejs
-                    ;;
-            esac
-            refresh_environment
+        # Ensure nvm is sourced and available
+        export NVM_DIR="$HOME/.nvm"
+        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+        
+        # Check if nvm and npm are available
+        if command -v nvm &> /dev/null && nvm which node &> /dev/null; then
+            print_info "Using nvm-managed Node.js for CDK installation"
+            # Use nvm's npm to install CDK
+            npm install -g aws-cdk
+        elif command -v npm &> /dev/null; then
+            print_info "Using system Node.js for CDK installation"
+            npm install -g aws-cdk
+        else
+            print_error "npm not found. Please install Programming Languages first (option 3) to set up Node.js via nvm"
+            print_info "CDK requires Node.js and npm. Skipping CDK installation."
+            return 1
         fi
         
-        npm install -g aws-cdk
         print_status "AWS CDK installed: $(cdk --version)"
     fi
 }
