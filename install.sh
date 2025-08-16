@@ -1635,6 +1635,7 @@ install_macos_core_tools() {
         "zoxide"       # Smart directory navigation
         "pspg"         # Tabular data pager - better for databases/CSV
         "fclones"      # Efficient duplicate file finder
+        "mas"          # Mac App Store CLI
     )
     
     for tool in "${tools[@]}"; do
@@ -1663,6 +1664,61 @@ install_macos_core_tools() {
             brew install --cask "$cask"
         fi
     done
+    
+    # Install Xcode via Mac App Store CLI
+    install_xcode
+}
+install_xcode() {
+    # Check if Xcode is already installed
+    if [ -d "/Applications/Xcode.app" ]; then
+        print_status "Xcode already installed"
+        return 0
+    fi
+    
+    # Check if mas is available
+    if ! command -v mas &> /dev/null; then
+        print_warning "mas (Mac App Store CLI) not available. Please install core tools first."
+        return 1
+    fi
+    
+    print_info "Installing Xcode via Mac App Store..."
+    print_warning "Note: Xcode is a large download (~10GB) and installation may take significant time"
+    
+    # Check if user is signed in to Mac App Store
+    if ! mas account &> /dev/null; then
+        print_warning "Not signed in to Mac App Store"
+        print_info "Please sign in to the Mac App Store and run the installer again"
+        print_info "You can also install Xcode manually from the App Store"
+        return 1
+    fi
+    
+    # Install Xcode (App Store ID: 497799835)
+    print_info "Installing Xcode (this may take 15-30 minutes)..."
+    if mas install 497799835; then
+        print_status "Xcode installed successfully"
+        
+        # Accept Xcode license
+        print_info "Accepting Xcode license..."
+        if sudo xcodebuild -license accept 2>/dev/null; then
+            print_status "Xcode license accepted"
+        else
+            print_warning "Failed to accept Xcode license automatically"
+            print_info "You may need to run: sudo xcodebuild -license accept"
+        fi
+        
+        # Install additional components
+        print_info "Installing Xcode command line tools..."
+        if sudo xcode-select --install 2>/dev/null; then
+            print_status "Xcode command line tools installed"
+        else
+            print_info "Xcode command line tools may already be installed"
+        fi
+    else
+        print_warning "Failed to install Xcode via mas"
+        print_info "You can install Xcode manually from the Mac App Store"
+        print_info "Or try: mas install 497799835"
+        return 1
+    fi
 }
 
 install_linux_core_tools() {

@@ -108,7 +108,8 @@ Each option installs the following components:
      - Source Code Pro
      - Cascadia Code
      - Inter (modern UI font)
-   - **Utilities:** jq, wget, tree, htop, tmux
+   - **Utilities:** jq, wget, tree, htop, tmux, mas (Mac App Store CLI)
+   - **Development Environment:** Xcode (macOS development, command line tools)
    </details>
 
 3. **Programming Languages**
