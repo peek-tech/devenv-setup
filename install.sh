@@ -1001,12 +1001,20 @@ wait_for_github_setup() {
         fi
         
         if [[ $choice =~ ^[Yy]$ ]]; then
+            # Add GitHub to known hosts if not already present
+            print_info "🔍 Adding GitHub to known hosts..."
+            if ! ssh-keygen -F github.com >/dev/null 2>&1; then
+                print_info "Adding GitHub host key to known_hosts..."
+                ssh-keyscan -H github.com >> "$HOME/.ssh/known_hosts" 2>/dev/null
+            fi
+            
             # Test SSH connection
             print_info "🔍 Testing SSH connection to GitHub..."
             local ssh_output
             ssh_output=$(ssh -T git@github.com 2>&1)
             
-            if echo "$ssh_output" | grep -q "successfully authenticated"; then
+            # Check for successful authentication (multiple possible messages)
+            if echo "$ssh_output" | grep -qE "(successfully authenticated|Hi [^!]+!)"; then
                 print_status "✅ SSH connection to GitHub successful!"
                 local username=$(echo "$ssh_output" | grep "Hi" | cut -d' ' -f2 | cut -d'!' -f1)
                 if [ -n "$username" ]; then
@@ -1027,17 +1035,20 @@ wait_for_github_setup() {
                 
                 local retry
                 if [ ! -t 0 ]; then
-                    if read -p "Try again? (y/N): " -n 1 -r retry </dev/tty 2>/dev/null; then
+                    if read -p "Try again? (y/s/N): " -n 1 -r retry </dev/tty 2>/dev/null; then
                         echo ""
                     else
                         retry="n"
                     fi
                 else
-                    read -p "Try again? (y/N): " -n 1 -r retry
+                    read -p "Try again? (y)es, (s)kip test, (N)o: " -n 1 -r retry
                     echo ""
                 fi
                 
-                if [[ ! $retry =~ ^[Yy]$ ]]; then
+                if [[ $retry =~ ^[Ss]$ ]]; then
+                    print_info "⏭️  Skipping SSH test - assuming setup is working"
+                    ready=true
+                elif [[ ! $retry =~ ^[Yy]$ ]]; then
                     print_warning "SSH setup incomplete - some git operations may fail"
                     return 1
                 fi
