@@ -190,26 +190,17 @@ run_manifest_scripts() {
     local script_count=0
     local executed_scripts=()
     
-    echo "DEBUG: Starting run_manifest_scripts" >&2
-    echo "DEBUG: Manifest file: $manifest_file" >&2
-    echo "DEBUG: Script dir: $script_dir" >&2
-    
     # Get script names in order from manifest
-    echo "DEBUG: About to parse manifest with jq" >&2
     local script_names=($(jq -r '.scripts[].name' "$manifest_file"))
-    echo "DEBUG: Found ${#script_names[@]} scripts" >&2
     
     for script_name in "${script_names[@]}"; do
-        echo "DEBUG: Processing script: $script_name" >&2
         local script_path="$script_dir/$script_name"
         
         # Check if script exists
         if [ ! -f "$script_path" ]; then
-            echo "DEBUG: Script not found: $script_path" >&2
             print_warning "Script not found: $script_name (skipping)"
             continue
         fi
-        echo "DEBUG: Script exists: $script_path" >&2
         
         # Get script metadata from manifest
         local description=$(jq -r --arg name "$script_name" '.scripts[] | select(.name == $name) | .description' "$manifest_file")
@@ -220,9 +211,8 @@ run_manifest_scripts() {
         
         # Show script info
         echo ""
-        print_section "Step $script_count: $script_name"
+        print_header "Step $script_count: $script_name"
         print_info "Description: $description"
-        echo ""
         
         # Handle optional scripts
         if [ "$optional" = "true" ]; then
@@ -284,10 +274,6 @@ main() {
     load_manifest "$manifest_file"
     
     print_info "Running installation scripts from manifest..."
-    
-    # Force output flush and test print functions
-    echo "TEST: This should appear before scripts start" >&2
-    sync
     
     # Run scripts based on manifest
     local script_count
