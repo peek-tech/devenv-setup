@@ -293,106 +293,116 @@
 <body>
     <div class="container">
         <header>
-            <h1>🚀 Developer Environment Setup</h1>
-            <p class="subtitle">Automated setup scripts for a complete developer environment</p>
+            <h1>🚀 Omacy - macOS Developer Environment</h1>
+            <p class="subtitle">Modular, reliable macOS developer environment installer inspired by Omarchy's architecture</p>
         </header>
         
         <div class="quick-start">
             <h2>Quick Start</h2>
-            <p>Run this command to start the interactive installer:</p>
+            <p>Run this command to start the modular installer:</p>
             <div class="command">
-                curl -fsSL https://peek-tech.github.io/devenv-setup/install.sh | bash
-                <button class="copy-btn" onclick="copyToClipboard('curl -fsSL https://peek-tech.github.io/devenv-setup/install.sh | bash')">Copy</button>
+                curl -fsSL https://peek-tech.github.io/devenv-setup/install | bash
+                <button class="copy-btn" onclick="copyToClipboard('curl -fsSL https://peek-tech.github.io/devenv-setup/install | bash')">Copy</button>
             </div>
+            <p><em>The installer automatically downloads the repository and runs 13 modular installation scripts.</em></p>
         </div>
         
         <div class="features">
             <div class="feature">
-                <h3>🤖 AI-Powered Development</h3>
-                <p>Claude Code with agent orchestration</p>
+                <h3>🏗️ Modular Architecture</h3>
+                <p>13 numbered installation scripts</p>
                 <ul>
-                    <li>Intelligent code assistance</li>
-                    <li>Automated workflows</li>
-                    <li>Agent orchestration system</li>
+                    <li>Sequential execution with error handling</li>
+                    <li>Preflight checks and validation</li>
+                    <li>Git-first setup pattern</li>
                 </ul>
             </div>
             
             <div class="feature">
-                <h3>🛠️ Core Tools</h3>
-                <p>Essential development utilities</p>
+                <h3>🎨 Advanced Theming</h3>
+                <p>4 Catppuccin color schemes</p>
                 <ul>
-                    <li>VS Code + extensions</li>
-                    <li>Modern CLI tools (ripgrep, bat, exa, fzf, lazygit)</li>
-                    <li>Ghostty terminal integration</li>
-                    <li>Curated Nerd Fonts collection</li>
+                    <li>CLI theme switching (omacy theme)</li>
+                    <li>Ghostty, VSCode, Git, Neovim themes</li>
+                    <li>Dark and light variants</li>
                 </ul>
             </div>
             
             <div class="feature">
-                <h3>🔧 Programming Languages</h3>
-                <p>Latest versions via version managers</p>
+                <h3>📦 Auto-Download</h3>
+                <p>Repository-first installation</p>
                 <ul>
-                    <li>Python (latest via pyenv) + Poetry</li>
-                    <li>Node.js (latest stable via nvm) + Yarn</li>
-                    <li>Go programming language</li>
-                    <li>Bun fast JavaScript runtime</li>
+                    <li>Downloads to ~/.omacy before running</li>
+                    <li>Works with curl | bash pattern</li>
+                    <li>Following Omarchy reliability patterns</li>
                 </ul>
             </div>
             
             <div class="feature">
-                <h3>🌐 Browsers & Design</h3>
-                <p>Web browsers and creative tools (macOS)</p>
+                <h3>🍎 macOS Focused</h3>
+                <p>Optimized for macOS without complexity</p>
                 <ul>
-                    <li>Chrome, Firefox, Edge, Brave, Arc</li>
-                    <li>Figma UI/UX design application</li>
-                    <li>CLI tools: ImageMagick, FFmpeg, optimization</li>
+                    <li>Homebrew package management</li>
+                    <li>macOS-native applications</li>
+                    <li>No Linux cross-platform overhead</li>
                 </ul>
             </div>
             
             <div class="feature">
-                <h3>☁️ Cloud Development</h3>
-                <p>AWS and cloud-native tools</p>
+                <h3>🤖 Complete Development Stack</h3>
+                <p>70+ tools and applications</p>
                 <ul>
-                    <li>AWS CLI v2, SAM, CDK & Vault</li>
-                    <li>Session Manager Plugin</li>
-                    <li>Podman with Docker compatibility</li>
+                    <li>Languages: Python, Node.js, Go, Bun</li>
+                    <li>AI: Claude Code with VS Code integration</li>
+                    <li>Cloud: AWS CLI, CDK, containers, databases</li>
                 </ul>
             </div>
             
             <div class="feature">
-                <h3>🗄️ Database Tools</h3>
-                <p>Development database tools and clients</p>
+                <h3>🔧 Modern CLI Tools</h3>
+                <p>Enhanced command line experience</p>
                 <ul>
-                    <li>GUI clients: DBeaver, MongoDB Compass</li>
-                    <li>CLI tools: PostgreSQL, MongoDB Shell, LazySql</li>
-                    <li>Optional database servers</li>
+                    <li>bat, ripgrep, fd, eza, fzf, delta</li>
+                    <li>lazygit, just, zoxide, hyperfine</li>
+                    <li>Comprehensive aliases and completions</li>
                 </ul>
             </div>
         </div>
         
         <div class="components">
-            <h2>Installation Options</h2>
-            <p>The installer provides an interactive menu to select components:</p>
+            <h2>Modular Installation Scripts</h2>
+            <p>The installer runs these scripts in sequence with error handling:</p>
             
             <div class="install-overview">
-                <h3>Quick Overview</h3>
+                <h3>13 Installation Scripts</h3>
                 <ol>
-                    <li><strong>Full Installation</strong> - Installs all components (recommended for new setups)</li>
-                    <li><strong>Core Development Tools</strong> - Homebrew, Git, VS Code, modern CLI tools, fonts</li>
-                    <li><strong>Programming Languages</strong> - Python, Node.js, Go, Bun with version managers</li>
-                    <li><strong>Web Browsers</strong> - Chrome, Firefox, Edge, Brave, Arc (macOS only)</li>
-                    <li><strong>Design Tools</strong> - Figma, image processing tools (macOS only)</li>
-                    <li><strong>Claude Code</strong> - AI assistant with agent orchestration</li>
-                    <li><strong>AWS Development Tools</strong> - CLI, SAM, CDK, Session Manager</li>
-                    <li><strong>Container Tools</strong> - Podman with Docker compatibility</li>
-                    <li><strong>Database Tools</strong> - DBeaver, MongoDB Compass, PostgreSQL, MongoDB</li>
-                    <li><strong>Custom Selection</strong> - Choose specific components to install</li>
+                    <li><strong>001-preflight-checks.sh</strong> - System validation and prerequisites</li>
+                    <li><strong>002-homebrew.sh</strong> - Package manager setup</li>
+                    <li><strong>003-git-setup.sh</strong> - Git configuration and SSH keys (early setup)</li>
+                    <li><strong>004-cli-tools.sh</strong> - Essential CLI tools and editors</li>
+                    <li><strong>005-fonts.sh</strong> - Developer fonts and Nerd Fonts</li>
+                    <li><strong>006-completions.sh</strong> - Shell completions and environment</li>
+                    <li><strong>007-development-apps.sh</strong> - Languages and development apps</li>
+                    <li><strong>008-design-apps.sh</strong> - Figma, ImageMagick, FFmpeg</li>
+                    <li><strong>009-browsers.sh</strong> - Chrome, Firefox, Edge, Brave, Arc</li>
+                    <li><strong>010-vscode.sh</strong> - VS Code and Claude extension</li>
+                    <li><strong>011-ghostty.sh</strong> - Modern terminal emulator</li>
+                    <li><strong>012-themes.sh</strong> - Additional theming components</li>
+                    <li><strong>013-themes-system.sh</strong> - Catppuccin theming system and CLI</li>
                 </ol>
             </div>
             
             <div class="install-details">
-                <h3>Detailed Installation Scripts</h3>
-                <p>Each option installs the following components:</p>
+                <h3>Theming System</h3>
+                <p>Omacy includes a comprehensive theming system with 4 Catppuccin variants and CLI management:</p>
+                
+                <div class="command">
+                    omacy theme set catppuccin-mocha
+                    <button class="copy-btn" onclick="copyToClipboard('omacy theme set catppuccin-mocha')">Copy</button>
+                </div>
+                
+                <h3>Software Installed</h3>
+                <p>Each script installs specific tools and applications:</p>
                 
                 <div class="install-options">
                     <ol>
