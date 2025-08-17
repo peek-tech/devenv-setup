@@ -63,14 +63,24 @@ ensure_xcode_cli_tools() {
     if ! xcode-select -p &> /dev/null; then
         print_info "Xcode Command Line Tools required for git operations"
         print_info "Installing Xcode Command Line Tools..."
-        xcode-select --install
-        print_info "Please complete the Xcode CLI Tools installation in the popup window"
-        print_info "Press any key after installation completes..."
-        read -n 1 -s
+        
+        # Temporarily disable exit on error for this command
+        set +e
+        xcode-select --install 2>/dev/null
+        local install_result=$?
+        set -e
+        
+        # The command may fail if tools are already installed or if dialog was cancelled
+        if [ $install_result -eq 0 ] || [ $install_result -eq 1 ]; then
+            print_info "Please complete the Xcode CLI Tools installation in the popup window"
+            print_info "Press any key after installation completes..."
+            read -n 1 -s
+        fi
         
         # Verify installation
         if ! xcode-select -p &> /dev/null; then
             print_error "Xcode Command Line Tools installation failed or incomplete"
+            print_error "Please install manually: xcode-select --install"
             exit 1
         fi
     fi
