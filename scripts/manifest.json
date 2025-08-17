@@ -4,11 +4,11 @@
   "groups": {
     "core": {
       "description": "Core system setup (required)",
-      "scripts": ["preflight-checks.sh", "git-setup.sh", "homebrew.sh"]
+      "scripts": ["preflight-checks.sh", "git-setup.sh"]
     },
     "tools": {
       "description": "Command line tools",
-      "scripts": ["tools/git.sh", "tools/gh.sh", "tools/jq.sh", "tools/wget.sh", "tools/tree.sh", "tools/ripgrep.sh", "tools/fd.sh", "tools/bat.sh", "tools/eza.sh", "tools/fzf.sh", "tools/delta.sh", "tools/dust.sh", "tools/procs.sh", "tools/sd.sh", "tools/tealdeer.sh", "tools/hyperfine.sh", "tools/just.sh", "tools/zoxide.sh", "tools/starship.sh"]
+      "scripts": ["tools/git.sh", "tools/gh.sh", "tools/wget.sh", "tools/tree.sh", "tools/ripgrep.sh", "tools/fd.sh", "tools/bat.sh", "tools/eza.sh", "tools/fzf.sh", "tools/delta.sh", "tools/dust.sh", "tools/procs.sh", "tools/sd.sh", "tools/tealdeer.sh", "tools/hyperfine.sh", "tools/just.sh", "tools/zoxide.sh", "tools/starship.sh"]
     },
     "languages": {
       "description": "Programming languages and version managers",
@@ -79,144 +79,130 @@
       "depends": []
     },
     {
-      "name": "homebrew.sh",
-      "description": "Package manager setup", 
-      "required": true,
-      "group": "core",
-      "depends": []
-    },
-    {
       "name": "tools/git.sh",
       "description": "Git version control with aliases",
       "required": false,
       "group": "tools",
-      "depends": ["homebrew.sh"]
+      "depends": []
     },
     {
       "name": "tools/gh.sh",
       "description": "GitHub CLI",
       "required": false,
       "group": "tools", 
-      "depends": ["homebrew.sh"]
-    },
-    {
-      "name": "tools/jq.sh",
-      "description": "JSON processor",
-      "required": false,
-      "group": "tools",
-      "depends": ["homebrew.sh"]
+      "depends": []
     },
     {
       "name": "tools/wget.sh",
       "description": "Network downloader",
       "required": false,
       "group": "tools",
-      "depends": ["homebrew.sh"]
+      "depends": []
     },
     {
       "name": "tools/tree.sh",
       "description": "Directory tree viewer",
       "required": false,
       "group": "tools",
-      "depends": ["homebrew.sh"]
+      "depends": []
     },
     {
       "name": "tools/ripgrep.sh",
       "description": "Fast text search with grep aliases",
       "required": false,
       "group": "tools",
-      "depends": ["homebrew.sh"]
+      "depends": []
     },
     {
       "name": "tools/fd.sh",
       "description": "User-friendly file search with find aliases",
       "required": false,
       "group": "tools",
-      "depends": ["homebrew.sh"]
+      "depends": []
     },
     {
       "name": "tools/bat.sh",
       "description": "Cat with syntax highlighting and aliases",
       "required": false,
       "group": "tools",
-      "depends": ["homebrew.sh"]
+      "depends": []
     },
     {
       "name": "tools/eza.sh",
       "description": "Modern ls replacement with icons and aliases",
       "required": false,
       "group": "tools",
-      "depends": ["homebrew.sh"]
+      "depends": []
     },
     {
       "name": "tools/fzf.sh",
       "description": "Fuzzy finder with shell integration",
       "required": false,
       "group": "tools",
-      "depends": ["homebrew.sh"]
+      "depends": []
     },
     {
       "name": "tools/delta.sh",
       "description": "Better git diff with syntax highlighting",
       "required": false,
       "group": "tools",
-      "depends": ["homebrew.sh"]
+      "depends": []
     },
     {
       "name": "tools/dust.sh",
       "description": "Visual disk usage with du aliases",
       "required": false,
       "group": "tools",
-      "depends": ["homebrew.sh"]
+      "depends": []
     },
     {
       "name": "tools/procs.sh",
       "description": "Enhanced process viewer with ps aliases",
       "required": false,
       "group": "tools",
-      "depends": ["homebrew.sh"]
+      "depends": []
     },
     {
       "name": "tools/zoxide.sh",
       "description": "Smart directory navigation with shell integration",
       "required": false,
       "group": "tools",
-      "depends": ["homebrew.sh"]
+      "depends": []
     },
     {
       "name": "tools/sd.sh",
       "description": "Intuitive find and replace tool",
       "required": false,
       "group": "tools",
-      "depends": ["homebrew.sh"]
+      "depends": []
     },
     {
       "name": "tools/tealdeer.sh",
       "description": "Fast tldr client for concise command examples",
       "required": false,
       "group": "tools",
-      "depends": ["homebrew.sh"]
+      "depends": []
     },
     {
       "name": "tools/hyperfine.sh",
       "description": "Benchmarking tool for command performance",
       "required": false,
       "group": "tools",
-      "depends": ["homebrew.sh"]
+      "depends": []
     },
     {
       "name": "tools/just.sh",
       "description": "Modern task runner and command organizer",
       "required": false,
       "group": "tools",
-      "depends": ["homebrew.sh"]
+      "depends": []
     },
     {
       "name": "tools/starship.sh",
       "description": "Cross-shell prompt with creative configuration",
       "required": false,
       "group": "tools",
-      "depends": ["homebrew.sh"]
+      "depends": []
     },
     {
       "name": "languages/nvm.sh",
@@ -230,7 +216,7 @@
       "description": "Python Version Manager with Python 3.11",
       "required": false,
       "group": "languages",
-      "depends": ["homebrew.sh"]
+      "depends": []
     },
     {
       "name": "languages/poetry.sh",
@@ -244,133 +230,133 @@
       "description": "Go programming language",
       "required": false,
       "group": "languages",
-      "depends": ["homebrew.sh"]
+      "depends": []
     },
     {
       "name": "languages/bun.sh",
       "description": "Fast JavaScript runtime and package manager",
       "required": false,
       "group": "languages",
-      "depends": ["homebrew.sh"]
+      "depends": []
     },
     {
       "name": "fonts/nerd-fonts.sh",
       "description": "Programming fonts with icons and symbols",
       "required": false,
       "group": "fonts",
-      "depends": ["homebrew.sh"]
+      "depends": []
     },
     {
       "name": "fonts/fira-code.sh",
       "description": "Coding font with ligatures",
       "required": false,
       "group": "fonts",
-      "depends": ["homebrew.sh"]
+      "depends": []
     },
     {
       "name": "apps/google-chrome.sh",
       "description": "Google Chrome browser",
       "required": false,
       "group": "browsers",
-      "depends": ["homebrew.sh"]
+      "depends": []
     },
     {
       "name": "apps/firefox.sh",
       "description": "Firefox browser",
       "required": false,
       "group": "browsers",
-      "depends": ["homebrew.sh"]
+      "depends": []
     },
     {
       "name": "apps/microsoft-edge.sh",
       "description": "Microsoft Edge browser",
       "required": false,
       "group": "browsers",
-      "depends": ["homebrew.sh"]
+      "depends": []
     },
     {
       "name": "apps/arc.sh",
       "description": "Arc modern browser",
       "required": false,
       "group": "browsers",
-      "depends": ["homebrew.sh"]
+      "depends": []
     },
     {
       "name": "apps/brave-browser.sh",
       "description": "Brave privacy-focused browser",
       "required": false,
       "group": "browsers",
-      "depends": ["homebrew.sh"]
+      "depends": []
     },
     {
       "name": "apps/visual-studio-code.sh",
       "description": "Visual Studio Code editor",
       "required": false,
       "group": "editors",
-      "depends": ["homebrew.sh"]
+      "depends": []
     },
     {
       "name": "apps/neovim.sh",
       "description": "Neovim editor",
       "required": false,
       "group": "editors",
-      "depends": ["homebrew.sh"]
+      "depends": []
     },
     {
       "name": "apps/claude.sh",
       "description": "Claude AI assistant desktop app",
       "required": false,
       "group": "ai-tools",
-      "depends": ["homebrew.sh"]
+      "depends": []
     },
     {
       "name": "apps/claude-code.sh",
       "description": "Claude Code AI CLI tool",
       "required": false,
       "group": "ai-tools",
-      "depends": ["homebrew.sh"]
+      "depends": []
     },
     {
       "name": "apps/lazygit.sh",
       "description": "Git TUI with aliases",
       "required": false,
       "group": "terminal-tools",
-      "depends": ["homebrew.sh"]
+      "depends": []
     },
     {
       "name": "apps/htop.sh",
       "description": "Interactive process viewer TUI",
       "required": false,
       "group": "terminal-tools",
-      "depends": ["homebrew.sh"]
+      "depends": []
     },
     {
       "name": "apps/tmux.sh",
       "description": "Terminal multiplexer with session management",
       "required": false,
       "group": "terminal-tools",
-      "depends": ["homebrew.sh"]
+      "depends": []
     },
     {
       "name": "apps/glances.sh",
       "description": "System monitoring TUI with top alias",
       "required": false,
       "group": "terminal-tools",
-      "depends": ["homebrew.sh"]
+      "depends": []
     },
     {
       "name": "apps/ncdu.sh",
       "description": "Interactive disk usage analyzer TUI",
       "required": false,
       "group": "terminal-tools",
-      "depends": ["homebrew.sh"]
+      "depends": []
     },
     {
       "name": "apps/lazysql.sh",
       "description": "Database TUI client with sql alias",
       "required": false,
       "group": "terminal-tools",
-      "depends": ["homebrew.sh"]
+      "depends": []
     },
     {
       "name": "apps/oxker.sh",
@@ -384,70 +370,70 @@
       "description": "Window management tool for macOS",
       "required": false,
       "group": "productivity",
-      "depends": ["homebrew.sh"]
+      "depends": []
     },
     {
       "name": "apps/bruno.sh",
       "description": "API client for testing REST, GraphQL, and gRPC",
       "required": false,
       "group": "productivity",
-      "depends": ["homebrew.sh"]
+      "depends": []
     },
     {
       "name": "apps/google-drive.sh",
       "description": "Google Drive for file sync and collaboration",
       "required": false,
       "group": "productivity",
-      "depends": ["homebrew.sh"]
+      "depends": []
     },
     {
       "name": "apps/slack.sh",
       "description": "Team communication and collaboration platform",
       "required": false,
       "group": "productivity",
-      "depends": ["homebrew.sh"]
+      "depends": []
     },
     {
       "name": "apps/maccy.sh",
       "description": "Lightweight clipboard manager for macOS",
       "required": false,
       "group": "productivity",
-      "depends": ["homebrew.sh"]
+      "depends": []
     },
     {
       "name": "apps/keycastr.sh",
       "description": "Open-source keystroke visualizer for macOS",
       "required": false,
       "group": "productivity",
-      "depends": ["homebrew.sh"]
+      "depends": []
     },
     {
       "name": "apps/twingate.sh",
       "description": "Zero Trust Network Access platform",
       "required": false,
       "group": "networking",
-      "depends": ["homebrew.sh"]
+      "depends": []
     },
     {
       "name": "apps/ngrok.sh",
       "description": "Secure tunnels to localhost",
       "required": false,
       "group": "networking",
-      "depends": ["homebrew.sh"]
+      "depends": []
     },
     {
       "name": "apps/figma.sh",
       "description": "UI/UX design application",
       "required": false,
       "group": "design",
-      "depends": ["homebrew.sh"]
+      "depends": []
     },
     {
       "name": "apps/podman.sh",
       "description": "Container runtime with Docker compatibility",
       "required": false,
       "group": "containers",
-      "depends": ["homebrew.sh"]
+      "depends": []
     },
     {
       "name": "apps/podman-desktop.sh",
@@ -468,7 +454,7 @@
       "description": "Ghostty terminal emulator",
       "required": false,
       "group": "terminal",
-      "depends": ["homebrew.sh"]
+      "depends": []
     },
     {
       "name": "themes.sh",

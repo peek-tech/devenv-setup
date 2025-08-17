@@ -43,22 +43,13 @@ should_use_colors() {
 
 # Set up colors based on terminal capabilities
 if should_use_colors; then
-    # Use tput if available for better compatibility
-    if command -v tput >/dev/null 2>&1; then
-        GREEN=$(tput setaf 2 2>/dev/null || printf '\033[0;32m')
-        BLUE=$(tput setaf 4 2>/dev/null || printf '\033[0;34m')
-        YELLOW=$(tput setaf 3 2>/dev/null || printf '\033[1;33m')
-        RED=$(tput setaf 1 2>/dev/null || printf '\033[0;31m')
-        CYAN=$(tput setaf 6 2>/dev/null || printf '\033[0;36m')
-        NC=$(tput sgr0 2>/dev/null || printf '\033[0m')
-    else
-        GREEN='\033[0;32m'
-        BLUE='\033[0;34m'
-        YELLOW='\033[1;33m'
-        RED='\033[0;31m'
-        CYAN='\033[0;36m'
-        NC='\033[0m' # No Color
-    fi
+    # Use standard ANSI codes for better compatibility
+    GREEN='\033[0;32m'
+    BLUE='\033[0;34m'
+    YELLOW='\033[1;33m'
+    RED='\033[0;31m'
+    CYAN='\033[0;36m'
+    NC='\033[0m' # No Color
 else
     # No colors
     GREEN=''
@@ -88,9 +79,9 @@ print_error() {
 
 print_section() {
     echo ""
-    printf "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}\n"
+    printf "${CYAN}===============================================${NC}\n"
     printf "${CYAN}%s${NC}\n" "$1"
-    printf "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}\n"
+    printf "${CYAN}===============================================${NC}\n"
 }
 
 print_header() {

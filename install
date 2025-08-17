@@ -122,6 +122,31 @@ check_repository_structure() {
     return 0
 }
 
+# Install core system dependencies (homebrew and jq)
+install_core_dependencies() {
+    local script_dir="$1"
+    
+    print_section "Installing Core Dependencies"
+    
+    # Install Homebrew
+    if bash "$script_dir/homebrew.sh"; then
+        print_status "Homebrew installation completed"
+        
+        # Load Homebrew environment
+        if [[ $(uname -m) == 'arm64' ]] && [ -f /opt/homebrew/bin/brew ]; then
+            eval "$(/opt/homebrew/bin/brew shellenv)"
+        elif [ -f /usr/local/bin/brew ]; then
+            eval "$(/usr/local/bin/brew shellenv)"
+        fi
+    else
+        print_error "Homebrew installation failed"
+        exit 1
+    fi
+    
+    # Install jq for manifest processing
+    ensure_jq
+}
+
 # Load manifest and validate script dependencies
 load_manifest() {
     local manifest_file="$1"
@@ -191,7 +216,12 @@ run_manifest_scripts() {
         # Handle optional scripts
         if [ "$optional" = "true" ]; then
             print_info "This is an optional configuration step"
-            # Optional scripts can still run, just noted as optional
+            echo -n "Would you like to install $script_name? [y/N]: "
+            read -r response
+            if [[ ! "$response" =~ ^[Yy]$ ]]; then
+                print_info "Skipping $script_name"
+                continue
+            fi
         fi
         
         # Execute script
@@ -199,17 +229,6 @@ run_manifest_scripts() {
             print_status "Completed: $script_name"
             executed_scripts+=("$script_name")
             
-            # After homebrew installation, source the environment for subsequent scripts
-            if [[ "$script_name" == "homebrew.sh" ]]; then
-                print_info "Refreshing environment for Homebrew..."
-                # Source Homebrew environment for Apple Silicon Macs
-                if [[ $(uname -m) == 'arm64' ]] && [ -f /opt/homebrew/bin/brew ]; then
-                    eval "$(/opt/homebrew/bin/brew shellenv)"
-                elif [ -f /usr/local/bin/brew ]; then
-                    eval "$(/usr/local/bin/brew shellenv)"
-                fi
-                print_status "Homebrew environment loaded"
-            fi
         else
             print_error "Failed: $script_name"
             print_info "You can retry by running: bash $script_path"
@@ -245,10 +264,10 @@ main() {
     # Get the directory where this script is located (should now be in $INSTALL_DIR)
     SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
     
-    # Ensure jq is available for manifest processing
-    ensure_jq
+    # Install core dependencies first (outside of manifest)
+    install_core_dependencies "$SCRIPT_DIR/scripts"
     
-    # Load and validate manifest
+    # Load and validate manifest (jq is now available)
     local manifest_file="$SCRIPT_DIR/scripts/manifest.json"
     load_manifest "$manifest_file"
     
