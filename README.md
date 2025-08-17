@@ -1,56 +1,73 @@
-# Developer Environment Setup
+# Omacy - macOS Developer Environment
 
-Automated setup scripts for quickly configuring a complete developer environment.
+Modular, reliable macOS developer environment installer inspired by Omarchy's architecture. Automatically sets up a complete development environment with modern tools, languages, and theming.
 
 ## Quick Start
 
 ```bash
-curl -fsSL https://peek-tech.github.io/devenv-setup/install.sh | bash
+curl -fsSL https://peek-tech.github.io/devenv-setup/install | bash
 ```
 
-## What Gets Installed
+The installer automatically downloads the repository and runs modular installation scripts.
 
-- **Claude Code**: AI-powered coding assistant with agent orchestration
-  - Claude desktop app and CLI tool
-  - VS Code extension integration
-  - Agent orchestration system setup
+## Features
 
-- **Core Development Tools**: Essential development utilities
-  - VS Code with Python and Node.js extensions
-  - Ghostty terminal integration
-  - Modern CLI tools: ripgrep, fd, bat, exa, fzf, lazygit, delta
-  - Development utilities: git, GitHub CLI, jq, wget, tree, htop, tmux, neovim
-  - Curated Nerd Fonts collection (JetBrains Mono, Hack, etc.)
+**🏗️ Modular Architecture**: 13 numbered installation scripts that run sequentially
+**🎨 Advanced Theming**: 4 Catppuccin color schemes with CLI switching (`omacy theme`)
+**🔄 Git-First Setup**: Early git configuration following Omarchy patterns
+**📦 Auto-Download**: Downloads repository before installation (works with `curl | bash`)
+**🍎 macOS Focused**: Optimized for macOS without Linux complexity
 
-- **Programming Languages**: Latest versions via version managers
-  - Python (latest via pyenv) + Poetry package manager
-  - Node.js (latest stable via nvm) + Yarn package manager  
-  - Go programming language
-  - Bun fast JavaScript runtime
+## Modular Installation Scripts
 
-- **Web Browsers**: Modern browsers (macOS only)
-  - Chrome, Firefox, Edge, Brave, Arc Browser
+The installer runs these scripts in order:
 
-- **Design Tools**: Creative applications and utilities (macOS only)
-  - Figma UI/UX design application
-  - CLI tools: ImageMagick, GraphicsMagick, OptiPNG, JPEG optimization, FFmpeg
-  - Developer fonts: Fira Code, Source Code Pro, Cascadia Code, Inter
+1. **001-preflight-checks.sh** - System validation and prerequisites
+2. **002-homebrew.sh** - Package manager setup
+3. **003-git-setup.sh** - Git configuration and SSH keys (early setup)
+4. **004-core-tools.sh** - Essential CLI tools and editors
+5. **005-modern-cli-tools.sh** - Enhanced CLI utilities (bat, ripgrep, fzf, etc.)
+6. **006-fonts.sh** - Developer fonts and Nerd Fonts
+7. **007-languages.sh** - Python, Node.js, Go, Bun with version managers
+8. **008-browsers.sh** - Chrome, Firefox, Edge, Brave, Arc
+9. **009-design-tools.sh** - Figma, ImageMagick, FFmpeg
+10. **010-claude-code.sh** - AI assistant and VS Code integration
+11. **011-aws-tools.sh** - AWS CLI, SAM, CDK, Session Manager
+12. **012-containers.sh** - Podman with Docker compatibility
+13. **013-themes-system.sh** - Catppuccin theming system and CLI
 
-- **AWS Development Tools**: AWS and infrastructure tools
-  - AWS CLI v2, SAM CLI, CDK
-  - AWS Session Manager Plugin
-  - AWS Vault for credential management
+## Theming System
 
-- **Container Tools**: Podman with full Docker compatibility
-  - Podman + Podman Desktop
-  - Docker command compatibility (symlinks/aliases)
-  - Docker Compose support via Podman Compose
+Omacy includes a comprehensive theming system with 4 Catppuccin variants:
 
-- **Database Tools**: Development database tools and clients
-  - GUI clients: DBeaver Community, MongoDB Compass
-  - CLI tools: PostgreSQL 16, MongoDB Shell, LazySql
-  - Optional database servers: MongoDB, PostgreSQL 16
-  - Database service management aliases
+- **catppuccin-mocha** (dark, default)
+- **catppuccin-macchiato** (dark, warm)
+- **catppuccin-frappe** (dark, cool)
+- **catppuccin-latte** (light)
+
+### Theme Management
+
+```bash
+# List available themes
+omacy theme list
+
+# Show current theme
+omacy theme current
+
+# Switch themes
+omacy theme set catppuccin-latte
+omacy theme set catppuccin-mocha
+```
+
+### Themed Applications
+
+Each theme configures:
+- **Ghostty Terminal** - Colors and styling
+- **VSCode** - Theme settings and terminal colors
+- **Git Delta** - Diff highlighting
+- **Bat** - Syntax highlighting
+- **FZF** - Fuzzy finder colors
+- **Neovim** - Colorscheme configurations
 
 ## Installation Options
 
@@ -230,21 +247,20 @@ export AWS_PROFILE=development
 
 ## Requirements
 
-- macOS or Linux (Ubuntu 20.04+, CentOS 8+)
-- Bash 4.0+
+- **macOS only** (macOS 12+ recommended)
 - Internet connection
-- Admin/sudo access for some components (see below)
+- Admin access for Homebrew installation
+- Git (automatically installed if missing)
 
-### Sudo Requirements
+## Architecture
 
-**macOS**: Homebrew installation requires sudo access to install to system directories. The installer will prompt for your password when needed.
+Omacy follows Omarchy's reliable installation patterns:
 
-**For automated/CI environments**, skip sudo prompts with:
-```bash
-curl -fsSL https://peek-tech.github.io/devenv-setup/install.sh | NONINTERACTIVE=1 bash
-```
-
-**Linux**: Package manager operations may require sudo for system package installation.
+1. **Repository Download**: Clones full repository to `~/.omacy` before running scripts
+2. **Modular Execution**: Runs numbered scripts in sequence with error handling
+3. **Early Git Setup**: Configures git and SSH early in the process
+4. **Comprehensive Theming**: Applies consistent colors across all development tools
+5. **CLI Management**: Provides `omacy` command for theme switching and future TUI
 
 ## License
 
