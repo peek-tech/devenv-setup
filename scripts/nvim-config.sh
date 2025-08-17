@@ -3,28 +3,9 @@
 # Omamacy - Neovim Configuration
 # Sets up Neovim with popular configurations or custom setup
 
-# Colors for output
-GREEN='\033[0;32m'
-BLUE='\033[0;34m'
-YELLOW='\033[1;33m'
-RED='\033[0;31m'
-NC='\033[0m' # No Color
-
-print_status() {
-    echo -e "${GREEN}✅${NC} $1"
-}
-
-print_info() {
-    echo -e "${BLUE}ℹ️${NC} $1"
-}
-
-print_warning() {
-    echo -e "${YELLOW}⚠️${NC} $1"
-}
-
-print_error() {
-    echo -e "${RED}❌${NC} $1"
-}
+# Load common functions
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/lib/common.sh"
 
 print_header() {
     echo -e "${BLUE}"
@@ -40,7 +21,8 @@ check_existing_config() {
     if [ -d "$HOME/.config/nvim" ] && [ -f "$HOME/.config/nvim/init.lua" ]; then
         print_warning "Neovim configuration already exists at ~/.config/nvim"
         echo ""
-        read -p "Do you want to backup and replace it? (y/N): " replace_config
+        local replace_config
+        tty_prompt "Do you want to backup and replace it? (y/N)" "N" replace_config
         if [[ ! $replace_config =~ ^[Yy]$ ]]; then
             print_info "Keeping existing configuration. Exiting."
             exit 0
@@ -346,7 +328,8 @@ prompt_user_for_config() {
     echo ""
     print_info "Neovim is installed. Would you like to configure it now?"
     echo ""
-    read -p "Configure Neovim? (y/N): " configure_choice
+    local configure_choice
+    tty_prompt "Configure Neovim? (y/N)" "N" configure_choice
     
     if [[ ! $configure_choice =~ ^[Yy]$ ]]; then
         print_info "Skipping Neovim configuration. You can run this script later to configure."
@@ -374,7 +357,7 @@ main() {
     show_config_options
     
     local choice
-    read -p "Enter your choice (1-6): " choice
+    tty_prompt "Enter your choice (1-6)" "" choice
     
     case $choice in
         1)

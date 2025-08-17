@@ -114,6 +114,7 @@ apply_theme() {
         "apps/ghostty.sh"
         "apps/vscode-config.sh"
         "apps/tmux.sh"
+        "apps/claude-code.sh"
         "tools/bat.sh"
         "tools/starship.sh"
         "tools/fzf.sh"

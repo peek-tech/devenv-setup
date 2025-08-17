@@ -3,36 +3,115 @@
 # Omamacy - Common Library Functions
 # Shared functions for all installation scripts
 
-# Colors for output
-GREEN='\033[0;32m'
-BLUE='\033[0;34m'
-YELLOW='\033[1;33m'
-RED='\033[0;31m'
-CYAN='\033[0;36m'
-NC='\033[0m' # No Color
+# Detect if colors should be used
+# Check multiple conditions like Homebrew does
+should_use_colors() {
+    # Force colors if CI environment
+    if [ -n "$CI" ]; then
+        return 0
+    fi
+    
+    # Force colors if explicitly requested
+    if [ "$FORCE_COLOR" = "1" ] || [ "$CLICOLOR_FORCE" = "1" ]; then
+        return 0
+    fi
+    
+    # Disable if NO_COLOR is set (https://no-color.org/)
+    if [ -n "$NO_COLOR" ]; then
+        return 1
+    fi
+    
+    # Check if output is to a terminal
+    if [ -t 1 ]; then
+        return 0
+    fi
+    
+    # Check if TERM supports colors (even when piped)
+    case "${TERM:-dumb}" in
+        *color*|xterm*|rxvt*|screen*|tmux*|alacritty*|kitty*|iterm*)
+            # Terminal supports colors, use them even if piped
+            # This is what makes Homebrew colorful even through curl | bash
+            return 0
+            ;;
+        dumb|"")
+            return 1
+            ;;
+    esac
+    
+    return 1
+}
 
-# Print functions
+# Set up colors based on terminal capabilities
+if should_use_colors; then
+    # Use tput if available for better compatibility
+    if command -v tput >/dev/null 2>&1; then
+        GREEN=$(tput setaf 2 2>/dev/null || printf '\033[0;32m')
+        BLUE=$(tput setaf 4 2>/dev/null || printf '\033[0;34m')
+        YELLOW=$(tput setaf 3 2>/dev/null || printf '\033[1;33m')
+        RED=$(tput setaf 1 2>/dev/null || printf '\033[0;31m')
+        CYAN=$(tput setaf 6 2>/dev/null || printf '\033[0;36m')
+        NC=$(tput sgr0 2>/dev/null || printf '\033[0m')
+    else
+        GREEN='\033[0;32m'
+        BLUE='\033[0;34m'
+        YELLOW='\033[1;33m'
+        RED='\033[0;31m'
+        CYAN='\033[0;36m'
+        NC='\033[0m' # No Color
+    fi
+else
+    # No colors
+    GREEN=''
+    BLUE=''
+    YELLOW=''
+    RED=''
+    CYAN=''
+    NC=''
+fi
+
+# Print functions - always use colors when available
 print_status() {
-    echo -e "${GREEN}✅${NC} $1"
+    printf "${GREEN}✅${NC} %s\n" "$1"
 }
 
 print_info() {
-    echo -e "${BLUE}ℹ️${NC} $1"
+    printf "${BLUE}ℹ️${NC} %s\n" "$1"
 }
 
 print_warning() {
-    echo -e "${YELLOW}⚠️${NC} $1"
+    printf "${YELLOW}⚠️${NC} %s\n" "$1"
 }
 
 print_error() {
-    echo -e "${RED}❌${NC} $1"
+    printf "${RED}❌${NC} %s\n" "$1"
 }
 
 print_section() {
     echo ""
-    echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-    echo -e "${CYAN}$1${NC}"
-    echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    printf "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}\n"
+    printf "${CYAN}%s${NC}\n" "$1"
+    printf "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}\n"
+}
+
+print_header() {
+    echo ""
+    printf "${CYAN}### %s ###${NC}\n" "$1"
+}
+
+# Optional: Inform about non-interactive mode for prompts
+ensure_tty() {
+    # Check if we need to use non-interactive mode for prompts
+    if [ ! -t 0 ]; then
+        export OMAMACY_NON_INTERACTIVE=1
+    fi
+}
+
+# Check if running in a TTY context (for optional warning)
+check_tty() {
+    if [ ! -t 0 ] || [ ! -t 1 ]; then
+        return 1
+    fi
+    return 0
 }
 
 # Load Homebrew environment
@@ -161,6 +240,44 @@ prompt_user() {
             read -p "$prompt" "$var_name"
         fi
     fi
+}
+
+# Prompt with TTY detection and default support
+# Usage: tty_prompt "Enter your name" "John" name_var
+#        tty_prompt "Continue?" "y" response
+# Returns: Sets the variable with user input or default
+# Note: Does NOT make yes/no decisions - calling script should check the value
+tty_prompt() {
+    local prompt="$1"
+    local default="$2"
+    local var_name="$3"
+    
+    # If not a TTY or in non-interactive mode, use default
+    if [ ! -t 0 ] || [ "$OMAMACY_NON_INTERACTIVE" = "1" ]; then
+        eval "$var_name='$default'"
+        echo "→ $prompt: $default (auto-selected)"
+        return 0
+    fi
+    
+    # Interactive prompt with default shown
+    local display_prompt="$prompt"
+    if [ -n "$default" ]; then
+        display_prompt="$prompt [$default]: "
+    else
+        display_prompt="$prompt: "
+    fi
+    
+    read -p "$display_prompt" response
+    
+    # Use default if empty response
+    if [ -z "$response" ] && [ -n "$default" ]; then
+        response="$default"
+    fi
+    
+    # Set the variable with the response
+    eval "$var_name='$response'"
+    
+    return 0
 }
 
 # Script execution wrapper for individual tools/apps

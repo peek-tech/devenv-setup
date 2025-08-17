@@ -89,13 +89,16 @@ apply_vscode_font() {
     print_status "VSCode font applied: $font_name"
 }
 
-# Prompt user for configuration (with TTY detection)
+# Prompt user for configuration
 prompt_user_for_config() {
     print_info "Visual Studio Code is installed. Would you like to configure it now?"
     print_info "This will install essential extensions and configure settings."
     
+    echo ""
     local configure_choice
-    if tty_prompt "Configure VSCode?" "y" configure_choice; then
+    tty_prompt "Configure VSCode? (y/N)" "N" configure_choice
+    
+    if [[ $configure_choice =~ ^[Yy]$ ]]; then
         return 0
     else
         print_info "Skipping VSCode configuration. You can run this script later to configure."

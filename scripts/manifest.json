@@ -36,7 +36,11 @@
     },
     "productivity": {
       "description": "Productivity and workflow tools",
-      "scripts": ["apps/rectangle.sh", "apps/bruno.sh", "apps/google-drive.sh", "apps/slack.sh"]
+      "scripts": ["apps/rectangle.sh", "apps/bruno.sh", "apps/google-drive.sh", "apps/slack.sh", "apps/maccy.sh", "apps/keycastr.sh"]
+    },
+    "networking": {
+      "description": "Network and tunnel tools",
+      "scripts": ["apps/twingate.sh", "apps/ngrok.sh"]
     },
     "design": {
       "description": "Design and creative tools",
@@ -48,7 +52,7 @@
     },
     "workspace": {
       "description": "Workspace and theming setup",
-      "scripts": ["workspaces.sh", "themes.sh"]
+      "scripts": ["workspaces.sh", "themes.sh", "macos-defaults.sh"]
     },
     "config": {
       "description": "Optional configuration scripts",
@@ -404,6 +408,34 @@
       "depends": ["homebrew.sh"]
     },
     {
+      "name": "apps/maccy.sh",
+      "description": "Lightweight clipboard manager for macOS",
+      "required": false,
+      "group": "productivity",
+      "depends": ["homebrew.sh"]
+    },
+    {
+      "name": "apps/keycastr.sh",
+      "description": "Open-source keystroke visualizer for macOS",
+      "required": false,
+      "group": "productivity",
+      "depends": ["homebrew.sh"]
+    },
+    {
+      "name": "apps/twingate.sh",
+      "description": "Zero Trust Network Access platform",
+      "required": false,
+      "group": "networking",
+      "depends": ["homebrew.sh"]
+    },
+    {
+      "name": "apps/ngrok.sh",
+      "description": "Secure tunnels to localhost",
+      "required": false,
+      "group": "networking",
+      "depends": ["homebrew.sh"]
+    },
+    {
       "name": "apps/figma.sh",
       "description": "UI/UX design application",
       "required": false,
@@ -444,6 +476,13 @@
       "required": false,
       "group": "workspace",
       "depends": ["tools/fzf.sh", "tools/bat.sh", "tools/delta.sh", "apps/ghostty.sh"]
+    },
+    {
+      "name": "macos-defaults.sh",
+      "description": "macOS system defaults with dark mode and developer settings",
+      "required": false,
+      "group": "workspace",
+      "depends": []
     },
     {
       "name": "nvim-config.sh",
