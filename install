@@ -238,7 +238,7 @@ run_manifest_scripts() {
         fi
         
         # Execute script with environment variable to suppress individual headers
-        if OMAMACY_FROM_INSTALLER=1 bash "$script_path"; then
+        if OMAMACY_FROM_INSTALLER=1 source "$script_path"; then
             echo ""
             echo "✅ Completed: $script_name" >&2
             executed_scripts+=("$script_name")
