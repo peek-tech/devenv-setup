@@ -25,10 +25,15 @@ install_homebrew() {
         print_info "Running Homebrew installation in non-interactive mode"
         NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
         
-        # Add Homebrew to PATH for Apple Silicon Macs
+        # Add Homebrew to PATH based on architecture
         if [[ $(uname -m) == 'arm64' ]]; then
+            # Apple Silicon Macs
             echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
             eval "$(/opt/homebrew/bin/brew shellenv)"
+        else
+            # Intel Macs
+            echo 'eval "$(/usr/local/bin/brew shellenv)"' >> ~/.zprofile
+            eval "$(/usr/local/bin/brew shellenv)"
         fi
         
         print_status "Homebrew installed successfully"
