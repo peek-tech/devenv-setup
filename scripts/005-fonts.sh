@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Omacy - Fonts Installation
-# Installs Nerd Fonts and developer fonts via Homebrew
+# Omacy - Developer Fonts Installation
+# Installs comprehensive Nerd Fonts collection via Homebrew
 
 # Colors for output
 GREEN='\033[0;32m'
@@ -25,12 +25,13 @@ load_homebrew_env() {
     fi
 }
 
-# Install Nerd Fonts
+# Install comprehensive Nerd Fonts collection
 install_nerd_fonts() {
-    print_info "Installing selected Nerd Fonts via Homebrew..."
+    print_info "Installing comprehensive Nerd Fonts collection via Homebrew..."
     
-    # Essential Nerd Fonts (focused selection instead of all)
+    # Comprehensive Nerd Fonts collection (most popular and useful ones)
     local nerd_fonts=(
+        # Core programming fonts with Nerd Font patches
         "font-fira-code-nerd-font"
         "font-jetbrains-mono-nerd-font"
         "font-hack-nerd-font"
@@ -41,6 +42,21 @@ install_nerd_fonts() {
         "font-dejavu-sans-mono-nerd-font"
         "font-liberation-nerd-font"
         "font-meslo-lg-nerd-font"
+        
+        # Additional popular Nerd Fonts
+        "font-3270-nerd-font"
+        "font-agave-nerd-font"
+        "font-anonymice-nerd-font"
+        "font-arimo-nerd-font"
+        "font-aurulent-sans-mono-nerd-font"
+        "font-bigblue-terminal-nerd-font"
+        "font-bitstream-vera-sans-mono-nerd-font"
+        "font-blex-mono-nerd-font"
+        "font-fira-mono-nerd-font"
+        "font-inconsolata-go-nerd-font"
+        "font-inconsolata-lgc-nerd-font"
+        "font-monofur-nerd-font"
+        "font-overpass-nerd-font"
     )
     
     for font in "${nerd_fonts[@]}"; do
@@ -53,22 +69,23 @@ install_nerd_fonts() {
     done
 }
 
-# Install developer fonts
-install_developer_fonts() {
-    print_info "Installing developer font families..."
+# Install additional developer fonts (non-Nerd Font versions)
+install_additional_dev_fonts() {
+    print_info "Installing additional developer fonts..."
     
+    # Non-Nerd Font versions for applications that don't need icons
     local dev_fonts=(
         "font-roboto"
         "font-roboto-mono"
         "font-roboto-slab"
         "font-roboto-condensed"
         "font-roboto-flex"
-        "font-sf-mono"
-        "font-sf-pro"
         "font-inter"
         "font-fira-code"
         "font-jetbrains-mono"
         "font-cascadia-code"
+        # Note: Removed font-sf-mono and font-sf-pro due to Apple licensing restrictions
+        # and permission issues requiring sudo. These fonts are already available in macOS.
     )
     
     for font in "${dev_fonts[@]}"; do
@@ -87,8 +104,8 @@ main() {
     load_homebrew_env
     
     install_nerd_fonts
-    install_developer_fonts
-    print_status "Fonts installation complete!"
+    install_additional_dev_fonts
+    print_status "Developer fonts installation complete!"
 }
 
 # Only run main if script is executed directly
