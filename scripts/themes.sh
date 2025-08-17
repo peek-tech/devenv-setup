@@ -70,7 +70,7 @@ install_themes_system() {
     set_default_theme
 }
 
-# Set Catppuccin Mocha as default theme
+# Set Catppuccin Mocha as default theme and FiraCode Nerd Font as default font
 set_default_theme() {
     print_info "Setting Catppuccin Mocha as default theme..."
     
@@ -79,6 +79,9 @@ set_default_theme() {
     
     # Apply default theme configurations
     apply_default_configurations
+    
+    # Set default font
+    set_default_font
     
     print_status "Default theme set to Catppuccin Mocha"
 }
@@ -124,6 +127,44 @@ apply_default_configurations() {
     done
     
     print_status "Default theme delegation complete"
+}
+
+# Set FiraCode Nerd Font as default font using delegation pattern
+set_default_font() {
+    local default_font="FiraCode Nerd Font"
+    
+    print_info "Setting FiraCode Nerd Font as default font..."
+    
+    # Get the directory where this script is located
+    local script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+    
+    # List of applications that support font configuration
+    local font_apps=(
+        "apps/ghostty.sh"
+        "apps/vscode-config.sh"
+    )
+    
+    print_info "Delegating font application to individual scripts..."
+    
+    # Apply font via individual scripts
+    for app_script in "${font_apps[@]}"; do
+        local script_path="$script_dir/$app_script"
+        local app_name=$(basename "$app_script" .sh)
+        
+        if [ -f "$script_path" ]; then
+            print_info "Applying font to $app_name..."
+            # Set environment variable and call script
+            if OMAMACY_APPLY_FONT_ONLY="$default_font" "$script_path" 2>/dev/null; then
+                print_status "Applied $app_name font via delegation"
+            else
+                print_warning "Failed to apply font to $app_name (may not be installed yet)"
+            fi
+        else
+            print_warning "Script not found: $script_path"
+        fi
+    done
+    
+    print_status "Default font delegation complete"
 }
 
 # Get shell config file
@@ -178,7 +219,9 @@ main() {
     print_status "Themes system installation complete!"
     print_info "Use 'omamacy theme list' to see available themes"
     print_info "Use 'omamacy theme set <theme-name>' to switch themes"
+    print_info "Use 'omamacy font set <font-name>' to change fonts"
     print_info "Current theme: catppuccin-mocha"
+    print_info "Default font: FiraCode Nerd Font"
 }
 
 # Only run main if script is executed directly

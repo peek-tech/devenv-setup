@@ -196,6 +196,7 @@ show_current_theme() {
 list_fonts() {
     print_info "Opening macOS Font Book to browse available fonts..."
     print_info "Popular developer fonts to consider:"
+    print_info "  - FiraCode Nerd Font (default)"
     print_info "  - JetBrains Mono Nerd Font"
     print_info "  - SF Mono"
     print_info "  - Monaco"
@@ -291,8 +292,8 @@ show_help() {
     echo "Examples:"
     echo "  omamacy theme list"
     echo "  omamacy theme set catppuccin-latte"
+    echo "  omamacy font set \"FiraCode Nerd Font\""
     echo "  omamacy font set \"JetBrains Mono Nerd Font\""
-    echo "  omamacy font set \"SF Mono\""
     echo ""
 }
 
