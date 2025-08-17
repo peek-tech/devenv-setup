@@ -21,6 +21,15 @@ print_info() {
     echo -e "${BLUE}ℹ️${NC} $1"
 }
 
+# Load Homebrew environment
+load_homebrew_env() {
+    if [[ $(uname -m) == 'arm64' ]] && [ -f /opt/homebrew/bin/brew ]; then
+        eval "$(/opt/homebrew/bin/brew shellenv)"
+    elif [ -f /usr/local/bin/brew ]; then
+        eval "$(/usr/local/bin/brew shellenv)"
+    fi
+}
+
 # Get shell config file
 get_shell_config_file() {
     local user_shell="$(basename "$SHELL")"
@@ -175,6 +184,9 @@ EOF
 
 # Main execution
 main() {
+    # Load Homebrew environment first
+    load_homebrew_env
+    
     setup_shell_completions
 }
 

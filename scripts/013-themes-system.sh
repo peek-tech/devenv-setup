@@ -21,6 +21,15 @@ print_info() {
     echo -e "${BLUE}ℹ️${NC} $1"
 }
 
+# Load Homebrew environment
+load_homebrew_env() {
+    if [[ $(uname -m) == 'arm64' ]] && [ -f /opt/homebrew/bin/brew ]; then
+        eval "$(/opt/homebrew/bin/brew shellenv)"
+    elif [ -f /usr/local/bin/brew ]; then
+        eval "$(/usr/local/bin/brew shellenv)"
+    fi
+}
+
 # Get the directory where this script is located
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
@@ -154,6 +163,9 @@ install_theme_packages() {
 
 # Main execution
 main() {
+    # Load Homebrew environment first
+    load_homebrew_env
+    
     install_theme_packages
     install_themes_system
     

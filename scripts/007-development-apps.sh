@@ -16,6 +16,15 @@ print_info() {
     echo -e "${BLUE}ℹ️${NC} $1"
 }
 
+# Load Homebrew environment
+load_homebrew_env() {
+    if [[ $(uname -m) == 'arm64' ]] && [ -f /opt/homebrew/bin/brew ]; then
+        eval "$(/opt/homebrew/bin/brew shellenv)"
+    elif [ -f /usr/local/bin/brew ]; then
+        eval "$(/usr/local/bin/brew shellenv)"
+    fi
+}
+
 # Install development applications
 install_development_apps() {
     print_info "Installing development applications..."
@@ -66,6 +75,9 @@ install_programming_languages() {
 
 # Main execution
 main() {
+    # Load Homebrew environment first
+    load_homebrew_env
+    
     install_development_apps
     install_programming_languages
     print_status "Development applications installation complete!"

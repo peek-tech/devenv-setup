@@ -16,6 +16,15 @@ print_info() {
     echo -e "${BLUE}ℹ️${NC} $1"
 }
 
+# Load Homebrew environment
+load_homebrew_env() {
+    if [[ $(uname -m) == 'arm64' ]] && [ -f /opt/homebrew/bin/brew ]; then
+        eval "$(/opt/homebrew/bin/brew shellenv)"
+    elif [ -f /usr/local/bin/brew ]; then
+        eval "$(/usr/local/bin/brew shellenv)"
+    fi
+}
+
 # Install Nerd Fonts
 install_nerd_fonts() {
     print_info "Installing selected Nerd Fonts via Homebrew..."
@@ -74,6 +83,9 @@ install_developer_fonts() {
 
 # Main execution
 main() {
+    # Load Homebrew environment first
+    load_homebrew_env
+    
     install_nerd_fonts
     install_developer_fonts
     print_status "Fonts installation complete!"

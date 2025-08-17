@@ -95,7 +95,7 @@ setup_ssh_for_github() {
     print_info "Setting up SSH for GitHub..."
     
     local ssh_dir="$HOME/.ssh"
-    local ssh_key="$ssh_dir/id_rsa"
+    local ssh_key="$ssh_dir/github"
     
     # Create SSH directory if it doesn't exist
     mkdir -p "$ssh_dir"
@@ -109,7 +109,7 @@ setup_ssh_for_github() {
             email="user@example.com"
         fi
         
-        ssh-keygen -t rsa -b 4096 -C "$email" -f "$ssh_key" -N ""
+        ssh-keygen -t ed25519 -C "$email" -f "$ssh_key" -N ""
         chmod 600 "$ssh_key"
         chmod 644 "${ssh_key}.pub"
         print_status "SSH key generated: $ssh_key"
