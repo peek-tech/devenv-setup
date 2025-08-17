@@ -54,10 +54,6 @@
       "description": "Workspace and theming setup",
       "scripts": ["workspaces.sh", "themes.sh", "macos-defaults.sh"]
     },
-    "config": {
-      "description": "Optional configuration scripts",
-      "scripts": ["nvim-config.sh", "apps/vscode-config.sh"]
-    },
     "terminal": {
       "description": "Terminal emulator",
       "scripts": ["apps/ghostty.sh"]
@@ -469,20 +465,6 @@
       "required": false,
       "group": "workspace",
       "depends": []
-    },
-    {
-      "name": "nvim-config.sh",
-      "description": "Neovim configuration setup",
-      "optional": true,
-      "group": "config",
-      "depends": ["apps/neovim.sh"]
-    },
-    {
-      "name": "apps/vscode-config.sh",
-      "description": "VS Code configuration setup", 
-      "optional": true,
-      "group": "config",
-      "depends": ["apps/visual-studio-code.sh"]
     }
   ]
 }
