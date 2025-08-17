@@ -3,28 +3,29 @@
 # Omacy - VSCode Configuration
 # Configures Visual Studio Code with extensions and settings
 
-# Colors for output
-GREEN='\033[0;32m'
-BLUE='\033[0;34m'
-YELLOW='\033[1;33m'
-NC='\033[0m' # No Color
+# Load common functions
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/../lib/common.sh"
 
-print_status() {
-    echo -e "${GREEN}✅${NC} $1"
-}
-
-print_warning() {
-    echo -e "${YELLOW}⚠️${NC} $1"
-}
-
-print_info() {
-    echo -e "${BLUE}ℹ️${NC} $1"
+# Prompt user for configuration (with TTY detection)
+prompt_user_for_config() {
+    print_info "Visual Studio Code is installed. Would you like to configure it now?"
+    print_info "This will install essential extensions and configure settings."
+    
+    local configure_choice
+    if tty_prompt "Configure VSCode?" "y" configure_choice; then
+        return 0
+    else
+        print_info "Skipping VSCode configuration. You can run this script later to configure."
+        return 1
+    fi
 }
 
 # Configure VSCode
 configure_vscode() {
     if ! command -v code &> /dev/null; then
-        print_warning "VSCode not found - skipping configuration"
+        print_info "VSCode 'code' command not available. Skipping configuration."
+        print_info "Note: You may need to install 'code' command via VSCode Command Palette > 'Shell Command: Install code command in PATH'"
         return 0
     fi
     
@@ -67,9 +68,28 @@ configure_vscode_terminal_default() {
 
 # Main execution
 main() {
+    run_individual_script "vscode-config.sh" "VSCode Configuration (Optional)"
+    
+    # Check if VSCode is installed (as a cask)
+    if ! brew list --cask visual-studio-code &>/dev/null; then
+        print_info "Visual Studio Code is not installed. Skipping configuration."
+        script_success "vscode-config"
+        return 0
+    fi
+    
+    # Ask user if they want to configure
+    if ! prompt_user_for_config; then
+        script_success "vscode-config"
+        return 0
+    fi
+    
     configure_vscode
     configure_vscode_terminal_default
+    
     print_status "VSCode configuration complete!"
+    print_info "Visual Studio Code is now configured with essential extensions and settings."
+    
+    script_success "vscode-config"
 }
 
 # Only run main if script is executed directly

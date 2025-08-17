@@ -309,12 +309,12 @@
         
         <div class="features">
             <div class="feature">
-                <h3>🏗️ Modular Architecture</h3>
-                <p>13 numbered installation scripts</p>
+                <h3>🎯 Granular Control</h3>
+                <p>50+ individual scripts for complete customization</p>
                 <ul>
-                    <li>Sequential execution with error handling</li>
-                    <li>Preflight checks and validation</li>
-                    <li>Git-first setup pattern</li>
+                    <li>One script per tool/app for maximum control</li>
+                    <li>Dependency-aware execution order</li>
+                    <li>Smart manifest-driven architecture</li>
                 </ul>
             </div>
             
@@ -329,12 +329,12 @@
             </div>
             
             <div class="feature">
-                <h3>📦 Auto-Download</h3>
-                <p>Repository-first installation</p>
+                <h3>📋 Manifest-Driven</h3>
+                <p>JSON-based execution with logical grouping</p>
                 <ul>
-                    <li>Downloads to ~/.omacy before running</li>
-                    <li>Works with curl | bash pattern</li>
-                    <li>Following Omarchy reliability patterns</li>
+                    <li>Smart dependency management</li>
+                    <li>Logical script grouping (tools, apps, languages)</li>
+                    <li>Version-controlled execution order</li>
                 </ul>
             </div>
             
@@ -350,11 +350,11 @@
             
             <div class="feature">
                 <h3>🤖 Complete Development Stack</h3>
-                <p>70+ tools and applications</p>
+                <p>60+ tools and applications across 13 logical groups</p>
                 <ul>
-                    <li>Languages: Python, Node.js, Go, Bun</li>
-                    <li>AI: Claude Code with VS Code integration</li>
-                    <li>Cloud: AWS CLI, CDK, containers, databases</li>
+                    <li>Languages: Python 3.11, Node 20, Go, Bun (via version managers)</li>
+                    <li>AI: Claude desktop + CLI with agent orchestration</li>
+                    <li>Containers: Podman with Docker compatibility</li>
                 </ul>
             </div>
             
@@ -370,25 +370,26 @@
         </div>
         
         <div class="components">
-            <h2>Modular Installation Scripts</h2>
-            <p>The installer runs these scripts in sequence with error handling:</p>
+            <h2>Individual Script Architecture</h2>
+            <p>Omacy uses a <strong>manifest-driven architecture</strong> with individual scripts organized into logical groups:</p>
             
             <div class="install-overview">
-                <h3>13 Installation Scripts</h3>
+                <h3>13 Logical Groups • 50+ Individual Scripts</h3>
                 <ol>
-                    <li><strong>001-preflight-checks.sh</strong> - System validation and prerequisites</li>
-                    <li><strong>002-homebrew.sh</strong> - Package manager setup</li>
-                    <li><strong>003-git-setup.sh</strong> - Git configuration and SSH keys (early setup)</li>
-                    <li><strong>004-cli-tools.sh</strong> - Essential CLI tools and editors</li>
-                    <li><strong>005-fonts.sh</strong> - Developer fonts and Nerd Fonts</li>
-                    <li><strong>006-completions.sh</strong> - Shell completions and environment</li>
-                    <li><strong>007-development-apps.sh</strong> - Languages and development apps</li>
-                    <li><strong>008-design-apps.sh</strong> - Figma, ImageMagick, FFmpeg</li>
-                    <li><strong>009-browsers.sh</strong> - Chrome, Firefox, Edge, Brave, Arc</li>
-                    <li><strong>010-vscode.sh</strong> - VS Code and Claude extension</li>
-                    <li><strong>011-ghostty.sh</strong> - Modern terminal emulator</li>
-                    <li><strong>012-themes.sh</strong> - Additional theming components</li>
-                    <li><strong>013-themes-system.sh</strong> - Catppuccin theming system and CLI</li>
+                    <li><strong>Core System (3 required)</strong> - preflight-checks.sh, git-setup.sh, homebrew.sh</li>
+                    <li><strong>Command Line Tools (20 tools)</strong> - Individual scripts for git, gh, jq, ripgrep, bat, eza, fzf, starship, etc.</li>
+                    <li><strong>Programming Languages (5 managers)</strong> - nvm.sh→Node 20, pyenv.sh→Python 3.11, poetry.sh, go.sh, bun.sh</li>
+                    <li><strong>Developer Fonts (2 collections)</strong> - nerd-fonts.sh (71 fonts), fira-code.sh</li>
+                    <li><strong>Web Browsers (5 browsers)</strong> - Individual scripts for Chrome, Firefox, Edge, Arc, Brave</li>
+                    <li><strong>Code Editors (2 editors)</strong> - visual-studio-code.sh, neovim.sh</li>
+                    <li><strong>AI Tools (2 tools)</strong> - claude.sh (desktop), claude-code.sh (CLI)</li>
+                    <li><strong>Terminal Applications (7 TUIs)</strong> - htop.sh, tmux.sh (hamvocke config), glances.sh, ncdu.sh, lazygit.sh, lazysql.sh, oxker.sh</li>
+                    <li><strong>Productivity Tools (4 apps)</strong> - rectangle.sh, bruno.sh, google-drive.sh, slack.sh</li>
+                    <li><strong>Design Tools (1 app)</strong> - figma.sh</li>
+                    <li><strong>Container Tools (2 tools)</strong> - podman.sh (Docker compat), podman-desktop.sh</li>
+                    <li><strong>Terminal Emulator (1 app)</strong> - ghostty.sh (modern terminal with config)</li>
+                    <li><strong>Workspace & Theming (2 scripts)</strong> - workspaces.sh (CSV repos), themes.sh (Catppuccin system)</li>
+                    <li><strong>Optional Configuration (2 scripts)</strong> - nvim-config.sh, vscode-config.sh</li>
                 </ol>
             </div>
             
@@ -399,6 +400,13 @@
                 <div class="command">
                     omacy theme set catppuccin-mocha
                     <button class="copy-btn" onclick="copyToClipboard('omacy theme set catppuccin-mocha')">Copy</button>
+                </div>
+                
+                <h3>Manifest-Driven Execution</h3>
+                <p>The manifest.json file defines script execution order, dependencies, and logical grouping:</p>
+                <div class="command">
+{"scripts": [{"name": "tools/starship.sh", "depends": ["homebrew.sh"], "group": "tools"}]}
+                    <button class="copy-btn" onclick="copyToClipboard('{\"scripts\": [{\"name\": \"tools/starship.sh\", \"depends\": [\"homebrew.sh\"], \"group\": \"tools\"}]}')">Copy</button>
                 </div>
                 
                 <h3>Software Installed</h3>
@@ -456,13 +464,14 @@
                     
                     <li>
                         <details>
-                            <summary><h4>Programming Languages</h4></summary>
+                            <summary><h4>Programming Languages (via Version Managers)</h4></summary>
                             <div class="details-content">
-                                <p><strong>Python:</strong> Latest via pyenv + Poetry package manager</p>
-                                <p><strong>Node.js:</strong> Latest stable via nvm + Yarn package manager</p>
-                                <p><strong>Go:</strong> Latest stable version</p>
+                                <p><strong>Python 3.11:</strong> Installed via pyenv + Poetry package manager</p>
+                                <p><strong>Node.js 20:</strong> Installed via nvm (not Homebrew)</p>
+                                <p><strong>Go:</strong> Latest stable version via Homebrew</p>
                                 <p><strong>Bun:</strong> Fast JavaScript runtime and package manager</p>
-                                <p><strong>Version Managers:</strong> pyenv, nvm</p>
+                                <p><strong>Version Managers:</strong> pyenv (Python), nvm (Node.js)</p>
+                                <p><strong>Individual Scripts:</strong> languages/nvm.sh, languages/pyenv.sh, languages/poetry.sh, languages/go.sh, languages/bun.sh</p>
                             </div>
                         </details>
                     </li>

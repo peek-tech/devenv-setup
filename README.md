@@ -1,6 +1,6 @@
 # Omacy - macOS Developer Environment
 
-Modular, reliable macOS developer environment installer inspired by Omarchy's architecture. Automatically sets up a complete development environment with modern tools, languages, and theming.
+Modular, reliable macOS developer environment installer with **individual app control**. Automatically sets up a complete development environment with modern tools, languages, and theming using a manifest-driven architecture.
 
 ## Quick Start
 
@@ -8,33 +8,80 @@ Modular, reliable macOS developer environment installer inspired by Omarchy's ar
 curl -fsSL https://peek-tech.github.io/devenv-setup/install | bash
 ```
 
-The installer automatically downloads the repository and runs modular installation scripts.
+The installer automatically downloads the repository and runs installation scripts based on a **smart manifest system**.
 
 ## Features
 
-**🏗️ Modular Architecture**: 13 numbered installation scripts that run sequentially
+**🎯 Granular Control**: 50+ individual scripts for complete customization
+**📋 Manifest-Driven**: JSON-based execution with logical grouping and dependencies
 **🎨 Advanced Theming**: 4 Catppuccin color schemes with CLI switching (`omacy theme`)
 **🔄 Git-First Setup**: Early git configuration following Omarchy patterns
 **📦 Auto-Download**: Downloads repository before installation (works with `curl | bash`)
 **🍎 macOS Focused**: Optimized for macOS without Linux complexity
 
-## Modular Installation Scripts
+## Individual Script Architecture
 
-The installer runs these scripts in order:
+Omacy uses a **manifest-driven architecture** with individual scripts organized into logical groups:
 
-1. **001-preflight-checks.sh** - System validation and prerequisites
-2. **002-homebrew.sh** - Package manager setup
-3. **003-git-setup.sh** - Git configuration and SSH keys (early setup)
-4. **004-core-tools.sh** - Essential CLI tools and editors
-5. **005-modern-cli-tools.sh** - Enhanced CLI utilities (bat, ripgrep, fzf, etc.)
-6. **006-fonts.sh** - Developer fonts and Nerd Fonts
-7. **007-languages.sh** - Python, Node.js, Go, Bun with version managers
-8. **008-browsers.sh** - Chrome, Firefox, Edge, Brave, Arc
-9. **009-design-tools.sh** - Figma, ImageMagick, FFmpeg
-10. **010-claude-code.sh** - AI assistant and VS Code integration
-11. **011-aws-tools.sh** - AWS CLI, SAM, CDK, Session Manager
-12. **012-containers.sh** - Podman with Docker compatibility
-13. **013-themes-system.sh** - Catppuccin theming system and CLI
+### Core System (Required)
+- **preflight-checks.sh** - System validation and prerequisites
+- **git-setup.sh** - Git configuration and SSH keys
+- **homebrew.sh** - Package manager setup
+
+### Command Line Tools (20 tools)
+- **Modern CLI replacements**: `bat` (cat), `eza` (ls), `ripgrep` (grep), `fd` (find)
+- **Development tools**: `git`, `gh`, `jq`, `delta`, `fzf`, `starship`
+- **System utilities**: `htop`, `dust`, `procs`, `zoxide`, `hyperfine`
+- **Task runners**: `just`, `tealdeer`, `sd`, `tree`, `wget`
+
+### Programming Languages (5 managers)
+- **nvm.sh** - Node.js 20 via version manager
+- **pyenv.sh** - Python 3.11 via version manager  
+- **poetry.sh** - Python package manager
+- **go.sh** - Go programming language
+- **bun.sh** - Fast JavaScript runtime
+
+### Developer Fonts (2 collections)
+- **nerd-fonts.sh** - Programming fonts with icons (71 fonts)
+- **fira-code.sh** - Coding font with ligatures
+
+### Web Browsers (5 browsers)
+- **google-chrome.sh**, **firefox.sh**, **microsoft-edge.sh**
+- **arc.sh**, **brave-browser.sh**
+
+### Code Editors (2 editors)
+- **visual-studio-code.sh** - VS Code editor
+- **neovim.sh** - Modern Vim-based editor
+
+### AI Tools (2 tools)
+- **claude.sh** - AI assistant desktop app
+- **claude-code.sh** - AI CLI tool
+
+### Terminal Applications (7 TUIs)
+- **htop.sh**, **tmux.sh** (with hamvocke.com config), **glances.sh**
+- **ncdu.sh**, **lazygit.sh**, **lazysql.sh**, **oxker.sh**
+
+### Productivity Tools (4 apps)
+- **rectangle.sh** - Window management
+- **bruno.sh** - API client (REST/GraphQL/gRPC)
+- **google-drive.sh** - File sync and collaboration
+- **slack.sh** - Team communication
+
+### Design Tools (1 app)
+- **figma.sh** - UI/UX design application
+
+### Container Tools (2 tools)
+- **podman.sh** - Container runtime with Docker compatibility
+- **podman-desktop.sh** - Container management GUI
+
+### Workspace & Theming (3 scripts)
+- **workspaces.sh** - CSV-based repository cloning
+- **ghostty.sh** - Terminal configuration
+- **themes.sh** - Catppuccin theming system
+
+### Optional Configuration (2 scripts)
+- **nvim-config.sh** - Neovim framework setup (LazyVim, AstroNvim, etc.)
+- **vscode-config.sh** - VS Code extensions and settings
 
 ## Theming System
 
@@ -252,15 +299,60 @@ export AWS_PROFILE=development
 - Admin access for Homebrew installation
 - Git (automatically installed if missing)
 
-## Architecture
+## Manifest-Driven Architecture
 
-Omacy follows Omarchy's reliable installation patterns:
+Omacy follows Omarchy's reliable installation patterns with modern enhancements:
 
 1. **Repository Download**: Clones full repository to `~/.omacy` before running scripts
-2. **Modular Execution**: Runs numbered scripts in sequence with error handling
-3. **Early Git Setup**: Configures git and SSH early in the process
-4. **Comprehensive Theming**: Applies consistent colors across all development tools
-5. **CLI Management**: Provides `omacy` command for theme switching and future TUI
+2. **Manifest Execution**: JSON-based script ordering with dependency management
+3. **Individual Scripts**: 50+ granular scripts for complete customization control
+4. **Smart Dependencies**: Scripts only run when their dependencies are satisfied
+5. **Early Git Setup**: Configures git and SSH early in the process
+6. **Comprehensive Theming**: Applies consistent colors across all development tools
+7. **CLI Management**: Provides `omacy` command for theme switching and future TUI
+
+### Manifest Structure
+```json
+{
+  "groups": {
+    "tools": ["tools/starship.sh", "tools/fzf.sh", ...],
+    "browsers": ["apps/chrome.sh", "apps/firefox.sh", ...],
+    "productivity": ["apps/slack.sh", "apps/rectangle.sh", ...]
+  },
+  "scripts": [
+    {"name": "tools/starship.sh", "depends": ["homebrew.sh"], "group": "tools"}
+  ]
+}
+```
+
+## Future Improvements
+
+### Script Execution Order Management
+Currently, scripts are executed based on their numeric prefixes (001-, 002-, etc.) determined by `ls` sorting. A better approach would be to use a manifest file (e.g., `scripts/manifest.txt` or `scripts/order.json`) that explicitly defines the execution order. This would:
+- Eliminate the need to renumber files when reordering scripts
+- Make dependencies and execution order explicit and version-controllable
+- Allow conditional execution based on configuration
+- Support parallel execution of independent scripts
+
+Example manifest structure:
+```json
+{
+  "scripts": [
+    {"name": "preflight-checks.sh", "required": true},
+    {"name": "git-setup.sh", "required": true},
+    {"name": "homebrew.sh", "required": true},
+    {"name": "fonts.sh", "required": false},
+    {"name": "cli-tools.sh", "required": false, "depends": ["homebrew.sh"]},
+    {"name": "languages.sh", "required": false, "depends": ["homebrew.sh"]},
+    {"name": "workspaces.sh", "required": false},
+    {"name": "apps.sh", "required": false, "depends": ["homebrew.sh"]},
+    {"name": "ghostty.sh", "required": false},
+    {"name": "nvim-config.sh", "optional": true},
+    {"name": "vscode-config.sh", "optional": true},
+    {"name": "themes.sh", "required": false}
+  ]
+}
+```
 
 ## License
 

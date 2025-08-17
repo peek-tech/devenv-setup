@@ -122,6 +122,111 @@ check_repository_structure() {
     return 0
 }
 
+# Load manifest and validate script dependencies
+load_manifest() {
+    local manifest_file="$1"
+    
+    if [ ! -f "$manifest_file" ]; then
+        print_error "Manifest file not found: $manifest_file"
+        exit 1
+    fi
+    
+    # Validate JSON syntax
+    if ! jq empty "$manifest_file" 2>/dev/null; then
+        print_error "Invalid JSON in manifest file: $manifest_file"
+        exit 1
+    fi
+    
+    print_status "Loaded manifest: $(jq -r '.description' "$manifest_file")"
+}
+
+# Check if jq is available, install if needed
+ensure_jq() {
+    if ! command -v jq &> /dev/null; then
+        print_info "Installing jq for manifest processing..."
+        if command -v brew &> /dev/null; then
+            brew install jq &> /dev/null || {
+                print_error "Failed to install jq via Homebrew"
+                exit 1
+            }
+        else
+            print_error "jq is required but Homebrew is not available"
+            print_error "Please install jq manually or ensure Homebrew is installed first"
+            exit 1
+        fi
+        print_status "jq installed successfully"
+    fi
+}
+
+# Run scripts based on manifest order
+run_manifest_scripts() {
+    local manifest_file="$1"
+    local script_dir="$2"
+    local script_count=0
+    local executed_scripts=()
+    
+    # Get script names in order from manifest
+    local script_names=($(jq -r '.scripts[].name' "$manifest_file"))
+    
+    for script_name in "${script_names[@]}"; do
+        local script_path="$script_dir/$script_name"
+        
+        # Check if script exists
+        if [ ! -f "$script_path" ]; then
+            print_warning "Script not found: $script_name (skipping)"
+            continue
+        fi
+        
+        # Get script metadata from manifest
+        local description=$(jq -r --arg name "$script_name" '.scripts[] | select(.name == $name) | .description' "$manifest_file")
+        local required=$(jq -r --arg name "$script_name" '.scripts[] | select(.name == $name) | .required' "$manifest_file")
+        local optional=$(jq -r --arg name "$script_name" '.scripts[] | select(.name == $name) | .optional' "$manifest_file")
+        
+        script_count=$((script_count + 1))
+        
+        # Show script info
+        print_section "Step $script_count: $script_name"
+        print_info "Description: $description"
+        
+        # Handle optional scripts
+        if [ "$optional" = "true" ]; then
+            print_info "This is an optional configuration step"
+            # Optional scripts can still run, just noted as optional
+        fi
+        
+        # Execute script
+        if bash "$script_path"; then
+            print_status "Completed: $script_name"
+            executed_scripts+=("$script_name")
+            
+            # After homebrew installation, source the environment for subsequent scripts
+            if [[ "$script_name" == "homebrew.sh" ]]; then
+                print_info "Refreshing environment for Homebrew..."
+                # Source Homebrew environment for Apple Silicon Macs
+                if [[ $(uname -m) == 'arm64' ]] && [ -f /opt/homebrew/bin/brew ]; then
+                    eval "$(/opt/homebrew/bin/brew shellenv)"
+                elif [ -f /usr/local/bin/brew ]; then
+                    eval "$(/usr/local/bin/brew shellenv)"
+                fi
+                print_status "Homebrew environment loaded"
+            fi
+        else
+            print_error "Failed: $script_name"
+            print_info "You can retry by running: bash $script_path"
+            
+            # Check if this was a required script
+            if [ "$required" = "true" ]; then
+                print_error "Required script failed, stopping installation"
+                exit 1
+            else
+                print_warning "Optional script failed, continuing with installation"
+            fi
+        fi
+    done
+    
+    return $script_count
+}
+
 # Main execution
 main() {
     print_header
@@ -140,46 +245,27 @@ main() {
     # Get the directory where this script is located (should now be in $INSTALL_DIR)
     SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
     
-    print_info "Running modular installation scripts..."
+    # Ensure jq is available for manifest processing
+    ensure_jq
     
-    # Run all numbered scripts in order
-    local script_count=0
-    for script in "$SCRIPT_DIR/scripts"/[0-9]*.sh; do
-        if [ -f "$script" ]; then
-            script_count=$((script_count + 1))
-            local script_name=$(basename "$script")
-            print_section "Step $script_count: $script_name"
-            
-            if bash "$script"; then
-                print_status "Completed: $script_name"
-                
-                # After homebrew installation, source the environment for subsequent scripts
-                if [[ "$script_name" == "002-homebrew.sh" ]]; then
-                    print_info "Refreshing environment for Homebrew..."
-                    # Source Homebrew environment for Apple Silicon Macs
-                    if [[ $(uname -m) == 'arm64' ]] && [ -f /opt/homebrew/bin/brew ]; then
-                        eval "$(/opt/homebrew/bin/brew shellenv)"
-                    elif [ -f /usr/local/bin/brew ]; then
-                        eval "$(/usr/local/bin/brew shellenv)"
-                    fi
-                    print_status "Homebrew environment loaded"
-                fi
-            else
-                print_error "Failed: $script_name"
-                print_info "You can retry by running: bash $script"
-                exit 1
-            fi
-        fi
-    done
+    # Load and validate manifest
+    local manifest_file="$SCRIPT_DIR/scripts/manifest.json"
+    load_manifest "$manifest_file"
+    
+    print_info "Running installation scripts from manifest..."
+    
+    # Run scripts based on manifest
+    local script_count
+    script_count=$(run_manifest_scripts "$manifest_file" "$SCRIPT_DIR/scripts")
     
     if [ $script_count -eq 0 ]; then
-        print_error "No installation scripts found in $SCRIPT_DIR/scripts/"
+        print_error "No installation scripts executed"
         exit 1
     fi
     
     print_section "Installation Complete"
     print_status "Omacy installation completed successfully!"
-    print_info "Installed $script_count components"
+    print_info "Executed $script_count script(s)"
     print_info "Restart your terminal or run 'source ~/.zshrc' to use new tools"
 }
 
