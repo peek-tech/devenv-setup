@@ -88,7 +88,7 @@ list_themes() {
     echo ""
 }
 
-# Apply theme to applications
+# Apply theme to applications using delegation pattern
 apply_theme() {
     local theme="$1"
     local theme_dir="$THEMES_DIR/$theme"
@@ -100,56 +100,54 @@ apply_theme() {
     
     print_info "Applying theme: $theme"
     
-    # Apply Ghostty theme
-    if [ -f "$theme_dir/ghostty.conf" ]; then
-        local ghostty_config="$HOME/.config/ghostty/config"
-        if [ -f "$ghostty_config" ]; then
-            cp "$theme_dir/ghostty.conf" "$ghostty_config"
-            print_status "Ghostty theme applied"
+    # Find the scripts directory (assuming omamacy is in /usr/local/bin and scripts are relative)
+    local scripts_base_dir
+    if [ -d "/Users/$(whoami)/.claude/devenv-setup/scripts" ]; then
+        scripts_base_dir="/Users/$(whoami)/.claude/devenv-setup/scripts"
+    else
+        print_error "Could not find scripts directory"
+        return 1
+    fi
+    
+    # List of themed applications and their script paths
+    local themed_apps=(
+        "apps/ghostty.sh"
+        "apps/vscode-config.sh"
+        "apps/tmux.sh"
+        "tools/bat.sh"
+        "tools/starship.sh"
+        "tools/fzf.sh"
+        "tools/delta.sh"
+    )
+    
+    local success_count=0
+    local total_count=0
+    
+    # Apply theme via individual scripts
+    for app_script in "${themed_apps[@]}"; do
+        local script_path="$scripts_base_dir/$app_script"
+        local app_name=$(basename "$app_script" .sh)
+        total_count=$((total_count + 1))
+        
+        if [ -f "$script_path" ]; then
+            print_info "Applying $theme theme to $app_name..."
+            # Set environment variable and call script
+            if OMAMACY_APPLY_THEME_ONLY="$theme" "$script_path" 2>/dev/null; then
+                print_status "$app_name theme applied via delegation"
+                success_count=$((success_count + 1))
+            else
+                print_warning "Failed to apply theme to $app_name (may not be installed)"
+            fi
+        else
+            print_warning "Script not found: $script_path"
         fi
-    fi
-    
-    # Apply VSCode theme
-    if [ -f "$theme_dir/vscode.json" ] && command -v code &> /dev/null; then
-        local vscode_settings="$HOME/Library/Application Support/Code/User/settings.json"
-        if [ -f "$vscode_settings" ]; then
-            # Merge theme settings with existing VSCode settings
-            # This is a simplified approach - in practice, you'd want proper JSON merging
-            print_info "VSCode theme configuration available in: $theme_dir/vscode.json"
-            print_info "Manually merge with your settings.json or use the VSCode Catppuccin extension"
-        fi
-    fi
-    
-    # Apply terminal theme configurations
-    if [ -f "$theme_dir/fzf.conf" ]; then
-        local shell_config="$(get_shell_config_file)"
-        if ! grep -q "# Omamacy FZF Theme" "$shell_config" 2>/dev/null; then
-            echo "" >> "$shell_config"
-            echo "# Omamacy FZF Theme" >> "$shell_config"
-            cat "$theme_dir/fzf.conf" >> "$shell_config"
-            print_status "FZF theme applied to shell config"
-        fi
-    fi
-    
-    # Apply bat theme
-    if [ -f "$theme_dir/bat.conf" ]; then
-        local bat_config="$HOME/.config/bat/config"
-        mkdir -p "$(dirname "$bat_config")"
-        cp "$theme_dir/bat.conf" "$bat_config"
-        print_status "Bat theme applied"
-    fi
-    
-    # Apply git delta theme
-    if [ -f "$theme_dir/delta.conf" ]; then
-        # Add delta configuration to gitconfig
-        git config --global include.path "$theme_dir/delta.conf"
-        print_status "Git Delta theme applied"
-    fi
+    done
     
     # Set as current theme
     set_current_theme "$theme"
     
     print_status "Theme '$theme' applied successfully!"
+    print_info "Applied to $success_count out of $total_count applications"
     print_info "You may need to restart applications to see changes"
 }
 
@@ -194,21 +192,107 @@ show_current_theme() {
     fi
 }
 
+# List available fonts by opening Font Book
+list_fonts() {
+    print_info "Opening macOS Font Book to browse available fonts..."
+    print_info "Popular developer fonts to consider:"
+    print_info "  - JetBrains Mono Nerd Font"
+    print_info "  - SF Mono"
+    print_info "  - Monaco"
+    print_info "  - Menlo"
+    print_info "  - Cascadia Code"
+    print_info "  - Fira Code"
+    print_info ""
+    print_info "Opening Font Book..."
+    
+    # Open Font Book application
+    open -a "Font Book" 2>/dev/null || {
+        print_error "Could not open Font Book"
+        print_info "You can also open it manually from Applications > Font Book"
+        return 1
+    }
+    
+    print_status "Font Book opened successfully"
+    print_info "Copy the exact font name from Font Book to use with:"
+    print_info "  omamacy font set \"<Font Name>\""
+}
+
+# Apply font to applications using delegation pattern
+apply_font() {
+    local font="$1"
+    
+    if [ -z "$font" ]; then
+        print_error "Font name cannot be empty"
+        return 1
+    fi
+    
+    print_info "Applying font: $font"
+    
+    # Find the scripts directory
+    local scripts_base_dir
+    if [ -d "/Users/$(whoami)/.claude/devenv-setup/scripts" ]; then
+        scripts_base_dir="/Users/$(whoami)/.claude/devenv-setup/scripts"
+    else
+        print_error "Could not find scripts directory"
+        return 1
+    fi
+    
+    # List of applications that support font configuration
+    local font_apps=(
+        "apps/ghostty.sh"
+        "apps/vscode-config.sh"
+    )
+    
+    local success_count=0
+    local total_count=0
+    
+    # Apply font via individual scripts
+    for app_script in "${font_apps[@]}"; do
+        local script_path="$scripts_base_dir/$app_script"
+        local app_name=$(basename "$app_script" .sh)
+        total_count=$((total_count + 1))
+        
+        if [ -f "$script_path" ]; then
+            print_info "Applying font '$font' to $app_name..."
+            # Set environment variable and call script
+            if OMAMACY_APPLY_FONT_ONLY="$font" "$script_path" 2>/dev/null; then
+                print_status "$app_name font applied via delegation"
+                success_count=$((success_count + 1))
+            else
+                print_warning "Failed to apply font to $app_name (may not be installed)"
+            fi
+        else
+            print_warning "Script not found: $script_path"
+        fi
+    done
+    
+    print_status "Font '$font' applied successfully!"
+    print_info "Applied to $success_count out of $total_count applications"
+    print_info "You may need to restart applications to see changes"
+}
+
 # Show help
 show_help() {
     print_header
-    echo "Usage: omamacy theme <command>"
+    echo "Usage: omamacy <command> [options]"
     echo ""
-    echo "Commands:"
-    echo "  list                List available themes"
-    echo "  current            Show current theme"
-    echo "  set <theme>        Switch to specified theme"
+    echo "Theme Commands:"
+    echo "  theme list         List available themes"
+    echo "  theme current      Show current theme"
+    echo "  theme set <theme>  Switch to specified theme"
+    echo ""
+    echo "Font Commands:"
+    echo "  font list          Open Font Book to browse available fonts"
+    echo "  font set <font>    Set font for supported applications"
+    echo ""
+    echo "General Commands:"
     echo "  help               Show this help message"
     echo ""
     echo "Examples:"
     echo "  omamacy theme list"
     echo "  omamacy theme set catppuccin-latte"
-    echo "  omamacy theme current"
+    echo "  omamacy font set \"JetBrains Mono Nerd Font\""
+    echo "  omamacy font set \"SF Mono\""
     echo ""
 }
 
@@ -233,6 +317,26 @@ main() {
                         print_error "Please specify a theme name"
                         echo "Usage: omamacy theme set <theme-name>"
                         echo "Run 'omamacy theme list' to see available themes"
+                    fi
+                    ;;
+                "help"|*)
+                    show_help
+                    ;;
+            esac
+            ;;
+        "font")
+            case "${2:-}" in
+                "list")
+                    list_fonts
+                    ;;
+                "set")
+                    if [ -n "${3:-}" ]; then
+                        apply_font "$3"
+                    else
+                        print_error "Please specify a font name"
+                        echo "Usage: omamacy font set <font-name>"
+                        echo "Example: omamacy font set \"JetBrains Mono Nerd Font\""
+                        echo "Run 'omamacy font list' to browse available fonts"
                     fi
                     ;;
                 "help"|*)

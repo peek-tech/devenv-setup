@@ -83,41 +83,47 @@ set_default_theme() {
     print_status "Default theme set to Catppuccin Mocha"
 }
 
-# Apply default theme configurations
+# Apply default theme configurations using delegation pattern
 apply_default_configurations() {
-    local theme_dir="$THEMES_DIR/catppuccin-mocha"
+    local default_theme="catppuccin-mocha"
     
-    # Apply Ghostty theme if Ghostty config exists
-    local ghostty_config_dir="$HOME/.config/ghostty"
-    if [ -d "$ghostty_config_dir" ] && [ -f "$theme_dir/ghostty.conf" ]; then
-        cp "$theme_dir/ghostty.conf" "$ghostty_config_dir/config"
-        print_status "Applied Ghostty theme"
-    fi
+    print_info "Applying default theme configurations via individual scripts..."
     
-    # Apply bat theme
-    if [ -f "$theme_dir/bat.conf" ]; then
-        local bat_config_dir="$HOME/.config/bat"
-        mkdir -p "$bat_config_dir"
-        cp "$theme_dir/bat.conf" "$bat_config_dir/config"
-        print_status "Applied bat theme"
-    fi
+    # Get the directory where this script is located
+    local script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
     
-    # Apply FZF theme to shell config
-    if [ -f "$theme_dir/fzf.conf" ]; then
-        local shell_config="$(get_shell_config_file)"
-        if [ -f "$shell_config" ] && ! grep -q "# Omamacy FZF Theme" "$shell_config"; then
-            echo "" >> "$shell_config"
-            echo "# Omamacy FZF Theme" >> "$shell_config"
-            cat "$theme_dir/fzf.conf" >> "$shell_config"
-            print_status "Applied FZF theme to shell config"
+    # List of themed applications and their script paths
+    local themed_apps=(
+        "apps/ghostty.sh"
+        "apps/vscode-config.sh"
+        "apps/tmux.sh"
+        "tools/bat.sh"
+        "tools/starship.sh"
+        "tools/fzf.sh"
+        "tools/delta.sh"
+    )
+    
+    print_info "Delegating theme application to individual scripts..."
+    
+    # Apply theme via individual scripts
+    for app_script in "${themed_apps[@]}"; do
+        local script_path="$script_dir/$app_script"
+        local app_name=$(basename "$app_script" .sh)
+        
+        if [ -f "$script_path" ]; then
+            print_info "Applying theme to $app_name..."
+            # Set environment variable and call script
+            if OMAMACY_APPLY_THEME_ONLY="$default_theme" "$script_path" 2>/dev/null; then
+                print_status "Applied $app_name theme via delegation"
+            else
+                print_warning "Failed to apply theme to $app_name (may not be installed yet)"
+            fi
+        else
+            print_warning "Script not found: $script_path"
         fi
-    fi
+    done
     
-    # Apply git delta theme
-    if [ -f "$theme_dir/delta.conf" ]; then
-        git config --global include.path "$theme_dir/delta.conf" 2>/dev/null || true
-        print_status "Applied Git Delta theme"
-    fi
+    print_status "Default theme delegation complete"
 }
 
 # Get shell config file

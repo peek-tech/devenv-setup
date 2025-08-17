@@ -7,6 +7,34 @@
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/../lib/common.sh"
 
+# Apply theme to existing tmux configuration
+apply_tmux_theme() {
+    local theme_name="$1"
+    local tmux_config="$HOME/.tmux.conf"
+    local themes_dir="$HOME/.config/omamacy/themes"
+    local theme_file="$themes_dir/$theme_name/tmux.conf"
+    
+    # For now, tmux themes will be complete configs since it doesn't support includes
+    # In the future, we could implement smart merging of theme-specific settings
+    if [ ! -f "$theme_file" ]; then
+        print_warning "tmux theme file not found: $theme_file"
+        print_info "tmux themes are managed as complete configurations"
+        return 1
+    fi
+    
+    print_info "Applying $theme_name theme to tmux..."
+    
+    # Backup existing config if it exists
+    if [ -f "$tmux_config" ]; then
+        cp "$tmux_config" "$tmux_config.backup.$(date +%Y%m%d_%H%M%S)"
+    fi
+    
+    # Copy theme config (complete replacement for now)
+    cp "$theme_file" "$tmux_config"
+    
+    print_status "tmux theme applied: $theme_name"
+}
+
 # Configure tmux with developer-friendly settings
 configure_tmux() {
     local tmux_config="$HOME/.tmux.conf"
@@ -101,6 +129,13 @@ EOF
 
 # Main installation
 main() {
+    # Check for theme-only mode
+    if [ -n "$OMAMACY_APPLY_THEME_ONLY" ]; then
+        apply_tmux_theme "$OMAMACY_APPLY_THEME_ONLY"
+        return $?
+    fi
+    
+    # Normal installation mode
     run_individual_script "tmux.sh" "tmux (Terminal Multiplexer)"
     
     # Install tmux

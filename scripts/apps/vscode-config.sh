@@ -7,6 +7,88 @@
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/../lib/common.sh"
 
+# Apply theme to existing VSCode configuration
+apply_vscode_theme() {
+    local theme_name="$1"
+    local vscode_settings="$HOME/Library/Application Support/Code/User/settings.json"
+    local themes_dir="$HOME/.config/omamacy/themes"
+    local theme_file="$themes_dir/$theme_name/vscode.json"
+    
+    if [ ! -f "$vscode_settings" ]; then
+        print_error "VSCode settings not found at $vscode_settings"
+        return 1
+    fi
+    
+    if [ ! -f "$theme_file" ]; then
+        print_error "Theme file not found: $theme_file"
+        return 1
+    fi
+    
+    print_info "Applying $theme_name theme to VSCode..."
+    
+    # Backup existing settings
+    cp "$vscode_settings" "$vscode_settings.backup.$(date +%Y%m%d_%H%M%S)"
+    
+    # Extract theme-specific settings from theme file
+    local temp_theme=$(mktemp)
+    local temp_settings=$(mktemp)
+    
+    # Get current settings
+    cp "$vscode_settings" "$temp_settings"
+    
+    # Extract theme settings from theme file
+    local color_theme=$(jq -r '.["workbench.colorTheme"] // empty' "$theme_file")
+    local icon_theme=$(jq -r '.["workbench.iconTheme"] // empty' "$theme_file")
+    local color_customizations=$(jq '.["workbench.colorCustomizations"] // {}' "$theme_file")
+    
+    # Update settings with theme values
+    if [ -n "$color_theme" ] && [ "$color_theme" != "null" ]; then
+        jq --arg theme "$color_theme" '.["workbench.colorTheme"] = $theme' "$temp_settings" > "$temp_theme" && mv "$temp_theme" "$temp_settings"
+    fi
+    
+    if [ -n "$icon_theme" ] && [ "$icon_theme" != "null" ]; then
+        jq --arg theme "$icon_theme" '.["workbench.iconTheme"] = $theme' "$temp_settings" > "$temp_theme" && mv "$temp_theme" "$temp_settings"
+    fi
+    
+    if [ "$color_customizations" != "{}" ]; then
+        jq --argjson customs "$color_customizations" '.["workbench.colorCustomizations"] = $customs' "$temp_settings" > "$temp_theme" && mv "$temp_theme" "$temp_settings"
+    fi
+    
+    # Write updated settings back
+    mv "$temp_settings" "$vscode_settings"
+    rm -f "$temp_theme"
+    
+    print_status "VSCode theme applied: $theme_name"
+}
+
+# Apply font to existing VSCode configuration
+apply_vscode_font() {
+    local font_name="$1"
+    local vscode_settings="$HOME/Library/Application Support/Code/User/settings.json"
+    
+    if [ ! -f "$vscode_settings" ]; then
+        print_error "VSCode settings not found at $vscode_settings"
+        return 1
+    fi
+    
+    print_info "Applying font '$font_name' to VSCode..."
+    
+    # Backup existing settings
+    cp "$vscode_settings" "$vscode_settings.backup.$(date +%Y%m%d_%H%M%S)"
+    
+    local temp_settings=$(mktemp)
+    
+    # Update font settings
+    jq --arg font "$font_name" '
+        .["editor.fontFamily"] = ($font + ", \"SF Mono\", Monaco, \"Cascadia Code\", \"Roboto Mono\", Consolas, \"Courier New\", monospace") |
+        .["terminal.integrated.fontFamily"] = $font
+    ' "$vscode_settings" > "$temp_settings"
+    
+    mv "$temp_settings" "$vscode_settings"
+    
+    print_status "VSCode font applied: $font_name"
+}
+
 # Prompt user for configuration (with TTY detection)
 prompt_user_for_config() {
     print_info "Visual Studio Code is installed. Would you like to configure it now?"
@@ -68,6 +150,19 @@ configure_vscode_terminal_default() {
 
 # Main execution
 main() {
+    # Check for theme-only mode
+    if [ -n "$OMAMACY_APPLY_THEME_ONLY" ]; then
+        apply_vscode_theme "$OMAMACY_APPLY_THEME_ONLY"
+        return $?
+    fi
+    
+    # Check for font-only mode
+    if [ -n "$OMAMACY_APPLY_FONT_ONLY" ]; then
+        apply_vscode_font "$OMAMACY_APPLY_FONT_ONLY"
+        return $?
+    fi
+    
+    # Normal installation mode
     run_individual_script "vscode-config.sh" "VSCode Configuration (Optional)"
     
     # Check if VSCode is installed (as a cask)

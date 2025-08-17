@@ -7,6 +7,35 @@
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/../lib/common.sh"
 
+# Apply theme to existing Starship configuration
+apply_starship_theme() {
+    local theme_name="$1"
+    local starship_config="$HOME/.config/starship.toml"
+    local themes_dir="$HOME/.config/omamacy/themes"
+    local theme_file="$themes_dir/$theme_name/starship.toml"
+    
+    # For now, Starship themes will be complete configs since it doesn't support includes
+    # In the future, we could implement smart merging of theme-specific settings
+    if [ ! -f "$theme_file" ]; then
+        print_warning "Starship theme file not found: $theme_file"
+        print_info "Starship themes are managed as complete configurations"
+        return 1
+    fi
+    
+    print_info "Applying $theme_name theme to Starship..."
+    
+    # Backup existing config if it exists
+    if [ -f "$starship_config" ]; then
+        cp "$starship_config" "$starship_config.backup.$(date +%Y%m%d_%H%M%S)"
+    fi
+    
+    # Copy theme config (complete replacement for now)
+    mkdir -p "$(dirname "$starship_config")"
+    cp "$theme_file" "$starship_config"
+    
+    print_status "Starship theme applied: $theme_name"
+}
+
 # Configure starship with AntreasAntoniou configuration
 configure_starship() {
     local starship_config="$HOME/.config/starship.toml"
@@ -189,6 +218,13 @@ fi'
 
 # Main installation
 main() {
+    # Check for theme-only mode
+    if [ -n "$OMAMACY_APPLY_THEME_ONLY" ]; then
+        apply_starship_theme "$OMAMACY_APPLY_THEME_ONLY"
+        return $?
+    fi
+    
+    # Normal installation mode
     run_individual_script "starship.sh" "Starship (Cross-Shell Prompt)"
     
     # Install starship
