@@ -276,6 +276,10 @@ main() {
     
     print_info "Running installation scripts from manifest..."
     
+    # Force output flush and test print functions
+    echo "TEST: This should appear before scripts start" >&2
+    sync
+    
     # Run scripts based on manifest
     local script_count
     script_count=$(run_manifest_scripts "$manifest_file" "$SCRIPT_DIR/scripts")
