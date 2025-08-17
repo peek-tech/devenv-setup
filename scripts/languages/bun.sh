@@ -12,7 +12,7 @@ main() {
     run_individual_script "bun.sh" "Bun (Fast JavaScript Runtime)"
     
     # Install Bun
-    if ! install_brew_package "bun" false "Fast JavaScript runtime and package manager"; then
+    if ! install_brew_package "oven-sh/bun/bun" false "Fast JavaScript runtime and package manager"; then
         script_failure "bun" "Failed to install via Homebrew"
     fi
     
