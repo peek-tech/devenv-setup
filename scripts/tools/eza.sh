@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omacy - Eza Installation
+# Omamacy - Eza Installation
 # Modern ls replacement with icons and colors
 
 # Load common functions

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omacy - FZF Installation
+# Omamacy - FZF Installation
 # Fuzzy finder with shell integration
 
 # Load common functions

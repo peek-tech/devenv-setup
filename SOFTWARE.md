@@ -1,6 +1,6 @@
-# Software Installed by Omacy
+# Software Installed by Omamacy
 
-This document lists all software installed by the individual scripts in the Omacy installer using the manifest-driven architecture.
+This document lists all software installed by the individual scripts in the Omamacy installer using the manifest-driven architecture.
 
 ## Core System Scripts (Required)
 
@@ -226,7 +226,7 @@ This document lists all software installed by the individual scripts in the Omac
 - Terminal configuration
 
 ### themes.sh
-- **Omacy CLI tool** (`omacy`) - Theme management
+- **Omamacy CLI tool** (`omacy`) - Theme management
 - **Catppuccin themes** - 4 color variants:
   - catppuccin-mocha (dark, default)
   - catppuccin-macchiato (dark, warm)  

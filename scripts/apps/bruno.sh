@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omacy - Bruno Installation
+# Omamacy - Bruno Installation
 # API client for testing REST, GraphQL, and gRPC
 
 # Load common functions

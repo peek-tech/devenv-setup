@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omacy - Claude Code Installation
+# Omamacy - Claude Code Installation
 # AI assistant command line tool
 
 # Load common functions

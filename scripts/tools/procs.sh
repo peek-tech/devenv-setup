@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omacy - Procs Installation
+# Omamacy - Procs Installation
 # Enhanced process viewer
 
 # Load common functions

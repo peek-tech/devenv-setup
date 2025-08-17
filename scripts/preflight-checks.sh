@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omacy - Preflight Checks
+# Omamacy - Preflight Checks
 # Validates system prerequisites before installation
 
 # Colors for output

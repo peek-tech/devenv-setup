@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omacy - Zoxide Installation
+# Omamacy - Zoxide Installation
 # Smart directory navigation with shell integration
 
 # Load common functions

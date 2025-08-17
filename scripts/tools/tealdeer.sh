@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omacy - tealdeer Installation
+# Omamacy - tealdeer Installation
 # Fast tldr client for concise command examples
 
 # Load common functions

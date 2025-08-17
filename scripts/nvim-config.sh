@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omacy - Neovim Configuration
+# Omamacy - Neovim Configuration
 # Sets up Neovim with popular configurations or custom setup
 
 # Colors for output

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omacy - Rectangle Installation
+# Omamacy - Rectangle Installation
 # Window management tool for macOS
 
 # Load common functions

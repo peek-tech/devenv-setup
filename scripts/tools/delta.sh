@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omacy - Delta Installation
+# Omamacy - Delta Installation
 # Better git diff with syntax highlighting
 
 # Load common functions

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omacy - just Installation
+# Omamacy - just Installation
 # Modern task runner and command organizer
 
 # Load common functions

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omacy - Bun Installation
+# Omamacy - Bun Installation
 # Fast JavaScript runtime and package manager
 
 # Load common functions

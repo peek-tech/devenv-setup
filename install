@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omacy - macOS Developer Environment Setup
+# Omamacy - macOS Developer Environment Setup
 # Usage: curl -fsSL https://peek-tech.github.io/devenv-setup/install | bash
 
 # macOS only - exit immediately if not on macOS
@@ -13,7 +13,7 @@ set -e
 
 # Repository configuration
 REPO_URL="https://github.com/peek-tech/devenv-setup.git"
-INSTALL_DIR="$HOME/.omacy"
+INSTALL_DIR="$HOME/.omamacy"
 
 # Colors for output
 RED='\033[0;31m'
@@ -29,7 +29,7 @@ VERSION="2.0.0"
 print_header() {
     echo ""
     echo -e "${CYAN}╔══════════════════════════════════════════════════════════╗${NC}"
-    echo -e "${CYAN}║                     Omacy v${VERSION}                     ║${NC}"
+    echo -e "${CYAN}║                    Omamacy v${VERSION}                    ║${NC}"
     echo -e "${CYAN}║              macOS Developer Environment                 ║${NC}"
     echo -e "${CYAN}╚══════════════════════════════════════════════════════════╝${NC}"
     echo ""
@@ -96,7 +96,7 @@ download_repository() {
             print_warning "Could not update repository, continuing with existing version"
         }
     else
-        print_info "Downloading Omacy repository..."
+        print_info "Downloading Omamacy repository..."
         git clone "$REPO_URL" "$INSTALL_DIR" || {
             print_error "Failed to clone repository from $REPO_URL"
             exit 1
@@ -231,7 +231,7 @@ run_manifest_scripts() {
 main() {
     print_header
     
-    print_section "Starting Omacy Installation"
+    print_section "Starting Omamacy Installation"
     
     # Ensure Xcode CLI Tools are available before any git operations
     ensure_xcode_cli_tools
@@ -264,7 +264,7 @@ main() {
     fi
     
     print_section "Installation Complete"
-    print_status "Omacy installation completed successfully!"
+    print_status "Omamacy installation completed successfully!"
     print_info "Executed $script_count script(s)"
     print_info "Restart your terminal or run 'source ~/.zshrc' to use new tools"
 }

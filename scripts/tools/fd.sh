@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omacy - fd Installation
+# Omamacy - fd Installation
 # User-friendly file search tool
 
 # Load common functions

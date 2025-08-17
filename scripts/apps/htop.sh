@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omacy - htop Installation
+# Omamacy - htop Installation
 # Interactive process viewer
 
 # Load common functions

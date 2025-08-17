@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omacy - tmux Installation
+# Omamacy - tmux Installation
 # Terminal multiplexer with developer-friendly configuration
 
 # Load common functions

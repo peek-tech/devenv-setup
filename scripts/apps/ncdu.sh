@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omacy - ncdu Installation
+# Omamacy - ncdu Installation
 # Interactive disk usage analyzer
 
 # Load common functions

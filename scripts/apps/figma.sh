@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omacy - Figma Installation
+# Omamacy - Figma Installation
 # UI/UX design application
 
 # Load common functions

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omacy - Microsoft Edge Installation
+# Omamacy - Microsoft Edge Installation
 # Web browser
 
 # Load common functions

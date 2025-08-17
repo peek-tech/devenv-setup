@@ -1,6 +1,6 @@
 {
   "version": "2.0",
-  "description": "Omacy installation script execution manifest",
+  "description": "Omamacy installation script execution manifest",
   "groups": {
     "core": {
       "description": "Core system setup (required)",

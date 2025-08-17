@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omacy - Nerd Fonts Installation
+# Omamacy - Nerd Fonts Installation
 # Programming fonts with icons and symbols
 
 # Load common functions

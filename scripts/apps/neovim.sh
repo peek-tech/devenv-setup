@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omacy - Neovim Installation
+# Omamacy - Neovim Installation
 # Modern Vim-based editor
 
 # Load common functions

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omacy - Glances Installation
+# Omamacy - Glances Installation
 # System monitoring TUI with top alias
 
 # Load common functions

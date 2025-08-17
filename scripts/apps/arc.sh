@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omacy - Arc Installation
+# Omamacy - Arc Installation
 # Modern web browser
 
 # Load common functions

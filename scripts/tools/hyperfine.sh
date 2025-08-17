@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omacy - hyperfine Installation
+# Omamacy - hyperfine Installation
 # Benchmarking tool for command performance
 
 # Load common functions

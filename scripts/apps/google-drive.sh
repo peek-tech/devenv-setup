@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omacy - Google Drive Installation
+# Omamacy - Google Drive Installation
 # Google Drive for file sync and collaboration
 
 # Load common functions

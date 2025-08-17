@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omacy - Git Installation
+# Omamacy - Git Installation
 # Version control system with helpful aliases
 
 # Load common functions

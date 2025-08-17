@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omacy - Ripgrep Installation
+# Omamacy - Ripgrep Installation
 # Fast text search tool with grep aliases
 
 # Load common functions

@@ -1,4 +1,4 @@
-# Omacy - macOS Developer Environment
+# Omamacy - macOS Developer Environment
 
 Modular, reliable macOS developer environment installer with **individual app control**. Automatically sets up a complete development environment with modern tools, languages, and theming using a manifest-driven architecture.
 
@@ -14,14 +14,14 @@ The installer automatically downloads the repository and runs installation scrip
 
 **🎯 Granular Control**: 50+ individual scripts for complete customization
 **📋 Manifest-Driven**: JSON-based execution with logical grouping and dependencies
-**🎨 Advanced Theming**: 4 Catppuccin color schemes with CLI switching (`omacy theme`)
+**🎨 Advanced Theming**: 4 Catppuccin color schemes with CLI switching (`omamacy theme`)
 **🔄 Git-First Setup**: Early git configuration following Omarchy patterns
 **📦 Auto-Download**: Downloads repository before installation (works with `curl | bash`)
 **🍎 macOS Focused**: Optimized for macOS without Linux complexity
 
 ## Individual Script Architecture
 
-Omacy uses a **manifest-driven architecture** with individual scripts organized into logical groups:
+Omamacy uses a **manifest-driven architecture** with individual scripts organized into logical groups:
 
 ### Core System (Required)
 - **preflight-checks.sh** - System validation and prerequisites
@@ -85,7 +85,7 @@ Omacy uses a **manifest-driven architecture** with individual scripts organized 
 
 ## Theming System
 
-Omacy includes a comprehensive theming system with 4 Catppuccin variants:
+Omamacy includes a comprehensive theming system with 4 Catppuccin variants:
 
 - **catppuccin-mocha** (dark, default)
 - **catppuccin-macchiato** (dark, warm)
@@ -96,14 +96,14 @@ Omacy includes a comprehensive theming system with 4 Catppuccin variants:
 
 ```bash
 # List available themes
-omacy theme list
+omamacy theme list
 
 # Show current theme
-omacy theme current
+omamacy theme current
 
 # Switch themes
-omacy theme set catppuccin-latte
-omacy theme set catppuccin-mocha
+omamacy theme set catppuccin-latte
+omamacy theme set catppuccin-mocha
 ```
 
 ### Themed Applications
@@ -301,15 +301,15 @@ export AWS_PROFILE=development
 
 ## Manifest-Driven Architecture
 
-Omacy follows Omarchy's reliable installation patterns with modern enhancements:
+Omamacy follows Omarchy's reliable installation patterns with modern enhancements:
 
-1. **Repository Download**: Clones full repository to `~/.omacy` before running scripts
+1. **Repository Download**: Clones full repository to `~/.omamacy` before running scripts
 2. **Manifest Execution**: JSON-based script ordering with dependency management
 3. **Individual Scripts**: 50+ granular scripts for complete customization control
 4. **Smart Dependencies**: Scripts only run when their dependencies are satisfied
 5. **Early Git Setup**: Configures git and SSH early in the process
 6. **Comprehensive Theming**: Applies consistent colors across all development tools
-7. **CLI Management**: Provides `omacy` command for theme switching and future TUI
+7. **CLI Management**: Provides `omamacy` command for theme switching and future TUI
 
 ### Manifest Structure
 ```json

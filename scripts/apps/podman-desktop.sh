@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omacy - Podman Desktop Installation
+# Omamacy - Podman Desktop Installation
 # Container management GUI for Podman
 
 # Load common functions

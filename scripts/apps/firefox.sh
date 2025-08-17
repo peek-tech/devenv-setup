@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omacy - Firefox Installation
+# Omamacy - Firefox Installation
 # Web browser
 
 # Load common functions

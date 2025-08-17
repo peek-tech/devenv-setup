@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omacy - Common Library Functions
+# Omamacy - Common Library Functions
 # Shared functions for all installation scripts
 
 # Colors for output

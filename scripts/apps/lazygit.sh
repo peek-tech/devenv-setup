@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omacy - Lazygit Installation
+# Omamacy - Lazygit Installation
 # Git TUI with helpful aliases
 
 # Load common functions

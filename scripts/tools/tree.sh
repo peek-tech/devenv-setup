@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omacy - tree Installation
+# Omamacy - tree Installation
 # Directory tree viewer
 
 # Load common functions

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omacy - pyenv Installation
+# Omamacy - pyenv Installation
 # Python Version Manager with Python 3.11
 
 # Load common functions

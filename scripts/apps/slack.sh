@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omacy - Slack Installation
+# Omamacy - Slack Installation
 # Team communication and collaboration platform
 
 # Load common functions

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omacy - Workspaces Setup
+# Omamacy - Workspaces Setup
 # Creates workspace directories and clones repositories from CSV files
 
 # Colors for output

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omacy - Poetry Installation
+# Omamacy - Poetry Installation
 # Python package manager
 
 # Load common functions

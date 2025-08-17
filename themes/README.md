@@ -1,6 +1,6 @@
-# Omacy Themes
+# Omamacy Themes
 
-This directory contains theme configurations for the Omacy development environment, inspired by Omarchy's theming system.
+This directory contains theme configurations for the Omamacy development environment, inspired by Omarchy's theming system.
 
 ## Available Themes
 

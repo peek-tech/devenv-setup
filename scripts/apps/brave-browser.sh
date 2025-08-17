@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omacy - Brave Browser Installation
+# Omamacy - Brave Browser Installation
 # Privacy-focused web browser
 
 # Load common functions

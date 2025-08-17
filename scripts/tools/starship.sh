@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omacy - Starship Installation
+# Omamacy - Starship Installation
 # Modern cross-shell prompt with theming support
 
 # Load common functions

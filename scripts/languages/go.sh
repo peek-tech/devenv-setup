@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omacy - Go Installation
+# Omamacy - Go Installation
 # Go programming language
 
 # Load common functions

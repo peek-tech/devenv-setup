@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omacy - Claude App Installation
+# Omamacy - Claude App Installation
 # AI assistant desktop application
 
 # Load common functions

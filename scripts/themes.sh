@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omacy - Themes System Installation
+# Omamacy - Themes System Installation
 # Installs the theming system and CLI tool
 
 # Colors for output

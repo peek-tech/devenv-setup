@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omacy - sd Installation
+# Omamacy - sd Installation
 # Intuitive find and replace tool
 
 # Load common functions

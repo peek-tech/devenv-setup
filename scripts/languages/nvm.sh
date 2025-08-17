@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omacy - NVM Installation
+# Omamacy - NVM Installation
 # Node Version Manager with Node 20
 
 # Load common functions

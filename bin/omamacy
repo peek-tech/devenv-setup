@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# Omacy - Theme Management CLI
-# Usage: omacy theme <command>
+# Omamacy - Theme Management CLI
+# Usage: omamacy theme <command>
 
 VERSION="2.0.0"
-OMACY_CONFIG_DIR="$HOME/.config/omacy"
-THEMES_DIR="$OMACY_CONFIG_DIR/themes"
-CURRENT_THEME_FILE="$OMACY_CONFIG_DIR/current-theme"
+OMAMACY_CONFIG_DIR="$HOME/.config/omamacy"
+THEMES_DIR="$OMAMACY_CONFIG_DIR/themes"
+CURRENT_THEME_FILE="$OMAMACY_CONFIG_DIR/current-theme"
 
 # Colors for output
 RED='\033[0;31m'
@@ -19,7 +19,7 @@ NC='\033[0m' # No Color
 print_header() {
     echo ""
     echo -e "${CYAN}╔══════════════════════════════════════════════════════════╗${NC}"
-    echo -e "${CYAN}║                     Omacy v${VERSION}                     ║${NC}"
+    echo -e "${CYAN}║                    Omamacy v${VERSION}                    ║${NC}"
     echo -e "${CYAN}║              macOS Developer Environment                 ║${NC}"
     echo -e "${CYAN}╚══════════════════════════════════════════════════════════╝${NC}"
     echo ""
@@ -123,9 +123,9 @@ apply_theme() {
     # Apply terminal theme configurations
     if [ -f "$theme_dir/fzf.conf" ]; then
         local shell_config="$(get_shell_config_file)"
-        if ! grep -q "# Omacy FZF Theme" "$shell_config" 2>/dev/null; then
+        if ! grep -q "# Omamacy FZF Theme" "$shell_config" 2>/dev/null; then
             echo "" >> "$shell_config"
-            echo "# Omacy FZF Theme" >> "$shell_config"
+            echo "# Omamacy FZF Theme" >> "$shell_config"
             cat "$theme_dir/fzf.conf" >> "$shell_config"
             print_status "FZF theme applied to shell config"
         fi
@@ -197,7 +197,7 @@ show_current_theme() {
 # Show help
 show_help() {
     print_header
-    echo "Usage: omacy theme <command>"
+    echo "Usage: omamacy theme <command>"
     echo ""
     echo "Commands:"
     echo "  list                List available themes"
@@ -206,16 +206,16 @@ show_help() {
     echo "  help               Show this help message"
     echo ""
     echo "Examples:"
-    echo "  omacy theme list"
-    echo "  omacy theme set catppuccin-latte"
-    echo "  omacy theme current"
+    echo "  omamacy theme list"
+    echo "  omamacy theme set catppuccin-latte"
+    echo "  omamacy theme current"
     echo ""
 }
 
 # Main command dispatcher
 main() {
     # Create config directory if it doesn't exist
-    mkdir -p "$OMACY_CONFIG_DIR"
+    mkdir -p "$OMAMACY_CONFIG_DIR"
     
     case "${1:-}" in
         "theme")
@@ -231,8 +231,8 @@ main() {
                         apply_theme "$3"
                     else
                         print_error "Please specify a theme name"
-                        echo "Usage: omacy theme set <theme-name>"
-                        echo "Run 'omacy theme list' to see available themes"
+                        echo "Usage: omamacy theme set <theme-name>"
+                        echo "Run 'omamacy theme list' to see available themes"
                     fi
                     ;;
                 "help"|*)

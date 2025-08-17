@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omacy - wget Installation
+# Omamacy - wget Installation
 # Network downloader
 
 # Load common functions

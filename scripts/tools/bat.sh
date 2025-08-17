@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omacy - Bat Installation
+# Omamacy - Bat Installation
 # Cat replacement with syntax highlighting
 
 # Load common functions

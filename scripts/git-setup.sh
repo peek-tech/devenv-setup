@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omacy - Git Setup  
+# Omamacy - Git Setup  
 # Configures git credentials and SSH for GitHub
 
 # Colors for output

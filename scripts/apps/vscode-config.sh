@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omacy - VSCode Configuration
+# Omamacy - VSCode Configuration
 # Configures Visual Studio Code with extensions and settings
 
 # Load common functions

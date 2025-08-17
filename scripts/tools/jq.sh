@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omacy - jq Installation
+# Omamacy - jq Installation
 # JSON processor and query tool
 
 # Load common functions

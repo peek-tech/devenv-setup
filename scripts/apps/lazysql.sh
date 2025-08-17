@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omacy - lazysql Installation
+# Omamacy - lazysql Installation
 # Database TUI client with sql alias
 
 # Load common functions

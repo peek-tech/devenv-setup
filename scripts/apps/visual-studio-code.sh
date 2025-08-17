@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omacy - Visual Studio Code Installation
+# Omamacy - Visual Studio Code Installation
 # Code editor with extensions and configuration
 
 # Load common functions

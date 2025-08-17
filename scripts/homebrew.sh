@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omacy - Homebrew Installation
+# Omamacy - Homebrew Installation
 # Installs Homebrew package manager for macOS
 
 # Colors for output
