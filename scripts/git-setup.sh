@@ -141,7 +141,15 @@ EOF
         ssh-add --apple-use-keychain "$ssh_key" 2>/dev/null || ssh-add "$ssh_key" 2>/dev/null
     fi
     
-    # Show public key and instructions
+    # Test SSH connection first
+    print_info "Testing SSH connection to GitHub..."
+    if ssh -T git@github.com 2>&1 | grep -q "successfully authenticated"; then
+        print_status "SSH connection to GitHub successful!"
+        return 0
+    fi
+    
+    # If SSH test failed, show setup instructions
+    print_warning "SSH connection test failed - setting up GitHub SSH key..."
     print_info "Your SSH public key:"
     echo ""
     cat "${ssh_key}.pub"
@@ -150,22 +158,40 @@ EOF
     print_info "1. Copy the public key above"
     print_info "2. Go to: https://github.com/settings/ssh/new"
     print_info "3. Add the key with a descriptive title"
-    print_info "4. Press Enter when done to test the connection..."
     
-    if prompt_user "Press Enter when you've added the key to GitHub..." dummy; then
-        print_info "Testing SSH connection to GitHub..."
-        if ssh -T git@github.com 2>&1 | grep -q "successfully authenticated"; then
-            print_status "SSH connection to GitHub successful!"
-            return 0
+    # Retry loop for SSH connection
+    local max_retries=3
+    local retry_count=0
+    
+    while [ $retry_count -lt $max_retries ]; do
+        if prompt_user "Press Enter when you've added the key to GitHub (or 'skip' to continue without SSH)... " user_input; then
+            if [ "$user_input" = "skip" ]; then
+                print_warning "Skipping SSH setup - you can configure it manually later"
+                print_info "Visit: https://docs.github.com/en/authentication/connecting-to-github-with-ssh"
+                return 1
+            fi
+            
+            print_info "Testing SSH connection to GitHub..."
+            if ssh -T git@github.com 2>&1 | grep -q "successfully authenticated"; then
+                print_status "SSH connection to GitHub successful!"
+                return 0
+            else
+                retry_count=$((retry_count + 1))
+                if [ $retry_count -lt $max_retries ]; then
+                    print_warning "SSH connection test failed. Please verify the key was added correctly."
+                    print_info "Retry $retry_count/$max_retries - make sure you've pasted the FULL public key"
+                else
+                    print_warning "SSH connection test failed after $max_retries attempts"
+                    print_info "You can configure it manually later"
+                    print_info "Visit: https://docs.github.com/en/authentication/connecting-to-github-with-ssh"
+                    return 1
+                fi
+            fi
         else
-            print_warning "SSH connection test failed - you can configure it manually later"
-            print_info "Visit: https://docs.github.com/en/authentication/connecting-to-github-with-ssh"
+            print_warning "No TTY available, skipping GitHub SSH setup"
             return 1
         fi
-    else
-        print_warning "No TTY available, skipping GitHub SSH setup"
-        return 1
-    fi
+    done
 }
 
 # Main execution
