@@ -276,12 +276,14 @@ run_individual_script() {
     local script_name="$1"
     local script_description="$2"
     
-    print_section "$script_description"
+    # Skip header if running from main installer
+    if [ "$OMAMACY_FROM_INSTALLER" != "1" ]; then
+        print_section "$script_description"
+        print_info "Script: $script_name"
+    fi
     
     # Load Homebrew environment
     load_homebrew_env
-    
-    print_info "Script: $script_name"
 }
 
 # Exit with success message

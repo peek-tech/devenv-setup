@@ -75,6 +75,62 @@
       "depends": []
     },
     {
+      "name": "macos-defaults.sh",
+      "description": "macOS system defaults with dark mode and developer settings",
+      "required": false,
+      "group": "workspace",
+      "depends": []
+    },
+    {
+      "name": "fonts/nerd-fonts.sh",
+      "description": "Programming fonts with icons and symbols",
+      "required": false,
+      "group": "fonts",
+      "depends": []
+    },
+    {
+      "name": "fonts/fira-code.sh",
+      "description": "Coding font with ligatures",
+      "required": false,
+      "group": "fonts",
+      "depends": []
+    },
+    {
+      "name": "languages/nvm.sh",
+      "description": "Node Version Manager with Node 20",
+      "required": false,
+      "group": "languages",
+      "depends": []
+    },
+    {
+      "name": "languages/pyenv.sh",
+      "description": "Python Version Manager with Python 3.11",
+      "required": false,
+      "group": "languages",
+      "depends": []
+    },
+    {
+      "name": "languages/poetry.sh",
+      "description": "Python package manager",
+      "required": false,
+      "group": "languages",
+      "depends": ["languages/pyenv.sh"]
+    },
+    {
+      "name": "languages/go.sh",
+      "description": "Go programming language",
+      "required": false,
+      "group": "languages",
+      "depends": []
+    },
+    {
+      "name": "languages/bun.sh",
+      "description": "Fast JavaScript runtime and package manager",
+      "required": false,
+      "group": "languages",
+      "depends": []
+    },
+    {
       "name": "tools/git.sh",
       "description": "Git version control with aliases",
       "required": false,
@@ -198,55 +254,6 @@
       "description": "Cross-shell prompt with creative configuration",
       "required": false,
       "group": "tools",
-      "depends": []
-    },
-    {
-      "name": "languages/nvm.sh",
-      "description": "Node Version Manager with Node 20",
-      "required": false,
-      "group": "languages",
-      "depends": []
-    },
-    {
-      "name": "languages/pyenv.sh",
-      "description": "Python Version Manager with Python 3.11",
-      "required": false,
-      "group": "languages",
-      "depends": []
-    },
-    {
-      "name": "languages/poetry.sh",
-      "description": "Python package manager",
-      "required": false,
-      "group": "languages",
-      "depends": ["languages/pyenv.sh"]
-    },
-    {
-      "name": "languages/go.sh",
-      "description": "Go programming language",
-      "required": false,
-      "group": "languages",
-      "depends": []
-    },
-    {
-      "name": "languages/bun.sh",
-      "description": "Fast JavaScript runtime and package manager",
-      "required": false,
-      "group": "languages",
-      "depends": []
-    },
-    {
-      "name": "fonts/nerd-fonts.sh",
-      "description": "Programming fonts with icons and symbols",
-      "required": false,
-      "group": "fonts",
-      "depends": []
-    },
-    {
-      "name": "fonts/fira-code.sh",
-      "description": "Coding font with ligatures",
-      "required": false,
-      "group": "fonts",
       "depends": []
     },
     {
@@ -439,13 +446,6 @@
       "depends": ["apps/podman.sh"]
     },
     {
-      "name": "workspaces.sh",
-      "description": "Workspace directories and repository cloning",
-      "required": false,
-      "group": "workspace",
-      "depends": []
-    },
-    {
       "name": "apps/ghostty.sh",
       "description": "Ghostty terminal emulator",
       "required": false,
@@ -460,10 +460,17 @@
       "depends": ["tools/fzf.sh", "tools/bat.sh", "tools/delta.sh", "apps/ghostty.sh"]
     },
     {
-      "name": "macos-defaults.sh",
-      "description": "macOS system defaults with dark mode and developer settings",
+      "name": "workspaces.sh",
+      "description": "Workspace directories and repository cloning",
       "required": false,
       "group": "workspace",
+      "depends": []
+    },
+    {
+      "name": "omamacy-binary.sh",
+      "description": "Omamacy CLI tool for theme and font management",
+      "required": false,
+      "group": "core",
       "depends": []
     }
   ]
