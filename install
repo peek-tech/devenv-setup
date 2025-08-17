@@ -220,8 +220,10 @@ run_manifest_scripts() {
         
         # Show script info
         echo ""
-        print_section "Step $script_count: $script_name"
-        print_info "Description: $description"
+        echo "=======================================" >&2
+        echo "Step $script_count: $script_name" >&2  
+        echo "Description: $description" >&2
+        echo "=======================================" >&2
         echo ""
         
         # Handle optional scripts
@@ -238,7 +240,7 @@ run_manifest_scripts() {
         # Execute script with environment variable to suppress individual headers
         if OMAMACY_FROM_INSTALLER=1 bash "$script_path"; then
             echo ""
-            print_status "✅ Completed: $script_name"
+            echo "✅ Completed: $script_name" >&2
             executed_scripts+=("$script_name")
             
         else
