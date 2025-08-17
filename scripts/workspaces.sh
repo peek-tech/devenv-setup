@@ -57,6 +57,34 @@ prompt_user() {
     fi
 }
 
+# Validate CSV file format
+validate_csv_file() {
+    local temp_csv="$1"
+    local line_count=0
+    local valid_lines=0
+    
+    while IFS= read -r line || [ -n "$line" ]; do
+        line_count=$((line_count + 1))
+        
+        # Skip empty lines
+        if [ -z "$(echo "$line" | xargs)" ]; then
+            continue
+        fi
+        
+        # Check if line has at least one comma (two fields)
+        if [[ "$line" == *","* ]]; then
+            valid_lines=$((valid_lines + 1))
+        fi
+    done < "$temp_csv"
+    
+    # Need at least 2 lines: header + 1 data line
+    if [ $line_count -lt 2 ] || [ $valid_lines -lt 2 ]; then
+        return 1
+    fi
+    
+    return 0
+}
+
 # Process a CSV file and clone repositories
 process_csv_file() {
     local csv_url="$1"
@@ -65,9 +93,16 @@ process_csv_file() {
     print_info "Processing CSV from: $csv_url"
     
     # Download the CSV file
-    local temp_csv="/tmp/omacy_workspaces_$$.csv"
+    local temp_csv="/tmp/omamacy_workspaces_$$.csv"
     if ! curl -fsSL "$csv_url" -o "$temp_csv" 2>/dev/null; then
         print_error "Failed to download CSV from $csv_url"
+        return 1
+    fi
+    
+    # Validate CSV format
+    if ! validate_csv_file "$temp_csv"; then
+        print_error "Invalid CSV file format. File must have a header line and at least one data line with comma-separated values."
+        rm -f "$temp_csv"
         return 1
     fi
     
@@ -107,13 +142,17 @@ process_csv_file() {
             continue
         fi
         
-        # Create workspace directory if it doesn't exist
+        # Create workspace directory if it doesn't exist (non-fatal)
         if [ ! -d "$workspace_path" ]; then
-            mkdir -p "$workspace_path"
-            print_status "Created workspace directory: $workspace_path"
+            if mkdir -p "$workspace_path" 2>/dev/null; then
+                print_status "Created workspace directory: $workspace_path"
+            else
+                print_warning "Failed to create directory: $workspace_path (continuing)"
+                continue
+            fi
         fi
         
-        # Clone the repository
+        # Clone the repository (non-fatal)
         local repo_path="$workspace_path/$repo_name"
         if [ -d "$repo_path" ]; then
             print_info "Repository already exists: $repo_path"
@@ -123,7 +162,7 @@ process_csv_file() {
                 print_status "Cloned: $repo_name → $repo_path"
                 cloned_count=$((cloned_count + 1))
             else
-                print_error "Failed to clone: $git_repo"
+                print_warning "Failed to clone: $git_repo (continuing)"
                 failed_count=$((failed_count + 1))
             fi
         fi
@@ -152,25 +191,24 @@ setup_workspaces() {
     # Ask user for CSV URLs
     print_info "You can provide CSV files with workspace configurations."
     print_info "CSV format: directory, git repo (with header line)"
-    print_info "Example: Work, git@github.com/peek-tech/omacy"
+    print_info "Example: Work, git@github.com/peek-tech/omamacy"
     echo ""
     
     local csv_count=0
     while true; do
         local csv_url=""
         if prompt_user "Enter CSV URL (or press Enter to skip): " csv_url; then
+            # Check if URL is empty - if so, break the loop
             if [ -z "$csv_url" ]; then
-                if [ $csv_count -eq 0 ]; then
-                    print_info "No CSV URLs provided, continuing without repository setup"
-                else
-                    print_info "Finished processing $csv_count CSV file(s)"
-                fi
                 break
             fi
             
             # Process the CSV file
             if process_csv_file "$csv_url"; then
                 csv_count=$((csv_count + 1))
+                print_status "Successfully processed CSV file $csv_url"
+            else
+                print_warning "Failed to process CSV file $csv_url, but continuing..."
             fi
             
             echo ""
@@ -179,6 +217,13 @@ setup_workspaces() {
             break
         fi
     done
+    
+    # Summary after loop completion
+    if [ $csv_count -eq 0 ]; then
+        print_info "No CSV files processed, continuing without repository setup"
+    else
+        print_info "Finished processing $csv_count CSV file(s)"
+    fi
     
     # Create some default workspace directories
     local default_dirs=(

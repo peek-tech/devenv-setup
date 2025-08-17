@@ -21,7 +21,7 @@ configure_tmux() {
     
     # Create tmux configuration based on hamvocke.com guide
     cat > "$tmux_config" << 'EOF'
-# Omacy tmux Configuration
+# Omamacy tmux Configuration
 # Based on https://hamvocke.com/blog/a-guide-to-customizing-your-tmux-conf/
 
 # Remap prefix from 'C-b' to 'C-a' (more convenient)

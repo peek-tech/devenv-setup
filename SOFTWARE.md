@@ -226,7 +226,7 @@ This document lists all software installed by the individual scripts in the Omam
 - Terminal configuration
 
 ### themes.sh
-- **Omamacy CLI tool** (`omacy`) - Theme management
+- **Omamacy CLI tool** (`omamacy`) - Theme management
 - **Catppuccin themes** - 4 color variants:
   - catppuccin-mocha (dark, default)
   - catppuccin-macchiato (dark, warm)  

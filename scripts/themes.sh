@@ -35,16 +35,16 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
 
 # Configuration
-OMACY_CONFIG_DIR="$HOME/.config/omacy"
-THEMES_DIR="$OMACY_CONFIG_DIR/themes"
+OMAMACY_CONFIG_DIR="$HOME/.config/omamacy"
+THEMES_DIR="$OMAMACY_CONFIG_DIR/themes"
 BIN_DIR="/usr/local/bin"
 
 # Install themes system
 install_themes_system() {
-    print_info "Setting up Omacy themes system..."
+    print_info "Setting up Omamacy themes system..."
     
     # Create config directories
-    mkdir -p "$OMACY_CONFIG_DIR"
+    mkdir -p "$OMAMACY_CONFIG_DIR"
     mkdir -p "$THEMES_DIR"
     
     # Copy theme configurations
@@ -56,14 +56,14 @@ install_themes_system() {
         print_warning "Theme configurations not found in project"
     fi
     
-    # Install omacy CLI tool
-    if [ -f "$PROJECT_ROOT/bin/omacy" ]; then
-        print_info "Installing omacy CLI tool..."
-        sudo cp "$PROJECT_ROOT/bin/omacy" "$BIN_DIR/omacy"
-        sudo chmod +x "$BIN_DIR/omacy"
-        print_status "Omacy CLI tool installed to $BIN_DIR/omacy"
+    # Install omamacy CLI tool
+    if [ -f "$PROJECT_ROOT/bin/omamacy" ]; then
+        print_info "Installing omamacy CLI tool..."
+        sudo cp "$PROJECT_ROOT/bin/omamacy" "$BIN_DIR/omamacy"
+        sudo chmod +x "$BIN_DIR/omamacy"
+        print_status "Omamacy CLI tool installed to $BIN_DIR/omamacy"
     else
-        print_warning "Omacy CLI tool not found in project"
+        print_warning "Omamacy CLI tool not found in project"
     fi
     
     # Set default theme
@@ -74,7 +74,7 @@ install_themes_system() {
 set_default_theme() {
     print_info "Setting Catppuccin Mocha as default theme..."
     
-    local current_theme_file="$OMACY_CONFIG_DIR/current-theme"
+    local current_theme_file="$OMAMACY_CONFIG_DIR/current-theme"
     echo "catppuccin-mocha" > "$current_theme_file"
     
     # Apply default theme configurations
@@ -105,9 +105,9 @@ apply_default_configurations() {
     # Apply FZF theme to shell config
     if [ -f "$theme_dir/fzf.conf" ]; then
         local shell_config="$(get_shell_config_file)"
-        if [ -f "$shell_config" ] && ! grep -q "# Omacy FZF Theme" "$shell_config"; then
+        if [ -f "$shell_config" ] && ! grep -q "# Omamacy FZF Theme" "$shell_config"; then
             echo "" >> "$shell_config"
-            echo "# Omacy FZF Theme" >> "$shell_config"
+            echo "# Omamacy FZF Theme" >> "$shell_config"
             cat "$theme_dir/fzf.conf" >> "$shell_config"
             print_status "Applied FZF theme to shell config"
         fi
@@ -170,8 +170,8 @@ main() {
     install_themes_system
     
     print_status "Themes system installation complete!"
-    print_info "Use 'omacy theme list' to see available themes"
-    print_info "Use 'omacy theme set <theme-name>' to switch themes"
+    print_info "Use 'omamacy theme list' to see available themes"
+    print_info "Use 'omamacy theme set <theme-name>' to switch themes"
     print_info "Current theme: catppuccin-mocha"
 }
 

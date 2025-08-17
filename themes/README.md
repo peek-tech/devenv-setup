@@ -22,20 +22,20 @@ Each theme includes configurations for:
 
 ## Usage
 
-Use the `omacy` CLI tool to manage themes:
+Use the `omamacy` CLI tool to manage themes:
 
 ```bash
 # List available themes
-omacy theme list
+omamacy theme list
 
 # Show current theme
-omacy theme current
+omamacy theme current
 
 # Switch to a specific theme
-omacy theme set catppuccin-latte
+omamacy theme set catppuccin-latte
 
 # Switch to dark theme
-omacy theme set catppuccin-mocha
+omamacy theme set catppuccin-mocha
 ```
 
 ## Theme Structure
@@ -53,9 +53,9 @@ Each theme directory contains:
 ## Adding Custom Themes
 
 To add a custom theme:
-1. Create a new directory in `~/.config/omacy/themes/`
+1. Create a new directory in `~/.config/omamacy/themes/`
 2. Add the required configuration files
-3. Use `omacy theme set <theme-name>` to apply
+3. Use `omamacy theme set <theme-name>` to apply
 
 ## Notes
 
