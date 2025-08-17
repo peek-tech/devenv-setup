@@ -58,6 +58,25 @@ print_section() {
     echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 }
 
+# Ensure Xcode Command Line Tools are installed
+ensure_xcode_cli_tools() {
+    if ! xcode-select -p &> /dev/null; then
+        print_info "Xcode Command Line Tools required for git operations"
+        print_info "Installing Xcode Command Line Tools..."
+        xcode-select --install
+        print_info "Please complete the Xcode CLI Tools installation in the popup window"
+        print_info "Press any key after installation completes..."
+        read -n 1 -s
+        
+        # Verify installation
+        if ! xcode-select -p &> /dev/null; then
+            print_error "Xcode Command Line Tools installation failed or incomplete"
+            exit 1
+        fi
+    fi
+    print_status "Xcode Command Line Tools available"
+}
+
 # Download repository if not already present
 download_repository() {
     if [ -d "$INSTALL_DIR" ]; then
@@ -98,6 +117,9 @@ main() {
     print_header
     
     print_section "Starting Omacy Installation"
+    
+    # Ensure Xcode CLI Tools are available before any git operations
+    ensure_xcode_cli_tools
     
     # Check if we need to download the repository
     if ! check_repository_structure; then
