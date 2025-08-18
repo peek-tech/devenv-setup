@@ -192,6 +192,7 @@ run_manifest_scripts() {
     
     # Get script names in order from manifest
     local script_names=($(jq -r '.scripts[].name' "$manifest_file"))
+    echo "Starting to process ${#script_names[@]} scripts..." >&2
     
     for script_name in "${script_names[@]}"; do
         local script_path="$script_dir/$script_name"
@@ -226,7 +227,7 @@ run_manifest_scripts() {
         fi
         
         # Execute script with environment variable to suppress individual headers
-        if OMAMACY_FROM_INSTALLER=1 source "$script_path"; then
+        if OMAMACY_FROM_INSTALLER=1 bash "$script_path" 2>&1; then
             echo ""
             print_status "✅ Completed: $script_name"
             executed_scripts+=("$script_name")
