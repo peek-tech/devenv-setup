@@ -11,6 +11,15 @@ source "$SCRIPT_DIR/../lib/common.sh"
 install_podman() {
     print_info "Installing Podman..."
     
+    # Check if on Apple Silicon
+    if [[ $(uname -m) == 'arm64' ]]; then
+        print_warning "Note: Podman on Apple Silicon may prompt to install Rosetta 2"
+        print_info "If a GRAPHICAL popup appears asking to install Rosetta 2:"
+        print_info "👉 Click 'Install' in the popup window"
+        print_info "This is required for x86_64 container compatibility"
+        echo ""
+    fi
+    
     # Install Podman
     if ! install_brew_package "podman" false "Container runtime"; then
         script_failure "Podman" "Failed to install via Homebrew"

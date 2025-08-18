@@ -93,8 +93,11 @@ print_section() {
 # Ensure Xcode Command Line Tools are installed
 ensure_xcode_cli_tools() {
     if ! xcode-select -p &> /dev/null; then
-        print_info "Xcode Command Line Tools required for git operations"
-        print_info "Installing Xcode Command Line Tools..."
+        print_warning "Xcode Command Line Tools are required but not installed"
+        echo ""
+        print_info "IMPORTANT: A GRAPHICAL installer will open OUTSIDE this terminal window"
+        print_info "👉 Look for the Xcode installer popup and click 'Install'"
+        echo ""
         
         # Temporarily disable exit on error for this command
         set +e
@@ -104,15 +107,25 @@ ensure_xcode_cli_tools() {
         
         # The command may fail if tools are already installed or if dialog was cancelled
         if [ $install_result -eq 0 ] || [ $install_result -eq 1 ]; then
-            print_info "Please complete the Xcode CLI Tools installation in the popup window"
-            print_info "Press any key after installation completes..."
-            read -n 1 -s
+            echo ""
+            print_warning "⚠️  LOOK FOR THE POPUP WINDOW OUTSIDE THE TERMINAL ⚠️"
+            echo ""
+            print_info "After completing the Xcode installation in the popup:"
+            print_info "1. Wait for it to fully complete"
+            print_info "2. Close the installer window"
+            print_info "3. Press ENTER here to continue..."
+            read -r
         fi
         
         # Verify installation
         if ! xcode-select -p &> /dev/null; then
-            print_error "Xcode Command Line Tools installation failed or incomplete"
-            print_error "Please install manually: xcode-select --install"
+            print_error "Xcode Command Line Tools installation not detected"
+            echo ""
+            print_info "Please complete the installation in the popup window, then:"
+            print_info "Re-run this installer with:"
+            echo ""
+            echo "    curl -fsSL https://peek-tech.github.io/devenv-setup/install | bash"
+            echo ""
             exit 1
         fi
     fi

@@ -10,6 +10,21 @@ curl -fsSL https://peek-tech.github.io/devenv-setup/install | bash
 
 The installer automatically downloads the repository and runs installation scripts based on a **smart manifest system**.
 
+## ⚠️ Important Installation Notes
+
+### First-Time macOS Setup
+1. **Xcode Command Line Tools**: On a new machine, you'll be prompted to install Xcode Command Line Tools
+   - **This opens a GRAPHICAL installer popup OUTSIDE the terminal**
+   - Look for the popup window and click "Install"
+   - The script will pause and wait for you to complete the installation
+   - After Xcode tools are installed, **re-run the installation command**
+
+2. **Rosetta 2 for Apple Silicon**: When installing Podman on Apple Silicon Macs
+   - A graphical popup will appear asking to install Rosetta 2
+   - This is required for x86_64 emulation support
+   - Click "Install" in the popup to continue
+   - The installation will proceed after Rosetta 2 is installed
+
 ## Features
 
 **🎯 Granular Control**: 50+ individual scripts for complete customization
