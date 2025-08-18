@@ -154,19 +154,24 @@ EOF
 show_github_setup_instructions() {
     local ssh_key="$HOME/.ssh/github"
     
-    echo ""
     print_warning "📋 GitHub SSH key needs to be added to your account:"
-    echo ""
-    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-    cat "${ssh_key}.pub"
-    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-    echo ""
+    print_info "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    
+    # Read the key content and display it using print_info
+    if [ -f "${ssh_key}.pub" ]; then
+        local key_content=$(cat "${ssh_key}.pub")
+        print_info "$key_content"
+    else
+        print_error "SSH key file not found: ${ssh_key}.pub"
+        return 1
+    fi
+    
+    print_info "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     print_info "To complete GitHub setup:"
     print_info "1. Copy the ENTIRE key above (including ssh-ed25519)"
     print_info "2. Open in browser: https://github.com/settings/ssh/new"
     print_info "3. Paste the key and give it a descriptive title"
     print_info "   (e.g., 'MacBook Pro - Omamacy')"
-    echo ""
 }
 
 # Main SSH setup function with proper flow
@@ -188,14 +193,12 @@ setup_ssh_for_github() {
     
     # Step 4: Loop until SSH works or user skips
     while true; do
-        echo ""
         if prompt_user "Press Enter after adding the key to GitHub (or type 'skip' to continue)... " user_input; then
             if [ "$user_input" = "skip" ] || [ "$user_input" = "s" ]; then
                 print_warning "Skipping SSH verification - you can test it manually later with:"
-                echo "    ssh -T git@github.com"
-                echo ""
+                print_info "    ssh -T git@github.com"
                 print_info "To view your SSH key again, run:"
-                echo "    cat ~/.ssh/github.pub"
+                print_info "    cat ~/.ssh/github.pub"
                 return 1
             fi
             
@@ -209,14 +212,13 @@ setup_ssh_for_github() {
                 print_info "• You copied the ENTIRE key (including ssh-ed25519)"
                 print_info "• The key is added to your GitHub account"  
                 print_info "• You have internet connectivity"
-                echo ""
                 # Show the key again for convenience
                 show_github_setup_instructions
             fi
         else
             print_warning "No TTY available, skipping GitHub SSH setup"
             print_info "To view your SSH key later, run:"
-            echo "    cat ~/.ssh/github.pub"
+            print_info "    cat ~/.ssh/github.pub"
             return 1
         fi
     done
