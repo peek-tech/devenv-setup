@@ -212,8 +212,8 @@ run_manifest_scripts() {
         
         # Show script info
         echo ""
-        print_header "Step $script_count: $script_name"
-        print_info "Description: $description"
+        echo "=== Step $script_count: $script_name ===" >&2
+        echo "Description: $description" >&2
         
         # Handle optional scripts
         if [ "$optional" = "true" ]; then
@@ -235,7 +235,7 @@ run_manifest_scripts() {
         
         if [ $script_exit_code -eq 0 ]; then
             echo ""
-            print_status "✅ Completed: $script_name"
+            echo "✅ Completed: $script_name" >&2
             executed_scripts+=("$script_name")
         else
             echo ""
