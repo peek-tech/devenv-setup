@@ -227,13 +227,19 @@ run_manifest_scripts() {
         fi
         
         # Execute script with environment variable to suppress individual headers
-        if OMAMACY_FROM_INSTALLER=1 bash "$script_path" 2>&1; then
+        # Disable exit on error for individual script execution
+        set +e
+        OMAMACY_FROM_INSTALLER=1 bash "$script_path"
+        local script_exit_code=$?
+        set -e
+        
+        if [ $script_exit_code -eq 0 ]; then
             echo ""
             print_status "✅ Completed: $script_name"
             executed_scripts+=("$script_name")
-            
         else
-            print_error "Failed: $script_name"
+            echo ""
+            print_error "Failed: $script_name (exit code: $script_exit_code)"
             print_info "You can retry by running: bash $script_path"
             
             # Check if this was a required script
