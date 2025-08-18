@@ -316,6 +316,27 @@
             <p><em>The installer automatically downloads the repository and runs 13 modular installation scripts.</em></p>
         </div>
         
+        <div class="quick-start">
+            <h2>⚠️ Important Installation Notes</h2>
+            <div style="margin-bottom: 1rem;">
+                <h3 style="color: var(--primary); margin-bottom: 0.5rem;">First-Time macOS Setup</h3>
+                <p><strong>Xcode Command Line Tools:</strong> On a new machine, you'll be prompted to install Xcode Command Line Tools</p>
+                <ul style="margin-left: 1rem;">
+                    <li><strong>This opens a GRAPHICAL installer popup OUTSIDE the terminal</strong></li>
+                    <li>Look for the popup window and click "Install"</li>
+                    <li><strong>The script will wait automatically</strong> and continue once installation completes</li>
+                    <li><strong>No need to re-run</strong> - the installer handles this seamlessly</li>
+                </ul>
+                
+                <p style="margin-top: 1rem;"><strong>Rosetta 2 for Apple Silicon:</strong> When installing Podman on Apple Silicon Macs</p>
+                <ul style="margin-left: 1rem;">
+                    <li>A graphical popup will appear asking to install Rosetta 2</li>
+                    <li>This is required for x86_64 emulation support</li>
+                    <li>Click "Install" in the popup to continue</li>
+                </ul>
+            </div>
+        </div>
+        
         <div class="features">
             <div class="feature">
                 <h3>🎯 Granular Control</h3>

@@ -16,8 +16,8 @@ The installer automatically downloads the repository and runs installation scrip
 1. **Xcode Command Line Tools**: On a new machine, you'll be prompted to install Xcode Command Line Tools
    - **This opens a GRAPHICAL installer popup OUTSIDE the terminal**
    - Look for the popup window and click "Install"
-   - The script will pause and wait for you to complete the installation
-   - After Xcode tools are installed, **re-run the installation command**
+   - **The script will wait automatically** and continue once installation completes
+   - **No need to re-run** - the installer handles this seamlessly
 
 2. **Rosetta 2 for Apple Silicon**: When installing Podman on Apple Silicon Macs
    - A graphical popup will appear asking to install Rosetta 2
