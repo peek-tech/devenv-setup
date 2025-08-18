@@ -150,10 +150,10 @@ confirm-close-surface = false
 keybind = cmd+t=new_tab
 keybind = cmd+w=close_surface
 keybind = cmd+n=new_window
-keybind = cmd+shift+t=restore_tab
-keybind = cmd+plus=increase_font_size
+keybind = cmd+shift+t=new_tab
+keybind = cmd+equal=increase_font_size
 keybind = cmd+minus=decrease_font_size
-keybind = cmd+0=reset_font_size
+keybind = cmd+zero=reset_font_size
 EOF
     
     print_status "Ghostty configuration created at $config_file"
