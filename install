@@ -212,7 +212,7 @@ run_manifest_scripts() {
         
         # Show script info
         echo ""
-        echo "=== Step $script_count: $script_name ===" >&2
+        echo -e "\033[1mStep $script_count: $script_name\033[0m" >&2
         echo "Description: $description" >&2
         
         # Handle optional scripts
