@@ -110,23 +110,28 @@ ensure_xcode_cli_tools() {
             echo ""
             print_warning "⚠️  LOOK FOR THE POPUP WINDOW OUTSIDE THE TERMINAL ⚠️"
             echo ""
-            print_info "After completing the Xcode installation in the popup:"
-            print_info "1. Wait for it to fully complete"
-            print_info "2. Close the installer window"
-            print_info "3. Press ENTER here to continue..."
-            read -r
-        fi
-        
-        # Verify installation
-        if ! xcode-select -p &> /dev/null; then
-            print_error "Xcode Command Line Tools installation not detected"
+            print_info "Waiting for Xcode Command Line Tools installation..."
+            print_info "This script will wait and check every 30 seconds"
+            print_info "Complete the installation in the popup window"
             echo ""
-            print_info "Please complete the installation in the popup window, then:"
-            print_info "Re-run this installer with:"
-            echo ""
-            echo "    curl -fsSL https://peek-tech.github.io/devenv-setup/install | bash"
-            echo ""
-            exit 1
+            
+            # Wait for installation to complete (check every 30 seconds)
+            while ! xcode-select -p &> /dev/null; do
+                print_info "Still waiting for Xcode tools installation... (checking again in 30s)"
+                sleep 30
+            done
+            
+            print_status "Xcode Command Line Tools installation detected!"
+        else
+            print_warning "Xcode tools installer may not have started properly"
+            print_info "If no popup appeared, please run manually: xcode-select --install"
+            print_info "This script will continue checking..."
+            
+            # Still wait and check periodically
+            while ! xcode-select -p &> /dev/null; do
+                print_info "Waiting for Xcode tools... (will check again in 30s)"
+                sleep 30
+            done
         fi
     fi
     print_status "Xcode Command Line Tools available"
@@ -146,9 +151,24 @@ download_repository() {
     if [ -d "$INSTALL_DIR" ]; then
         print_info "Repository already exists at $INSTALL_DIR"
         cd "$INSTALL_DIR"
-        git pull origin main 2>/dev/null || {
-            print_warning "Could not update repository, continuing with existing version"
-        }
+        
+        # Check if this is a git repository
+        if [ -d ".git" ]; then
+            print_info "Updating repository to latest version..."
+            
+            # Reset any local changes and pull latest
+            git fetch origin main 2>/dev/null || {
+                print_warning "Could not fetch latest changes"
+            }
+            
+            git reset --hard origin/main 2>/dev/null || {
+                print_warning "Could not update to latest version, using existing"
+            }
+            
+            print_status "Repository updated to latest version"
+        else
+            print_warning "Existing directory is not a git repository, using as-is"
+        fi
     else
         print_info "Downloading Omamacy repository..."
         mkdir -p "$(dirname "$INSTALL_DIR")"
@@ -157,6 +177,7 @@ download_repository() {
             exit 1
         }
         cd "$INSTALL_DIR"
+        print_status "Repository downloaded successfully"
     fi
 }
 
