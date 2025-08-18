@@ -1,0 +1,18 @@
+{
+  "version": "2.1.1",
+  "description": "Add new productivity tools - example update",
+  "scripts": [
+    {
+      "name": "tools/hyperfine.sh",
+      "description": "Command-line benchmarking tool",
+      "required": false,
+      "group": "tools"
+    },
+    {
+      "name": "tools/dust.sh",
+      "description": "Disk usage analyzer",
+      "required": false,
+      "group": "tools"
+    }
+  ]
+}

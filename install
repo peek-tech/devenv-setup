@@ -2,6 +2,9 @@
 
 # Omamacy - macOS Developer Environment Setup
 # Usage: curl -fsSL https://peek-tech.github.io/devenv-setup/install | bash
+# Options:
+#   --manifest <path>  Use custom manifest file
+#   --update-mode      Skip preflight checks (for upgrade system)
 
 # macOS only - exit immediately if not on macOS
 if [[ "$OSTYPE" != "darwin"* ]]; then
@@ -13,7 +16,8 @@ set -e
 
 # Repository configuration
 REPO_URL="https://github.com/peek-tech/devenv-setup.git"
-INSTALL_DIR="$HOME/.omamacy"
+INSTALL_DIR="$HOME/.local/share/omamacy"
+CONFIG_DIR="$HOME/.config/omamacy"
 
 # Colors for output
 RED='\033[0;31m'
@@ -25,6 +29,34 @@ NC='\033[0m' # No Color
 
 # Configuration
 VERSION="2.0.0"
+
+# Parse command-line arguments
+CUSTOM_MANIFEST=""
+UPDATE_MODE=false
+
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --manifest|-m)
+            CUSTOM_MANIFEST="$2"
+            shift 2
+            ;;
+        --update-mode)
+            UPDATE_MODE=true
+            shift
+            ;;
+        --help|-h)
+            echo "Usage: $0 [options]"
+            echo "Options:"
+            echo "  --manifest <path>  Use custom manifest file"
+            echo "  --update-mode      Skip preflight checks (for upgrade system)"
+            exit 0
+            ;;
+        *)
+            print_error "Unknown option: $1"
+            exit 1
+            ;;
+    esac
+done
 
 print_header() {
     echo ""
@@ -89,6 +121,15 @@ ensure_xcode_cli_tools() {
 
 # Download repository if not already present
 download_repository() {
+    # Handle migration from old location
+    OLD_INSTALL_DIR="$HOME/.omamacy"
+    if [ -d "$OLD_INSTALL_DIR" ] && [ ! -d "$INSTALL_DIR" ]; then
+        print_info "Migrating from old installation location..."
+        mkdir -p "$(dirname "$INSTALL_DIR")"
+        mv "$OLD_INSTALL_DIR" "$INSTALL_DIR"
+        print_status "Migrated to new location: $INSTALL_DIR"
+    fi
+
     if [ -d "$INSTALL_DIR" ]; then
         print_info "Repository already exists at $INSTALL_DIR"
         cd "$INSTALL_DIR"
@@ -97,6 +138,7 @@ download_repository() {
         }
     else
         print_info "Downloading Omamacy repository..."
+        mkdir -p "$(dirname "$INSTALL_DIR")"
         git clone "$REPO_URL" "$INSTALL_DIR" || {
             print_error "Failed to clone repository from $REPO_URL"
             exit 1
@@ -183,6 +225,38 @@ ensure_jq() {
     fi
 }
 
+# Save installation/update timestamp
+save_timestamp() {
+    mkdir -p "$CONFIG_DIR"
+    date +%s > "$CONFIG_DIR/last_update"
+    print_status "Saved update timestamp"
+}
+
+# Log update to history
+log_update() {
+    local update_type="$1"
+    local scripts_run="$2"
+    
+    mkdir -p "$CONFIG_DIR"
+    local history_file="$CONFIG_DIR/update_history.json"
+    local timestamp=$(date +%s)
+    
+    # Create history file if it doesn't exist
+    if [ ! -f "$history_file" ]; then
+        echo "[]" > "$history_file"
+    fi
+    
+    # Add new entry to history
+    local new_entry=$(jq -n \
+        --arg ts "$timestamp" \
+        --arg ver "$VERSION" \
+        --arg type "$update_type" \
+        --arg scripts "$scripts_run" \
+        '{timestamp: ($ts | tonumber), version: $ver, type: $type, scripts: $scripts}')
+    
+    jq ". += [$new_entry]" "$history_file" > "$history_file.tmp" && mv "$history_file.tmp" "$history_file"
+}
+
 # Run scripts based on manifest order
 run_manifest_scripts() {
     local manifest_file="$1"
@@ -259,10 +333,18 @@ run_manifest_scripts() {
 main() {
     print_header
     
-    print_section "Starting Omamacy Installation"
-    
-    # Ensure Xcode CLI Tools are available before any git operations
-    ensure_xcode_cli_tools
+    # Determine update type
+    local update_type="install"
+    if [ "$UPDATE_MODE" = true ]; then
+        update_type="update"
+        print_section "Running Omamacy Update"
+    else
+        print_section "Starting Omamacy Installation"
+        
+        # Only run preflight checks if not in update mode
+        # Ensure Xcode CLI Tools are available before any git operations
+        ensure_xcode_cli_tools
+    fi
     
     # Check if we need to download the repository
     if ! check_repository_structure; then
@@ -274,16 +356,35 @@ main() {
     SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
     
     # Install core dependencies first (outside of manifest)
-    install_core_dependencies "$SCRIPT_DIR/scripts"
+    if [ "$UPDATE_MODE" != true ]; then
+        install_core_dependencies "$SCRIPT_DIR/scripts"
+    else
+        # In update mode, just ensure jq is available
+        ensure_jq
+    fi
+    
+    # Determine manifest file to use
+    local manifest_file
+    if [ -n "$CUSTOM_MANIFEST" ]; then
+        # Use custom manifest (can be relative or absolute path)
+        if [[ "$CUSTOM_MANIFEST" = /* ]]; then
+            manifest_file="$CUSTOM_MANIFEST"
+        else
+            manifest_file="$SCRIPT_DIR/$CUSTOM_MANIFEST"
+        fi
+        print_info "Using custom manifest: $manifest_file"
+    else
+        manifest_file="$SCRIPT_DIR/scripts/manifest.json"
+    fi
     
     # Load and validate manifest (jq is now available)
-    local manifest_file="$SCRIPT_DIR/scripts/manifest.json"
     load_manifest "$manifest_file"
     
     print_info "Running installation scripts from manifest..."
     
     # Run scripts based on manifest
     local script_count
+    local executed_scripts
     script_count=$(run_manifest_scripts "$manifest_file" "$SCRIPT_DIR/scripts")
     
     if [ $script_count -eq 0 ]; then
@@ -291,11 +392,18 @@ main() {
         exit 1
     fi
     
+    # Save timestamp and log the update
+    save_timestamp
+    log_update "$update_type" "$script_count scripts"
+    
     print_section "Installation Complete"
-    print_status "Omamacy installation completed successfully!"
+    print_status "Omamacy $update_type completed successfully!"
     print_info "Executed $script_count script(s)"
-    print_info "Restart your terminal or run 'source ~/.zshrc' to use new tools"
+    
+    if [ "$UPDATE_MODE" != true ]; then
+        print_info "Restart your terminal or run 'source ~/.zshrc' to use new tools"
+    fi
 }
 
 # Run main function
-main "$@"
+main
