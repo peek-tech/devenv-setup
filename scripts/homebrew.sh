@@ -3,18 +3,9 @@
 # Omamacy - Homebrew Installation
 # Installs Homebrew package manager for macOS
 
-# Colors for output
-GREEN='\033[0;32m'
-BLUE='\033[0;34m'
-NC='\033[0m' # No Color
-
-print_status() {
-    echo -e "${GREEN}✅${NC} $1"
-}
-
-print_info() {
-    echo -e "${BLUE}ℹ️${NC} $1"
-}
+# Load common functions
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/lib/common.sh"
 
 # Install Homebrew
 install_homebrew() {

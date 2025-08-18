@@ -3,28 +3,9 @@
 # Omamacy - Workspaces Setup
 # Creates workspace directories and clones repositories from CSV files
 
-# Colors for output
-GREEN='\033[0;32m'
-BLUE='\033[0;34m'
-YELLOW='\033[1;33m'
-RED='\033[0;31m'
-NC='\033[0m' # No Color
-
-print_status() {
-    echo -e "${GREEN}✅${NC} $1"
-}
-
-print_info() {
-    echo -e "${BLUE}ℹ️${NC} $1"
-}
-
-print_warning() {
-    echo -e "${YELLOW}⚠️${NC} $1"
-}
-
-print_error() {
-    echo -e "${RED}❌${NC} $1"
-}
+# Load common functions
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/lib/common.sh"
 
 # TTY-aware prompt helper
 prompt_user() {

@@ -3,23 +3,9 @@
 # Omamacy - Themes System Installation
 # Installs the theming system and CLI tool
 
-# Colors for output
-GREEN='\033[0;32m'
-BLUE='\033[0;34m'
-YELLOW='\033[1;33m'
-NC='\033[0m' # No Color
-
-print_status() {
-    echo -e "${GREEN}✅${NC} $1"
-}
-
-print_warning() {
-    echo -e "${YELLOW}⚠️${NC} $1"
-}
-
-print_info() {
-    echo -e "${BLUE}ℹ️${NC} $1"
-}
+# Load common functions
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/lib/common.sh"
 
 # Load Homebrew environment
 load_homebrew_env() {
