@@ -45,6 +45,11 @@ install_poetry() {
     
     print_info "Installing Poetry Python package manager..."
     
+    # Initialize pyenv in current session to ensure Python 3.11 is available
+    export PYENV_ROOT="$HOME/.pyenv"
+    export PATH="$PYENV_ROOT/bin:$PATH"
+    eval "$(pyenv init -)"
+    
     # Install Poetry using the official installer
     curl -sSL https://install.python-poetry.org | python3 -
     
