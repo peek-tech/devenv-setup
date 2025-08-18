@@ -7,8 +7,8 @@
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/lib/common.sh"
 
-# Ensure we're running with proper TTY (fork if piped)
-ensure_tty "$@"
+# Load Homebrew environment for this script
+load_homebrew_env
 
 # Main installation
 main() {
@@ -17,14 +17,20 @@ main() {
     print_info "Configuring macOS system defaults..."
     print_info "This will modify system preferences and may require admin privileges."
     
-    # Confirm with user
+    # Confirm with user - default to YES for installer
     echo ""
     local apply_defaults
-    tty_prompt "Apply macOS system defaults? (y/N)" "N" apply_defaults
-    if [[ ! $apply_defaults =~ ^[Yy]$ ]]; then
-        print_info "Skipping macOS defaults configuration."
-        script_success "macos-defaults"
-        return 0
+    # If running from installer, default to yes, otherwise ask
+    if [ "$OMAMACY_FROM_INSTALLER" = "1" ]; then
+        apply_defaults="y"
+        print_info "Applying macOS system defaults (installer mode)..."
+    else
+        tty_prompt "Apply macOS system defaults? (y/N)" "N" apply_defaults
+        if [[ ! $apply_defaults =~ ^[Yy]$ ]]; then
+            print_info "Skipping macOS defaults configuration."
+            script_success "macos-defaults"
+            return 0
+        fi
     fi
     
     print_header "Dark Mode & Appearance"
@@ -208,7 +214,7 @@ main() {
     killall SystemUIServer 2>/dev/null || true
     killall cfprefsd 2>/dev/null || true
     
-    print_success "macOS system defaults configured successfully!"
+    print_status "macOS system defaults configured successfully!"
     print_info "Some changes may require a logout/login or restart to take full effect."
     print_info "Dark mode and most settings should be active immediately."
     
