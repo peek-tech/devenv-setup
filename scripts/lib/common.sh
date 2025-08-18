@@ -89,6 +89,16 @@ print_header() {
     printf "${CYAN}### %s ###${NC}\n" "$1"
 }
 
+print_banner() {
+    printf "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}\n"
+    printf "${CYAN}%s${NC}\n" "$1"
+    printf "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}\n"
+}
+
+print_br() {
+    printf "${CYAN}────────────────────────────────────────────────────────────────────────────────${NC}\n"
+}
+
 # Optional: Inform about non-interactive mode for prompts
 ensure_tty() {
     # Check if we need to use non-interactive mode for prompts
