@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Omamacy - pyenv Installation
-# Python Version Manager with Python 3.11
+# Omamacy - Python Development Environment
+# Python version manager (pyenv) with Poetry package manager
 
 # Load common functions
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -34,29 +34,70 @@ install_python() {
     fi
 }
 
-# Add pyenv to shell config
-setup_pyenv_shell_config() {
-    local pyenv_config='
-# pyenv Configuration
+# Install Poetry package manager
+install_poetry() {
+    # Check if Poetry is already installed
+    if command -v poetry &> /dev/null; then
+        print_status "Poetry already installed"
+        print_info "Poetry version: $(poetry --version)"
+        return 0
+    fi
+    
+    print_info "Installing Poetry Python package manager..."
+    
+    # Install Poetry using the official installer
+    curl -sSL https://install.python-poetry.org | python3 -
+    
+    # Add to PATH
+    export PATH="$HOME/.local/bin:$PATH"
+    
+    if command -v poetry &> /dev/null; then
+        print_status "Poetry installed successfully"
+        print_info "Poetry version: $(poetry --version)"
+    else
+        print_error "Poetry installation failed"
+        return 1
+    fi
+}
+
+# Configure Poetry
+configure_poetry() {
+    if command -v poetry &> /dev/null; then
+        print_info "Configuring Poetry..."
+        
+        # Configure Poetry to create virtual environments in project directory
+        poetry config virtualenvs.in-project true
+        
+        print_status "Poetry configured to create .venv in project directories"
+    fi
+}
+
+# Add Python tools to shell config
+setup_python_shell_config() {
+    local python_config='
+# Python Development Environment
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
 if command -v pyenv 1>/dev/null 2>&1; then
     eval "$(pyenv init -)"
 fi'
     
-    add_to_shell_config "$pyenv_config" "pyenv Configuration"
-    print_status "pyenv shell configuration added"
+    add_to_shell_config "$python_config" "Python Development Environment"
+    print_status "Python development environment shell configuration added"
 }
 
 # Main installation
 main() {
-    run_individual_script "pyenv.sh" "pyenv & Python 3.11"
+    run_individual_script "pyenv.sh" "Python Development Environment (pyenv + Poetry)"
     
     install_pyenv
-    setup_pyenv_shell_config
     install_python
+    install_poetry
+    configure_poetry
+    setup_python_shell_config
     
-    script_success "pyenv & Python 3.11"
+    script_success "Python Development Environment"
 }
 
 # Only run main if script is executed directly

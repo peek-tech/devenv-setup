@@ -12,7 +12,7 @@
     },
     "languages": {
       "description": "Programming languages and version managers",
-      "scripts": ["languages/nvm.sh", "languages/pyenv.sh", "languages/poetry.sh", "languages/go.sh", "languages/bun.sh"]
+      "scripts": ["languages/nvm.sh", "languages/pyenv.sh", "languages/go.sh", "languages/bun.sh"]
     },
     "fonts": {
       "description": "Developer fonts",
@@ -104,17 +104,10 @@
     },
     {
       "name": "languages/pyenv.sh",
-      "description": "Python Version Manager with Python 3.11",
+      "description": "Python development environment (pyenv + Poetry)",
       "required": false,
       "group": "languages",
       "depends": []
-    },
-    {
-      "name": "languages/poetry.sh",
-      "description": "Python package manager",
-      "required": false,
-      "group": "languages",
-      "depends": ["languages/pyenv.sh"]
     },
     {
       "name": "languages/go.sh",
