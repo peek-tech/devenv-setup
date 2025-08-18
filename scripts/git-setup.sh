@@ -123,20 +123,6 @@ setup_ssh_key_and_config() {
         chmod 600 "$ssh_key"
         chmod 644 "${ssh_key}.pub"
         print_status "SSH key generated: $ssh_key"
-        
-        # Show the public key immediately after generation
-        echo ""
-        print_info "📋 Your NEW SSH public key for GitHub:"
-        echo ""
-        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-        cat "${ssh_key}.pub"
-        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-        echo ""
-        print_info "To add this key to GitHub:"
-        print_info "1. Copy the key above (including the ssh-ed25519 part)"
-        print_info "2. Go to: https://github.com/settings/ssh/new"
-        print_info "3. Paste the key and give it a descriptive title"
-        echo ""
     else
         print_status "SSH key already exists: $ssh_key"
     fi
@@ -187,34 +173,18 @@ show_github_setup_instructions() {
 setup_ssh_for_github() {
     print_info "Setting up SSH for GitHub..."
     
-    # Step 1: Check if SSH is already configured
-    if is_ssh_configured; then
-        print_status "SSH already configured for GitHub"
-        
-        # Step 2a: If configured, test immediately
-        if test_ssh_connection; then
-            print_status "SSH connection to GitHub successful!"
-            return 0
-        fi
-        
-        # Step 3a: If test fails with existing config, show key and loop
-        print_warning "SSH is configured but connection test failed"
-        show_github_setup_instructions
-    else
-        # Step 2b: If not configured, walk through setup
-        print_info "SSH not configured for GitHub, setting up..."
-        setup_ssh_key_and_config
-        
-        # Step 3b: Test after initial setup
-        if test_ssh_connection; then
-            print_status "SSH connection to GitHub successful!"
-            return 0
-        fi
-        
-        # Step 4b: If test fails after setup, show instructions
-        print_warning "SSH setup complete but connection test failed"
-        show_github_setup_instructions
+    # Step 1: Always setup SSH key and config first
+    setup_ssh_key_and_config
+    
+    # Step 2: Test SSH connection
+    if test_ssh_connection; then
+        print_status "SSH connection to GitHub successful!"
+        return 0
     fi
+    
+    # Step 3: If test fails, show key and wait for user to add it
+    print_warning "SSH key needs to be added to GitHub"
+    show_github_setup_instructions
     
     # Step 4: Loop until SSH works or user skips
     while true; do
