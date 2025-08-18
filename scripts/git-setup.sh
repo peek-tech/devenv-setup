@@ -123,6 +123,20 @@ setup_ssh_key_and_config() {
         chmod 600 "$ssh_key"
         chmod 644 "${ssh_key}.pub"
         print_status "SSH key generated: $ssh_key"
+        
+        # Show the public key immediately after generation
+        echo ""
+        print_info "📋 Your NEW SSH public key for GitHub:"
+        echo ""
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        cat "${ssh_key}.pub"
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        echo ""
+        print_info "To add this key to GitHub:"
+        print_info "1. Copy the key above (including the ssh-ed25519 part)"
+        print_info "2. Go to: https://github.com/settings/ssh/new"
+        print_info "3. Paste the key and give it a descriptive title"
+        echo ""
     else
         print_status "SSH key already exists: $ssh_key"
     fi
@@ -154,14 +168,19 @@ EOF
 show_github_setup_instructions() {
     local ssh_key="$HOME/.ssh/github"
     
-    print_info "Your SSH public key for GitHub:"
     echo ""
+    print_warning "📋 GitHub SSH key needs to be added to your account:"
+    echo ""
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     cat "${ssh_key}.pub"
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     echo ""
     print_info "To complete GitHub setup:"
-    print_info "1. Copy the public key above"
-    print_info "2. Go to: https://github.com/settings/ssh/new"
-    print_info "3. Add the key with a descriptive title"
+    print_info "1. Copy the ENTIRE key above (including ssh-ed25519)"
+    print_info "2. Open in browser: https://github.com/settings/ssh/new"
+    print_info "3. Paste the key and give it a descriptive title"
+    print_info "   (e.g., 'MacBook Pro - Omamacy')"
+    echo ""
 }
 
 # Main SSH setup function with proper flow
@@ -199,22 +218,35 @@ setup_ssh_for_github() {
     
     # Step 4: Loop until SSH works or user skips
     while true; do
-        if prompt_user "Press Enter when you've added the key to GitHub (or type 'skip' to continue without SSH)... " user_input; then
-            if [ "$user_input" = "skip" ]; then
-                print_warning "Skipping SSH setup - you can configure it manually later"
-                print_info "Visit: https://docs.github.com/en/authentication/connecting-to-github-with-ssh"
+        echo ""
+        if prompt_user "Press Enter after adding the key to GitHub (or type 'skip' to continue)... " user_input; then
+            if [ "$user_input" = "skip" ] || [ "$user_input" = "s" ]; then
+                print_warning "Skipping SSH verification - you can test it manually later with:"
+                echo "    ssh -T git@github.com"
+                echo ""
+                print_info "To view your SSH key again, run:"
+                echo "    cat ~/.ssh/github.pub"
                 return 1
             fi
             
+            print_info "Testing SSH connection to GitHub..."
             if test_ssh_connection; then
-                print_status "SSH connection to GitHub successful!"
+                print_status "✅ SSH connection to GitHub successful!"
+                print_info "You can now use git with SSH URLs (git@github.com:...)"
                 return 0
             else
-                print_warning "SSH connection test failed. Please verify the key was added correctly."
-                print_info "Make sure you've pasted the FULL public key shown above to GitHub"
+                print_error "Connection test failed. Please check:"
+                print_info "• You copied the ENTIRE key (including ssh-ed25519)"
+                print_info "• The key is added to your GitHub account"  
+                print_info "• You have internet connectivity"
+                echo ""
+                # Show the key again for convenience
+                show_github_setup_instructions
             fi
         else
             print_warning "No TTY available, skipping GitHub SSH setup"
+            print_info "To view your SSH key later, run:"
+            echo "    cat ~/.ssh/github.pub"
             return 1
         fi
     done
