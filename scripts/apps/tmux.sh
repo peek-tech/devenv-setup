@@ -127,6 +127,36 @@ EOF
     print_info "  Switch panes: Alt + Arrow keys"
 }
 
+# Setup automatic tmux session management
+setup_tmux_auto_start() {
+    echo ""
+    local auto_start
+    tty_prompt "Do you want tmux to auto-start/attach when opening new terminals? (y/N)" "n" auto_start
+    
+    if [[ $auto_start =~ ^[Yy]$ ]]; then
+        print_info "Setting up automatic tmux session management..."
+        
+        local tmux_auto_config='
+# Automatic tmux session management
+if [[ $- == *i* ]] && [[ -z "$TMUX" ]] && command -v tmux &> /dev/null; then
+    # Only auto-start in interactive shells that are not already inside tmux
+    if tmux has-session 2>/dev/null; then
+        # Attach to existing session
+        tmux attach
+    else
+        # Create new session
+        tmux new-session
+    fi
+fi'
+        
+        add_to_shell_config "$tmux_auto_config" "tmux auto-start/attach"
+        print_status "tmux will automatically start/attach in new terminals"
+        print_info "To disable: remove the 'tmux auto-start/attach' section from your shell config"
+    else
+        print_info "tmux installed without auto-start (use 'tmux' command manually)"
+    fi
+}
+
 # Main installation
 main() {
     # Check for theme-only mode
@@ -145,6 +175,9 @@ main() {
     
     # Configure tmux
     configure_tmux
+    
+    # Setup optional auto-start/attach
+    setup_tmux_auto_start
     
     script_success "tmux"
 }
