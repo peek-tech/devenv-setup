@@ -313,8 +313,6 @@ run_manifest_scripts() {
         
         # Get script metadata from manifest
         local description=$(jq -r --arg name "$script_name" '.scripts[] | select(.name == $name) | .description' "$manifest_file")
-        local required=$(jq -r --arg name "$script_name" '.scripts[] | select(.name == $name) | .required' "$manifest_file")
-        local optional=$(jq -r --arg name "$script_name" '.scripts[] | select(.name == $name) | .optional' "$manifest_file")
         
         script_count=$((script_count + 1))
         
@@ -322,17 +320,6 @@ run_manifest_scripts() {
         echo ""
         echo -e "\033[1mStep $script_count: $script_name\033[0m" >&2
         echo "Description: $description" >&2
-        
-        # Handle optional scripts
-        if [ "$optional" = "true" ]; then
-            print_info "This is an optional configuration step"
-            echo -n "Would you like to install $script_name? [y/N]: "
-            read -r response
-            if [[ ! "$response" =~ ^[Yy]$ ]]; then
-                print_info "Skipping $script_name"
-                continue
-            fi
-        fi
         
         # Execute script with environment variable to suppress individual headers
         # Disable exit on error for individual script execution
@@ -349,14 +336,7 @@ run_manifest_scripts() {
             echo ""
             print_error "Failed: $script_name (exit code: $script_exit_code)"
             print_info "You can retry by running: bash $script_path"
-            
-            # Check if this was a required script
-            if [ "$required" = "true" ]; then
-                print_error "Required script failed, stopping installation"
-                exit 1
-            else
-                print_warning "Optional script failed, continuing with installation"
-            fi
+            print_warning "Script failed, continuing with installation"
         fi
     done
     

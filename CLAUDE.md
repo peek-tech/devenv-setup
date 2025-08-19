@@ -1,9 +1,34 @@
 # Claude Code Context - Omamacy Development Environment
 
 ## Project Overview
-Omamacy is a macOS developer environment setup tool that was renamed from "Omacy". It provides automated installation and configuration of development tools with centralized theme and font management.
+Omamacy is a macOS developer environment setup tool that was renamed from "Omacy". It provides **automated** installation and configuration of development tools with centralized theme and font management.
+
+### Installation Requirements
+The installation process is **automated** but requires user attention for:
+- **Authentication prompts**: Multiple sudo password requests throughout the process
+- **Git configuration**: Setting up name, email, and SSH keys for GitHub
+- **External installers**: Xcode Command Line Tools popup (appears outside terminal)
+- **Application-specific setup**: VSCode configuration, Neovim setup, Claude Code authentication
 
 ## Current Architecture
+
+### Installation System
+The installer uses a **manifest-driven approach** with automated script execution:
+
+#### Manifest Configuration (`scripts/manifest.json`):
+- **Script definitions**: Each script has name, description, group, and dependencies
+- **Grouped organization**: Scripts organized by categories (tools, languages, apps, etc.)
+- **Execution order**: Scripts run in the order defined in the manifest
+
+#### Automated Flow:
+1. **Sequential Execution**: All scripts run automatically in manifest order
+2. **No User Selection**: No prompts for which components to install
+3. **Individual Configuration**: Each script may have its own internal configuration prompts:
+   - Git name/email and SSH key setup
+   - VSCode extension and settings configuration
+   - Neovim configuration selection
+   - Claude Code repository setup
+4. **Error Handling**: Failed scripts log errors but don't stop the overall installation
 
 ### Theme Management System
 The project implements a **delegation pattern** for theme management that preserves user customizations while maintaining centralized control.

@@ -63,406 +63,348 @@
     {
       "name": "preflight-checks.sh",
       "description": "System validation and prerequisites",
-      "required": true,
       "group": "core",
       "depends": []
     },
     {
       "name": "git-setup.sh", 
       "description": "Git configuration and SSH keys",
-      "required": true,
       "group": "core",
       "depends": []
     },
     {
       "name": "macos-defaults.sh",
       "description": "macOS system defaults with dark mode and developer settings",
-      "required": false,
       "group": "workspace",
       "depends": []
     },
     {
       "name": "fonts/nerd-fonts.sh",
       "description": "Programming fonts with icons and symbols",
-      "required": false,
       "group": "fonts",
       "depends": []
     },
     {
       "name": "fonts/fira-code.sh",
       "description": "Coding font with ligatures",
-      "required": false,
       "group": "fonts",
       "depends": []
     },
     {
       "name": "languages/nvm.sh",
       "description": "Node Version Manager with Node 20",
-      "required": false,
       "group": "languages",
       "depends": []
     },
     {
       "name": "languages/pyenv.sh",
       "description": "Python development environment (pyenv + Poetry)",
-      "required": false,
       "group": "languages",
       "depends": []
     },
     {
       "name": "languages/go.sh",
       "description": "Go programming language",
-      "required": false,
       "group": "languages",
       "depends": []
     },
     {
       "name": "languages/bun.sh",
       "description": "Fast JavaScript runtime and package manager",
-      "required": false,
       "group": "languages",
       "depends": []
     },
     {
       "name": "tools/git.sh",
       "description": "Git version control with aliases",
-      "required": false,
       "group": "tools",
       "depends": []
     },
     {
       "name": "tools/gh.sh",
       "description": "GitHub CLI",
-      "required": false,
       "group": "tools", 
       "depends": []
     },
     {
       "name": "tools/wget.sh",
       "description": "Network downloader",
-      "required": false,
       "group": "tools",
       "depends": []
     },
     {
       "name": "tools/tree.sh",
       "description": "Directory tree viewer",
-      "required": false,
       "group": "tools",
       "depends": []
     },
     {
       "name": "tools/ripgrep.sh",
       "description": "Fast text search with grep aliases",
-      "required": false,
       "group": "tools",
       "depends": []
     },
     {
       "name": "tools/fd.sh",
       "description": "User-friendly file search with find aliases",
-      "required": false,
       "group": "tools",
       "depends": []
     },
     {
       "name": "tools/bat.sh",
       "description": "Cat with syntax highlighting and aliases",
-      "required": false,
       "group": "tools",
       "depends": []
     },
     {
       "name": "tools/eza.sh",
       "description": "Modern ls replacement with icons and aliases",
-      "required": false,
       "group": "tools",
       "depends": []
     },
     {
       "name": "tools/fzf.sh",
       "description": "Fuzzy finder with shell integration",
-      "required": false,
       "group": "tools",
       "depends": []
     },
     {
       "name": "tools/delta.sh",
       "description": "Better git diff with syntax highlighting",
-      "required": false,
       "group": "tools",
       "depends": []
     },
     {
       "name": "tools/dust.sh",
       "description": "Visual disk usage with du aliases",
-      "required": false,
       "group": "tools",
       "depends": []
     },
     {
       "name": "tools/procs.sh",
       "description": "Enhanced process viewer with ps aliases",
-      "required": false,
       "group": "tools",
       "depends": []
     },
     {
       "name": "tools/zoxide.sh",
       "description": "Smart directory navigation with shell integration",
-      "required": false,
       "group": "tools",
       "depends": []
     },
     {
       "name": "tools/sd.sh",
       "description": "Intuitive find and replace tool",
-      "required": false,
       "group": "tools",
       "depends": []
     },
     {
       "name": "tools/tealdeer.sh",
       "description": "Fast tldr client for concise command examples",
-      "required": false,
       "group": "tools",
       "depends": []
     },
     {
       "name": "tools/hyperfine.sh",
       "description": "Benchmarking tool for command performance",
-      "required": false,
       "group": "tools",
       "depends": []
     },
     {
       "name": "tools/just.sh",
       "description": "Modern task runner and command organizer",
-      "required": false,
       "group": "tools",
       "depends": []
     },
     {
       "name": "tools/starship.sh",
       "description": "Cross-shell prompt with creative configuration",
-      "required": false,
       "group": "tools",
       "depends": []
     },
     {
       "name": "apps/google-chrome.sh",
       "description": "Google Chrome browser",
-      "required": false,
       "group": "browsers",
       "depends": []
     },
     {
       "name": "apps/firefox.sh",
       "description": "Firefox browser",
-      "required": false,
       "group": "browsers",
       "depends": []
     },
     {
       "name": "apps/microsoft-edge.sh",
       "description": "Microsoft Edge browser",
-      "required": false,
       "group": "browsers",
       "depends": []
     },
     {
       "name": "apps/arc.sh",
       "description": "Arc modern browser",
-      "required": false,
       "group": "browsers",
       "depends": []
     },
     {
       "name": "apps/brave-browser.sh",
       "description": "Brave privacy-focused browser",
-      "required": false,
       "group": "browsers",
       "depends": []
     },
     {
       "name": "apps/visual-studio-code.sh",
       "description": "Visual Studio Code editor",
-      "required": false,
       "group": "editors",
       "depends": []
     },
     {
       "name": "apps/neovim.sh",
       "description": "Neovim editor",
-      "required": false,
       "group": "editors",
       "depends": []
     },
     {
       "name": "apps/claude.sh",
       "description": "Claude AI assistant desktop app",
-      "required": false,
       "group": "ai-tools",
       "depends": []
     },
     {
       "name": "apps/claude-code.sh",
       "description": "Claude Code AI CLI tool",
-      "required": false,
       "group": "ai-tools",
       "depends": []
     },
     {
       "name": "apps/lazygit.sh",
       "description": "Git TUI with aliases",
-      "required": false,
       "group": "terminal-tools",
       "depends": []
     },
     {
       "name": "apps/htop.sh",
       "description": "Interactive process viewer TUI",
-      "required": false,
       "group": "terminal-tools",
       "depends": []
     },
     {
       "name": "apps/tmux.sh",
       "description": "Terminal multiplexer with session management",
-      "required": false,
       "group": "terminal-tools",
       "depends": []
     },
     {
       "name": "apps/glances.sh",
       "description": "System monitoring TUI with top alias",
-      "required": false,
       "group": "terminal-tools",
       "depends": []
     },
     {
       "name": "apps/ncdu.sh",
       "description": "Interactive disk usage analyzer TUI",
-      "required": false,
       "group": "terminal-tools",
       "depends": []
     },
     {
       "name": "apps/lazysql.sh",
       "description": "Database TUI client with sql alias",
-      "required": false,
       "group": "terminal-tools",
       "depends": []
     },
     {
       "name": "apps/oxker.sh",
       "description": "TUI for Docker/container management",
-      "required": false,
       "group": "terminal-tools",
       "depends": ["apps/podman.sh"]
     },
     {
       "name": "apps/rectangle.sh",
       "description": "Window management tool for macOS",
-      "required": false,
       "group": "productivity",
       "depends": []
     },
     {
       "name": "apps/bruno.sh",
       "description": "API client for testing REST, GraphQL, and gRPC",
-      "required": false,
       "group": "productivity",
       "depends": []
     },
     {
       "name": "apps/google-drive.sh",
       "description": "Google Drive for file sync and collaboration",
-      "required": false,
       "group": "productivity",
       "depends": []
     },
     {
       "name": "apps/slack.sh",
       "description": "Team communication and collaboration platform",
-      "required": false,
       "group": "productivity",
       "depends": []
     },
     {
       "name": "apps/maccy.sh",
       "description": "Lightweight clipboard manager for macOS",
-      "required": false,
       "group": "productivity",
       "depends": []
     },
     {
       "name": "apps/keycastr.sh",
       "description": "Open-source keystroke visualizer for macOS",
-      "required": false,
       "group": "productivity",
       "depends": []
     },
     {
       "name": "apps/twingate.sh",
       "description": "Zero Trust Network Access platform",
-      "required": false,
       "group": "networking",
       "depends": []
     },
     {
       "name": "apps/ngrok.sh",
       "description": "Secure tunnels to localhost",
-      "required": false,
       "group": "networking",
       "depends": []
     },
     {
       "name": "apps/figma.sh",
       "description": "UI/UX design application",
-      "required": false,
       "group": "design",
       "depends": []
     },
     {
       "name": "apps/podman.sh",
       "description": "Container runtime with Docker compatibility",
-      "required": false,
       "group": "containers",
       "depends": []
     },
     {
       "name": "apps/podman-desktop.sh",
       "description": "Container management GUI for Podman",
-      "required": false,
       "group": "containers",
       "depends": ["apps/podman.sh"]
     },
     {
       "name": "apps/ghostty.sh",
       "description": "Ghostty terminal emulator",
-      "required": false,
       "group": "terminal",
       "depends": []
     },
     {
       "name": "themes.sh",
       "description": "Catppuccin theming system",
-      "required": false,
       "group": "workspace",
       "depends": ["tools/fzf.sh", "tools/bat.sh", "tools/delta.sh", "apps/ghostty.sh"]
     },
     {
       "name": "workspaces.sh",
       "description": "Workspace directories and repository cloning",
-      "required": false,
       "group": "workspace",
       "depends": []
     },
     {
       "name": "omamacy-binary.sh",
       "description": "Omamacy CLI tool for theme and font management",
-      "required": false,
       "group": "core",
       "depends": []
     }

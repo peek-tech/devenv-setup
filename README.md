@@ -194,6 +194,13 @@ curl -fsSL https://peek-tech.github.io/devenv-setup/install | bash
 
 The installer automatically pulls the latest repository version and updates existing installations.
 
+## Acknowledgments
+
+This project was inspired by:
+
+- **[Omarchy](https://github.com/basecamp/omarchy)** - DHH's opinionated Arch Linux + Hyprland setup that inspired the single-command installation approach. Thanks to the contributors for the ideas and motivation.
+- **[Homebrew](https://brew.sh)** - The package manager that powers most installations in this project. Thanks to the developers of Homebrew for making macOS package management possible.
+
 ---
 
 **Note**: This installer modifies system settings and installs numerous applications. Review the [script manifest](scripts/manifest.json) for complete details of what will be installed.
