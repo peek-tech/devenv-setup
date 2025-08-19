@@ -1,6 +1,6 @@
-# Omamacy - macOS Developer Environment
+# Omamacy - macOS Developer Environment Setup
 
-Modular, reliable macOS developer environment installer with **individual app control**. Automatically sets up a complete development environment with modern tools, languages, and theming using a manifest-driven architecture.
+Automated macOS developer environment installer with **70+ development tools** and applications. Sets up a complete development workstation with modern CLI tools, programming languages, editors, browsers, and productivity apps using a manifest-driven architecture.
 
 ## Quick Start
 
@@ -8,367 +8,183 @@ Modular, reliable macOS developer environment installer with **individual app co
 curl -fsSL https://peek-tech.github.io/devenv-setup/install | bash
 ```
 
-The installer automatically downloads the repository and runs installation scripts based on a **smart manifest system**.
+The installer downloads the repository to `~/.local/share/omamacy` and executes installation scripts automatically based on a JSON manifest.
 
-## ⚠️ Important Installation Notes
+## ⚠️ Interactive Installation Required
 
-### First-Time macOS Setup
-1. **Xcode Command Line Tools**: On a new machine, you'll be prompted to install Xcode Command Line Tools
-   - **This opens a GRAPHICAL installer popup OUTSIDE the terminal**
-   - Look for the popup window and click "Install"
-   - **The script will wait automatically** and continue once installation completes
-   - **No need to re-run** - the installer handles this seamlessly
+**This is NOT a hands-off installation.** You must be present during the process for:
 
-2. **Rosetta 2 for Apple Silicon**: When installing Podman on Apple Silicon Macs
-   - A graphical popup will appear asking to install Rosetta 2
-   - This is required for x86_64 emulation support
-   - Click "Install" in the popup to continue
-   - The installation will proceed after Rosetta 2 is installed
+- **Multiple sudo password prompts** throughout installation
+- **System UI popups** that appear outside the terminal window
+- **User configuration prompts** for git, editors, and optional features
+- **Authentication dialogs** for various applications
 
-## Features
+### System Popups You'll See
 
-**🎯 Granular Control**: 50+ individual scripts for complete customization
-**📋 Manifest-Driven**: JSON-based execution with logical grouping and dependencies
-**🎨 Advanced Theming**: 4 Catppuccin color schemes with CLI switching (`omamacy theme`)
-**🔄 Git-First Setup**: Early git configuration following Omarchy patterns
-**📦 Auto-Download**: Downloads repository before installation (works with `curl | bash`)
-**🍎 macOS Focused**: Optimized for macOS without Linux complexity
+1. **Xcode Command Line Tools**: Graphical installer popup (required)
+2. **Homebrew Installation**: Multiple password prompts in terminal
+3. **macOS Security Dialogs**: App installation permissions
+4. **Application-Specific Setup**: VSCode, Neovim, Claude Code configuration prompts
 
-## Individual Script Architecture
+**Installation Time**: 15-30 minutes depending on your internet connection and choices made during configuration.
 
-Omamacy uses a **manifest-driven architecture** with individual scripts organized into logical groups:
+## What Gets Installed
 
-### Core System (Required)
-- **preflight-checks.sh** - System validation and prerequisites
-- **git-setup.sh** - Git configuration and SSH keys
-- **homebrew.sh** - Package manager setup
+The installer runs **70+ scripts** organized into these categories:
 
-### Command Line Tools (20 tools)
-- **Modern CLI replacements**: `bat` (cat), `eza` (ls), `ripgrep` (grep), `fd` (find)
-- **Development tools**: `git`, `gh`, `jq`, `delta`, `fzf`, `starship`
-- **System utilities**: `htop`, `dust`, `procs`, `zoxide`, `hyperfine`
-- **Task runners**: `just`, `tealdeer`, `sd`, `tree`, `wget`
+### Core System Setup
+- **System Validation**: macOS compatibility and prerequisite checks
+- **Git Configuration**: Global git setup with SSH key generation for GitHub
+- **macOS System Defaults**: Dark mode, Finder settings, developer-friendly system preferences
 
-### Programming Languages (5 managers)
-- **nvm.sh** - Node.js 20 via version manager
-- **pyenv.sh** - Python 3.11 via version manager  
-- **poetry.sh** - Python package manager
-- **go.sh** - Go programming language
-- **bun.sh** - Fast JavaScript runtime
+### Command Line Tools (21 tools)
+- **Modern Replacements**: `bat` (cat), `eza` (ls), `fd` (find), `ripgrep` (grep), `dust` (du), `procs` (ps)
+- **Development Tools**: Git with aliases, GitHub CLI, fuzzy finder (fzf), smart directory navigation (zoxide)
+- **Performance Tools**: Hyperfine benchmarking, Just task runner
+- **Text Processing**: Delta git diff, sd find/replace, TealDeer quick help
+- **Shell Enhancement**: Starship cross-shell prompt with creative configuration
 
-### Developer Fonts (2 collections)
-- **nerd-fonts.sh** - Programming fonts with icons (71 fonts)
-- **fira-code.sh** - Coding font with ligatures
+### Programming Languages & Runtimes
+- **Node.js**: NVM with Node 20 and npm
+- **Python**: pyenv with Poetry package management
+- **Go**: Latest Go programming language
+- **Bun**: Fast JavaScript runtime and package manager
+
+### Developer Fonts
+- **Nerd Fonts**: Programming fonts with icons and symbols
+- **Fira Code**: Coding font with ligatures
 
 ### Web Browsers (5 browsers)
-- **google-chrome.sh**, **firefox.sh**, **microsoft-edge.sh**
-- **arc.sh**, **brave-browser.sh**
+- Google Chrome, Firefox, Microsoft Edge, Arc, Brave Browser
 
-### Code Editors (2 editors)
-- **visual-studio-code.sh** - VS Code editor
-- **neovim.sh** - Modern Vim-based editor
+### Code Editors
+- **Visual Studio Code**: Full IDE with extensions and configuration
+- **Neovim**: Modern vim editor with distribution choices (LazyVim, AstroNvim, NvChad, LunarVim, or custom git URL)
 
-### AI Tools (2 tools)
-- **claude.sh** - AI assistant desktop app
-- **claude-code.sh** - AI CLI tool
+### AI Development Tools
+- **Claude**: AI assistant desktop application
+- **Claude Code**: AI-powered CLI tool with optional custom agent/MCP server configuration
 
 ### Terminal Applications (7 TUIs)
-- **htop.sh**, **tmux.sh** (with hamvocke.com config), **glances.sh**
-- **ncdu.sh**, **lazygit.sh**, **lazysql.sh**, **oxker.sh**
+- **Process Management**: htop (system monitor), Glances (advanced system stats)
+- **File Management**: ncdu (disk usage analyzer)
+- **Development**: LazyGit (git TUI), LazSQL (database client), tmux (terminal multiplexer)
+- **Container Management**: Oxker (Docker/Podman TUI)
 
-### Productivity Tools (4 apps)
-- **rectangle.sh** - Window management
-- **bruno.sh** - API client (REST/GraphQL/gRPC)
-- **google-drive.sh** - File sync and collaboration
-- **slack.sh** - Team communication
+### Productivity Applications (6 apps)
+- **Window Management**: Rectangle for macOS window organization
+- **API Development**: Bruno for REST, GraphQL, and gRPC testing
+- **Communication**: Slack team collaboration
+- **File Sync**: Google Drive
+- **Clipboard**: Maccy lightweight clipboard manager
+- **Presentations**: KeyCastr keystroke visualizer
 
-### Design Tools (1 app)
-- **figma.sh** - UI/UX design application
+### Networking Tools
+- **Twingate**: Zero Trust Network Access platform
+- **ngrok**: Secure tunnels to localhost for development
 
-### Container Tools (2 tools)
-- **podman.sh** - Container runtime with Docker compatibility
-- **podman-desktop.sh** - Container management GUI
+### Design Tools
+- **Figma**: UI/UX design application
 
-### Workspace & Theming (3 scripts)
-- **workspaces.sh** - CSV-based repository cloning
-- **ghostty.sh** - Terminal configuration
-- **themes.sh** - Catppuccin theming system
+### Container Platform
+- **Podman**: Docker-compatible container runtime with desktop GUI
+- **Podman Desktop**: Container management interface
 
-### Optional Configuration (2 scripts)
-- **nvim-config.sh** - Neovim framework setup (LazyVim, AstroNvim, etc.)
-- **vscode-config.sh** - VS Code extensions and settings
+### Terminal Emulator
+- **Ghostty**: Modern terminal emulator
 
-## Theming System
+### Theming & Workspace
+- **Catppuccin Theme System**: Consistent theming across all supported applications
+- **Workspace Setup**: Development directory structure and repository cloning
+- **Font Management**: CLI tool for font configuration across applications
 
-Omamacy includes a comprehensive theming system with 4 Catppuccin variants:
+## Interactive Configuration Options
 
-- **catppuccin-mocha** (dark, default)
-- **catppuccin-macchiato** (dark, warm)
-- **catppuccin-frappe** (dark, cool)
-- **catppuccin-latte** (light)
+Several scripts will prompt you for choices during installation:
 
-### Theme Management
+### Git Setup
+- Name and email configuration
+- SSH key generation for GitHub
+- GitHub authentication setup
 
-```bash
-# List available themes
-omamacy theme list
+### Neovim Configuration
+- Choose from popular distributions: LazyVim, AstroNvim, NvChad, LunarVim
+- Provide custom git URL for your own configuration
+- Falls back to NvChad if invalid choice
 
-# Show current theme
-omamacy theme current
+### macOS System Defaults
+- Opt-in to apply developer-friendly system settings
+- Includes dark mode, Finder enhancements, security settings
 
-# Switch themes
-omamacy theme set catppuccin-latte
-omamacy theme set catppuccin-mocha
-```
+### Starship Prompt
+- Choose whether to use Starship as your shell prompt
+- Adds creative configuration with emoji and symbols
 
-### Themed Applications
+### Claude Code
+- Optional configuration with custom agents and MCP servers
+- Provide git repository URL for advanced AI tool setup
 
-Each theme configures:
-- **Ghostty Terminal** - Colors and styling
-- **VSCode** - Theme settings and terminal colors
-- **Git Delta** - Diff highlighting
-- **Bat** - Syntax highlighting
-- **FZF** - Fuzzy finder colors
-- **Neovim** - Colorscheme configurations
+## Command Line Integration
 
-## Installation Options
+The installer adds helpful aliases and integrations:
 
-The installer provides an interactive menu to select components:
+- **Modern Commands**: `ll` (eza), `cat` (bat), `find` (fd), `grep` (rg), `du` (dust), `ps` (procs)
+- **Git Shortcuts**: Common git aliases for faster development
+- **Development Shortcuts**: `lg` (lazygit), `sql` (lazysql), `top` (glances)
+- **Smart Navigation**: `z` command for intelligent directory jumping
+- **Enhanced Search**: `fzf` integration for command history and file finding
 
-### Quick Overview
+## Theme Management
 
-1. **Full Installation** - Installs all components (recommended for new setups)
-2. **Core Development Tools** - Homebrew, Git, VS Code, modern CLI tools, fonts
-3. **Programming Languages** - Python, Node.js, Go, Bun with version managers
-4. **Web Browsers** - Chrome, Firefox, Edge, Brave, Arc (macOS only)
-5. **Design Tools** - Figma, image processing tools (macOS only)
-6. **Claude Code** - AI assistant with agent orchestration
-7. **AWS Development Tools** - CLI, SAM, CDK, Session Manager
-8. **Container Tools** - Podman with Docker compatibility
-9. **Database Tools** - DBeaver, MongoDB Compass, PostgreSQL, MongoDB
-10. **Custom Selection** - Choose specific components to install
-
-### Detailed Installation Scripts
-
-Each option installs the following components:
-
-1. **Full Installation** - Installs all components below (recommended for new setups)
-
-2. **Core Development Tools**
-   <details>
-   <summary>Click to expand details</summary>
-   
-   - **Package Manager:** Homebrew
-   - **Version Control:** Git, GitHub CLI
-   - **Editors:** VS Code with extensions, Neovim
-   - **Terminal:** Ghostty terminal
-   - **API Client:** Bruno (REST, GraphQL, gRPC testing)
-   - **File Sync:** Google Drive (cloud storage and collaboration)
-   - **Modern CLI Tools:**
-     - eza (better ls)
-     - bat (better cat)
-     - ripgrep (better grep)
-     - fd (better find)
-     - fzf (fuzzy finder)
-     - delta (better git diff)
-     - dust (better du)
-     - procs (better ps)
-     - sd (better sed)
-     - tealdeer (better man)
-     - glances (better top)
-     - hyperfine (benchmarking)
-     - lazygit (git TUI)
-     - ncdu (disk usage)
-     - just (command runner)
-     - zoxide (smart cd)
-   - **Fonts:**
-     - Curated Nerd Fonts collection
-     - Fira Code (coding font with ligatures)
-     - Source Code Pro
-     - Cascadia Code
-     - Inter (modern UI font)
-   - **Utilities:** jq, wget, tree, htop, tmux, mas (Mac App Store CLI)
-   - **Development Environment:** Xcode (macOS development, command line tools)
-   </details>
-
-3. **Programming Languages**
-   <details>
-   <summary>Click to expand details</summary>
-   
-   - **Python:** Latest via pyenv + Poetry package manager
-   - **Node.js:** Latest stable via nvm + Yarn package manager
-   - **Go:** Latest stable version
-   - **Bun:** Fast JavaScript runtime and package manager
-   - **Version Managers:** pyenv, nvm
-   </details>
-
-4. **Web Browsers (macOS only)**
-   <details>
-   <summary>Click to expand details</summary>
-   
-   - Google Chrome
-   - Mozilla Firefox
-   - Microsoft Edge
-   - Brave Browser
-   - Arc Browser
-   </details>
-
-5. **Design Tools (macOS only)**
-   <details>
-   <summary>Click to expand details</summary>
-   
-   - **Design Applications:** Figma
-   - **Image Processing:**
-     - ImageMagick
-     - GraphicsMagick
-     - OptiPNG
-     - JPEG optimization tools
-     - FFmpeg (video processing)
-   </details>
-
-6. **Claude Code + Agent Orchestration**
-   <details>
-   <summary>Click to expand details</summary>
-   
-   - **AI Assistant:** Claude desktop app and CLI tool
-   - **VS Code Integration:** Official Claude extension
-   - **Agent System:** Multi-agent orchestration capabilities
-   - **Features:**
-     - Intelligent code assistance
-     - Automated workflows
-     - Project understanding
-     - Code generation and review
-   </details>
-
-7. **AWS Development Tools**
-   <details>
-   <summary>Click to expand details</summary>
-   
-   - **Core AWS Tools:**
-     - AWS CLI v2
-     - AWS SAM CLI (Serverless Application Model)
-     - AWS CDK (Cloud Development Kit)
-     - Session Manager Plugin
-     - AWS Vault (credential management)
-   - **Infrastructure as Code:** CDK, SAM templates
-   - **Serverless Development:** Lambda, API Gateway, DynamoDB
-   </details>
-
-8. **Container Tools**
-   <details>
-   <summary>Click to expand details</summary>
-   
-   - **Container Runtime:** Podman + Podman Desktop
-   - **Docker Compatibility:**
-     - Docker command aliases
-     - Docker Compose via Podman Compose
-     - Compatible API and CLI
-   - **Features:**
-     - Rootless containers
-     - Kubernetes YAML support
-     - Pod management
-     - Security-focused design
-   </details>
-
-9. **Database Tools**
-   <details>
-   <summary>Click to expand details</summary>
-   
-   - **GUI Clients:**
-     - DBeaver Community (universal database tool)
-     - MongoDB Compass (MongoDB GUI)
-   - **CLI Tools:**
-     - PostgreSQL 16 client tools
-     - MongoDB Shell (mongosh)
-     - LazySql (terminal UI for SQL databases)
-   - **Database Servers (installed by default):**
-     - PostgreSQL 16
-     - MongoDB Community
-   - **Service Management:** Optional auto-start at boot via Homebrew services
-   </details>
-
-10. **Custom Selection** - Choose specific components to install from the above options
-
-## Configuration
-
-Set environment variables before running:
+Includes the `omamacy` CLI tool for centralized theme and font management:
 
 ```bash
-# For automated/non-interactive installation
-export NONINTERACTIVE=1
+# Theme management
+omamacy theme list           # Show available themes
+omamacy theme set <theme>    # Switch themes across all apps
+omamacy theme current        # Show current theme
 
-# For CI environments
-export CI=1
-
-# For private repository access (Claude agents)
-export GITHUB_CLIENT_ID=your_oauth_app_client_id
-
-# For AWS configuration
-export AWS_PROFILE=development
+# Font management  
+omamacy font list           # Open Font Book for browsing
+omamacy font set "Font"     # Set font across supported apps
 ```
 
-## Requirements
+## File Structure
 
-- **macOS only** (macOS 12+ recommended)
-- Internet connection
-- Admin access for Homebrew installation
-- Git (automatically installed if missing)
-
-## Manifest-Driven Architecture
-
-Omamacy follows Omarchy's reliable installation patterns with modern enhancements:
-
-1. **Repository Download**: Clones full repository to `~/.omamacy` before running scripts
-2. **Manifest Execution**: JSON-based script ordering with dependency management
-3. **Individual Scripts**: 50+ granular scripts for complete customization control
-4. **Smart Dependencies**: Scripts only run when their dependencies are satisfied
-5. **Early Git Setup**: Configures git and SSH early in the process
-6. **Comprehensive Theming**: Applies consistent colors across all development tools
-7. **CLI Management**: Provides `omamacy` command for theme switching and future TUI
-
-### Manifest Structure
-```json
-{
-  "groups": {
-    "tools": ["tools/starship.sh", "tools/fzf.sh", ...],
-    "browsers": ["apps/chrome.sh", "apps/firefox.sh", ...],
-    "productivity": ["apps/slack.sh", "apps/rectangle.sh", ...]
-  },
-  "scripts": [
-    {"name": "tools/starship.sh", "depends": ["homebrew.sh"], "group": "tools"}
-  ]
-}
+```
+~/.local/share/omamacy/     # Repository and scripts
+~/.config/omamacy/          # User configuration and themes
+~/.local/omamacy/           # Claude Code configurations (if used)
 ```
 
-## Future Improvements
+## Manual Script Execution
 
-### Script Execution Order Management
-Currently, scripts are executed based on their numeric prefixes (001-, 002-, etc.) determined by `ls` sorting. A better approach would be to use a manifest file (e.g., `scripts/manifest.txt` or `scripts/order.json`) that explicitly defines the execution order. This would:
-- Eliminate the need to renumber files when reordering scripts
-- Make dependencies and execution order explicit and version-controllable
-- Allow conditional execution based on configuration
-- Support parallel execution of independent scripts
+All scripts can be run individually:
 
-Example manifest structure:
-```json
-{
-  "scripts": [
-    {"name": "preflight-checks.sh", "required": true},
-    {"name": "git-setup.sh", "required": true},
-    {"name": "homebrew.sh", "required": true},
-    {"name": "fonts.sh", "required": false},
-    {"name": "cli-tools.sh", "required": false, "depends": ["homebrew.sh"]},
-    {"name": "languages.sh", "required": false, "depends": ["homebrew.sh"]},
-    {"name": "workspaces.sh", "required": false},
-    {"name": "apps.sh", "required": false, "depends": ["homebrew.sh"]},
-    {"name": "ghostty.sh", "required": false},
-    {"name": "nvim-config.sh", "optional": true},
-    {"name": "vscode-config.sh", "optional": true},
-    {"name": "themes.sh", "required": false}
-  ]
-}
+```bash
+cd ~/.local/share/omamacy/scripts
+bash apps/neovim.sh         # Install and configure Neovim
+bash tools/starship.sh      # Install Starship prompt
+bash languages/nvm.sh       # Install Node.js via NVM
 ```
 
-## License
+## System Requirements
 
-MIT
+- **macOS only** (Intel or Apple Silicon)
+- **Internet connection** for downloading packages
+- **Administrator access** for system modifications
+- **User presence** for interactive configuration
+
+## Updates
+
+Re-run the installer to update to the latest version:
+
+```bash
+curl -fsSL https://peek-tech.github.io/devenv-setup/install | bash
+```
+
+The installer automatically pulls the latest repository version and updates existing installations.
+
+---
+
+**Note**: This installer modifies system settings and installs numerous applications. Review the [script manifest](scripts/manifest.json) for complete details of what will be installed.
