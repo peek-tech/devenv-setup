@@ -1,6 +1,6 @@
 # Omamacy - macOS Developer Environment Setup
 
-Automated macOS developer environment installer with **70+ development tools** and applications. Sets up a complete development workstation with modern CLI tools, programming languages, editors, browsers, and productivity apps using a manifest-driven architecture.
+Automated and opinionated macOS developer environment installer with **70+ development tools** and applications. Sets up a complete development workstation with modern CLI tools, programming languages, editors, browsers, and productivity apps using a manifest-driven architecture.
 
 ## Quick Start
 
