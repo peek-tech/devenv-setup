@@ -204,20 +204,43 @@ install_core_dependencies() {
     
     print_section "Installing Core Dependencies"
     
-    # Install Homebrew
-    if bash "$script_dir/homebrew.sh"; then
-        print_status "Homebrew installation completed"
+    # Install Homebrew with retry logic
+    local homebrew_attempts=0
+    local max_homebrew_attempts=3
+    
+    while [ $homebrew_attempts -lt $max_homebrew_attempts ]; do
+        homebrew_attempts=$((homebrew_attempts + 1))
         
-        # Load Homebrew environment
-        if [[ $(uname -m) == 'arm64' ]] && [ -f /opt/homebrew/bin/brew ]; then
-            eval "$(/opt/homebrew/bin/brew shellenv)"
-        elif [ -f /usr/local/bin/brew ]; then
-            eval "$(/usr/local/bin/brew shellenv)"
+        if bash "$script_dir/homebrew.sh"; then
+            print_status "Homebrew installation completed"
+            
+            # Load Homebrew environment
+            if [[ $(uname -m) == 'arm64' ]] && [ -f /opt/homebrew/bin/brew ]; then
+                eval "$(/opt/homebrew/bin/brew shellenv)"
+            elif [ -f /usr/local/bin/brew ]; then
+                eval "$(/usr/local/bin/brew shellenv)"
+            fi
+            
+            # Verify brew is available
+            if command -v brew &> /dev/null; then
+                break
+            else
+                print_warning "Homebrew installed but brew command not found, retrying..."
+                continue
+            fi
+        else
+            if [ $homebrew_attempts -lt $max_homebrew_attempts ]; then
+                print_warning "Homebrew installation failed (attempt $homebrew_attempts/$max_homebrew_attempts)"
+                print_info "Waiting 5 seconds before retry..."
+                sleep 5
+            else
+                print_error "Homebrew installation failed after $max_homebrew_attempts attempts"
+                print_error "This may be due to Xcode Command Line Tools still installing"
+                print_info "Please wait for Xcode installation to complete and run the installer again"
+                exit 1
+            fi
         fi
-    else
-        print_error "Homebrew installation failed"
-        exit 1
-    fi
+    done
     
     # Install jq for manifest processing
     ensure_jq

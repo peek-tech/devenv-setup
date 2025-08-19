@@ -12,9 +12,32 @@ install_homebrew() {
     if ! command -v brew &> /dev/null; then
         print_info "Installing Homebrew..."
         
-        # Always use non-interactive mode to avoid TTY issues
-        print_info "Running Homebrew installation in non-interactive mode"
-        NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        # Install Homebrew (sudo access already cached from preflight-checks.sh)
+        print_info "Running Homebrew installation..."
+        
+        # Install Homebrew with explicit error handling
+        set +e
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        local brew_install_result=$?
+        set -e
+        
+        if [ $brew_install_result -ne 0 ]; then
+            print_error "Homebrew installation failed with exit code: $brew_install_result"
+            print_info "This often happens after Xcode Command Line Tools installation"
+            print_info "Retrying Homebrew installation..."
+            
+            # Wait a moment and retry once
+            sleep 3
+            set +e
+            /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+            brew_install_result=$?
+            set -e
+            
+            if [ $brew_install_result -ne 0 ]; then
+                print_error "Homebrew installation failed after retry"
+                return 1
+            fi
+        fi
         
         # Add Homebrew to PATH based on architecture
         if [[ $(uname -m) == 'arm64' ]]; then
@@ -25,6 +48,13 @@ install_homebrew() {
             # Intel Macs
             echo 'eval "$(/usr/local/bin/brew shellenv)"' >> ~/.zprofile
             eval "$(/usr/local/bin/brew shellenv)"
+        fi
+        
+        # Verify brew is now available
+        if ! command -v brew &> /dev/null; then
+            print_error "Homebrew installation completed but brew command not found"
+            print_info "Please restart your terminal and run the installer again"
+            return 1
         fi
         
         print_status "Homebrew installed successfully"
