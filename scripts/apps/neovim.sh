@@ -50,6 +50,8 @@ show_config_options() {
     echo "  5) Custom Config - Follow the medium.com guide for manual setup"
     echo "  6) Exit - Keep current configuration"
     echo ""
+    echo "  Or provide a git URL for a custom distribution"
+    echo ""
 }
 
 # Install LazyVim
@@ -325,6 +327,25 @@ EOF
     print_info "Guide reference: https://medium.com/@edominguez.se/so-i-switched-to-neovim-in-2025-163b85aa0935"
 }
 
+# Install from git URL
+install_from_git_url() {
+    local git_url="$1"
+    print_info "Installing Neovim configuration from: $git_url"
+    
+    # Clone the configuration
+    if git clone "$git_url" ~/.config/nvim; then
+        # Remove .git folder to make it your own
+        rm -rf ~/.config/nvim/.git
+        
+        print_status "Custom Neovim configuration installed successfully!"
+        print_info "Run 'nvim' to complete the setup."
+    else
+        print_error "Failed to clone configuration from git URL"
+        print_info "Falling back to NvChad as default..."
+        install_nvchad
+    fi
+}
+
 # Prompt user for configuration
 prompt_user_for_config() {
     echo ""
@@ -358,33 +379,38 @@ setup_neovim_config() {
     show_config_options
     
     local choice
-    tty_prompt "Enter your choice (1-6)" "" choice
+    tty_prompt "Enter your choice (1-6) or a git URL" "" choice
     
-    case $choice in
-        1)
-            install_lazyvim
-            ;;
-        2)
-            install_astronvim
-            ;;
-        3)
-            install_nvchad
-            ;;
-        4)
-            install_lunarvim
-            ;;
-        5)
-            install_custom_config
-            ;;
-        6)
-            print_info "Exiting without changes."
-            return 0
-            ;;
-        *)
-            print_error "Invalid choice. Exiting."
-            return 1
-            ;;
-    esac
+    # Check if input is a git URL
+    if [[ "$choice" =~ ^(https?://|git@) ]]; then
+        install_from_git_url "$choice"
+    else
+        case $choice in
+            1)
+                install_lazyvim
+                ;;
+            2)
+                install_astronvim
+                ;;
+            3)
+                install_nvchad
+                ;;
+            4)
+                install_lunarvim
+                ;;
+            5)
+                install_custom_config
+                ;;
+            6)
+                print_info "Exiting without changes."
+                return 0
+                ;;
+            *)
+                print_warning "Invalid choice. Installing NvChad as default..."
+                install_nvchad
+                ;;
+        esac
+    fi
     
     echo ""
     print_status "Neovim configuration complete!"

@@ -17,20 +17,14 @@ main() {
     print_info "Configuring macOS system defaults..."
     print_info "This will modify system preferences and may require admin privileges."
     
-    # Confirm with user - default to YES for installer
+    # Confirm with user
     echo ""
     local apply_defaults
-    # If running from installer, default to yes, otherwise ask
-    if [ "$OMAMACY_FROM_INSTALLER" = "1" ]; then
-        apply_defaults="y"
-        print_info "Applying macOS system defaults (installer mode)..."
-    else
-        tty_prompt "Apply macOS system defaults? (y/N)" "N" apply_defaults
-        if [[ ! $apply_defaults =~ ^[Yy]$ ]]; then
-            print_info "Skipping macOS defaults configuration."
-            script_success "macos-defaults"
-            return 0
-        fi
+    tty_prompt "Apply macOS system defaults? (Y/n)" "y" apply_defaults
+    if [[ ! $apply_defaults =~ ^[Yy]$ ]]; then
+        print_info "Skipping macOS defaults configuration."
+        script_success "macos-defaults"
+        return 0
     fi
     
     print_header "Dark Mode & Appearance"

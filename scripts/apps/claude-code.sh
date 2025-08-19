@@ -64,7 +64,7 @@ apply_claude_font() {
 
 # Claude Code configuration
 setup_claude_config() {
-    local config_dir="$HOME/.omamacy/claude-config"
+    local config_dir="$HOME/.local/omamacy/claude-config"
     
     # Check if config repo already exists
     if [ -d "$config_dir" ]; then
@@ -76,7 +76,7 @@ setup_claude_config() {
             return 1
         }
         
-        # Check for update script and run it
+        # Run update script if it exists
         if [ -x "./update" ]; then
             print_info "Running configuration update..."
             if ./update; then
@@ -86,9 +86,9 @@ setup_claude_config() {
             fi
         fi
         
-        # Run install script
+        # Run install script if it exists
         if [ -x "./install" ]; then
-            print_info "Running Claude Code configuration..."
+            print_info "Running Claude Code configuration installer..."
             if ./install; then
                 print_status "Claude Code configured successfully"
             else
@@ -97,19 +97,19 @@ setup_claude_config() {
             fi
         else
             print_warning "No install script found in configuration repository"
-            return 1
         fi
     else
-        # First time setup - prompt for config repo
+        # No existing config - ask if user wants to set one up
         echo ""
         print_info "Claude Code can be configured with custom agents and MCP servers"
-        print_warning "Configuration scripts may be destructive - back up your existing Claude directories first"
-        print_info "Consider backing up: ~/.claude/ and ~/.config/claude/ directories"
         
-        local has_repo
-        tty_prompt "Do you have a Claude Code configuration repository? (y/n)" "n" has_repo
+        local want_config
+        tty_prompt "Do you want to configure Claude Code with a custom repository? (y/N)" "n" want_config
         
-        if [[ $has_repo =~ ^[Yy]$ ]]; then
+        if [[ $want_config =~ ^[Yy]$ ]]; then
+            print_warning "Configuration scripts may be destructive - back up your existing Claude directories first"
+            print_info "Consider backing up: ~/.claude/ and ~/.config/claude/ directories"
+            
             local repo_url
             tty_prompt "Enter the git repository URL" "" repo_url
             
@@ -125,21 +125,22 @@ setup_claude_config() {
             fi
             
             # Create omamacy directory if it doesn't exist
-            mkdir -p "$HOME/.omamacy"
+            mkdir -p "$HOME/.local/omamacy"
             
             # Clone the configuration repository
             print_info "Cloning Claude Code configuration repository..."
             if git clone "$repo_url" "$config_dir"; then
                 print_status "Configuration repository cloned successfully"
                 
-                # Change to config directory and run install
+                # Change to config directory
                 cd "$config_dir" || {
                     print_error "Failed to change to config directory"
                     return 1
                 }
                 
+                # Run install script if it exists
                 if [ -x "./install" ]; then
-                    print_info "Running Claude Code configuration..."
+                    print_info "Running Claude Code configuration installer..."
                     if ./install; then
                         print_status "Claude Code configured successfully"
                     else
@@ -147,8 +148,7 @@ setup_claude_config() {
                         return 1
                     fi
                 else
-                    print_error "No executable install script found in configuration repository"
-                    return 1
+                    print_warning "No executable install script found in configuration repository"
                 fi
             else
                 print_error "Failed to clone configuration repository"
@@ -178,9 +178,25 @@ main() {
     
     run_individual_script "claude-code.sh" "Claude Code CLI"
     
-    # Install Claude Code
-    if ! install_brew_package "claude-code" false "AI assistant command line tool"; then
-        script_failure "claude-code" "Failed to install via Homebrew"
+    # Install Claude Code using official installer
+    if ! command -v claude >/dev/null 2>&1; then
+        print_info "Installing Claude Code..."
+        
+        # Download and run the official Claude Code installer
+        if curl -fsSL https://claude.ai/install.sh | bash; then
+            print_status "Claude Code installed successfully"
+            
+            # Verify installation
+            if command -v claude >/dev/null 2>&1; then
+                print_status "Claude Code installation verified"
+            else
+                print_warning "Claude Code installed but not found in PATH - restart terminal"
+            fi
+        else
+            script_failure "claude-code" "Failed to install via official installer"
+        fi
+    else
+        print_status "Claude Code already installed"
     fi
     
     # Setup Claude Code configuration

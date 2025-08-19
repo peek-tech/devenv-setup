@@ -232,13 +232,23 @@ main() {
         script_failure "starship" "Failed to install via Homebrew"
     fi
     
-    # Configure starship
-    configure_starship
+    # Ask if user wants to use starship as their prompt
+    echo ""
+    local use_as_prompt
+    tty_prompt "Do you want to use Starship as your shell prompt? (Y/n)" "y" use_as_prompt
     
-    # Setup shell integration
-    setup_shell_integration
-    
-    print_info "Restart your terminal or run 'source ~/.zshrc' to activate Starship"
+    if [[ $use_as_prompt =~ ^[Yy]$ ]]; then
+        # Configure starship
+        configure_starship
+        
+        # Setup shell integration
+        setup_shell_integration
+        
+        print_info "Restart your terminal or run 'source ~/.zshrc' to activate Starship"
+    else
+        print_info "Starship installed but not configured as your prompt"
+        print_info "You can configure it later by running this script again"
+    fi
     
     script_success "starship"
 }
