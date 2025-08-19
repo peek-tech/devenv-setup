@@ -51,6 +51,7 @@ show_config_options() {
     echo "  6) Exit - Keep current configuration"
     echo ""
     echo "  Or provide a git URL for a custom distribution"
+    echo "    (Repository must contain a 'neovim/' directory with your config)"
     echo ""
 }
 
@@ -319,6 +320,7 @@ require("lazy").setup({
       })
     end,
   },
+  
 })
 EOF
     
@@ -332,18 +334,78 @@ install_from_git_url() {
     local git_url="$1"
     print_info "Installing Neovim configuration from: $git_url"
     
-    # Clone the configuration
-    if git clone "$git_url" ~/.config/nvim; then
-        # Remove .git folder to make it your own
-        rm -rf ~/.config/nvim/.git
+    # Create a temporary directory for cloning
+    local temp_dir="/tmp/nvim-config-$$"
+    
+    # Clone the configuration repository
+    if git clone "$git_url" "$temp_dir"; then
+        # Check if the repo has a neovim directory
+        if [ -d "$temp_dir/neovim" ]; then
+            # Copy the neovim directory contents to ~/.config/nvim
+            mkdir -p ~/.config/nvim
+            cp -r "$temp_dir/neovim/"* ~/.config/nvim/
+            
+            print_status "Custom Neovim configuration installed successfully!"
+            print_info "Configuration copied from $git_url/neovim/ to ~/.config/nvim/"
+            print_info "Run 'nvim' to complete the setup."
+        else
+            print_error "Repository does not contain a 'neovim' directory"
+            print_info "Expected structure: your-repo/neovim/[config files]"
+            print_info "Falling back to NvChad as default..."
+            install_nvchad
+        fi
         
-        print_status "Custom Neovim configuration installed successfully!"
-        print_info "Run 'nvim' to complete the setup."
+        # Clean up temporary directory
+        rm -rf "$temp_dir"
     else
         print_error "Failed to clone configuration from git URL"
         print_info "Falling back to NvChad as default..."
         install_nvchad
     fi
+}
+
+# Add tmux navigation plugin to existing Neovim configuration
+add_tmux_navigation_plugin() {
+    local nvim_config_dir="$HOME/.config/nvim"
+    local plugins_dir="$nvim_config_dir/lua/plugins"
+    
+    # Check if Neovim config exists
+    if [ ! -d "$nvim_config_dir" ]; then
+        print_info "No Neovim configuration found, skipping tmux navigation setup"
+        return 0
+    fi
+    
+    print_info "Adding tmux navigation plugin to existing Neovim configuration..."
+    
+    # Create plugins directory if it doesn't exist
+    mkdir -p "$plugins_dir"
+    
+    # Create tmux navigation plugin file
+    cat > "$plugins_dir/tmux-navigation.lua" << 'EOF'
+-- Tmux navigation integration
+-- Allows seamless navigation between Neovim splits and tmux panes
+return {
+  'alexghergh/nvim-tmux-navigation',
+  config = function()
+    local nvim_tmux_nav = require('nvim-tmux-navigation')
+
+    nvim_tmux_nav.setup {
+      disable_when_zoomed = true -- defaults to false
+    }
+
+    vim.keymap.set('n', "<C-h>", nvim_tmux_nav.NvimTmuxNavigateLeft)
+    vim.keymap.set('n', "<C-j>", nvim_tmux_nav.NvimTmuxNavigateDown)
+    vim.keymap.set('n', "<C-k>", nvim_tmux_nav.NvimTmuxNavigateUp)
+    vim.keymap.set('n', "<C-l>", nvim_tmux_nav.NvimTmuxNavigateRight)
+    vim.keymap.set('n', "<C-\\>", nvim_tmux_nav.NvimTmuxNavigateLastActive)
+    vim.keymap.set('n', "<C-Space>", nvim_tmux_nav.NvimTmuxNavigateNext)
+  end
+}
+EOF
+    
+    print_status "Tmux navigation plugin added to ~/.config/nvim/lua/plugins/tmux-navigation.lua"
+    print_info "Use Ctrl+h/j/k/l to navigate between Neovim splits and tmux panes"
+    print_info "Restart Neovim to load the new plugin"
 }
 
 # Prompt user for configuration
@@ -414,6 +476,10 @@ setup_neovim_config() {
     
     echo ""
     print_status "Neovim configuration complete!"
+    
+    # Add tmux navigation plugin to any configuration
+    add_tmux_navigation_plugin
+    
     print_info "Start Neovim with: nvim"
     
     if [ "$choice" = "4" ]; then

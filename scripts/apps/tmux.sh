@@ -66,11 +66,9 @@ unbind %
 # Reload config file (useful for development)
 bind r source-file ~/.tmux.conf \; display-message "Config reloaded!"
 
-# Switch panes using Alt-arrow without prefix (faster navigation)
-bind -n M-Left select-pane -L
-bind -n M-Right select-pane -R
-bind -n M-Up select-pane -U
-bind -n M-Down select-pane -D
+# vim-tmux-navigator plugin will handle pane navigation
+# Smart pane switching with awareness of Vim splits
+# Use Ctrl+h/j/k/l for unified navigation
 
 # Enable mouse mode (modern convenience)
 set -g mouse on
@@ -116,6 +114,34 @@ setw -g mode-keys vi
 bind-key -T copy-mode-vi v send-keys -X begin-selection
 bind-key -T copy-mode-vi y send-keys -X copy-selection
 bind-key -T copy-mode-vi r send-keys -X rectangle-toggle
+
+# Plugin Manager (TPM) and Plugins
+set -g @plugin 'tmux-plugins/tpm'
+set -g @plugin 'tmux-plugins/tmux-resurrect'
+set -g @plugin 'tmux-plugins/tmux-continuum'
+set -g @plugin 'tmux-plugins/tmux-sessionist'
+set -g @plugin 'christoomey/vim-tmux-navigator'
+
+# Plugin configurations
+set -g @continuum-restore 'on'
+set -g @continuum-save-interval '15'
+set -g @resurrect-capture-pane-contents 'on'
+set -g @resurrect-strategy-vim 'session'
+set -g @resurrect-strategy-nvim 'session'
+
+# Session management keybindings (tmux-sessionist)
+# Prefix + g - prompt for new session name and create it
+# Prefix + C - prompt for new session name and create it in background
+# Prefix + X - kill current session and switch to previous one
+# Prefix + S - switch to another session via interactive menu
+# Prefix + @ - promote current pane to new session
+
+# Session restore/save (tmux-resurrect)
+# Prefix + Ctrl-s - save session
+# Prefix + Ctrl-r - restore session
+
+# Initialize TMUX plugin manager (keep this line at the very bottom of tmux.conf)
+run '~/.tmux/plugins/tpm/tpm'
 EOF
 
     print_status "tmux configuration created at $tmux_config"
@@ -124,7 +150,39 @@ EOF
     print_info "  Split horizontal: Prefix + |"
     print_info "  Split vertical: Prefix + -"
     print_info "  Reload config: Prefix + r"
-    print_info "  Switch panes: Alt + Arrow keys"
+    print_info "  Navigate panes/vim: Ctrl + h/j/k/l"
+    print_info "Session management:"
+    print_info "  Save session: Prefix + Ctrl-s"
+    print_info "  Restore session: Prefix + Ctrl-r"
+    print_info "  New session: Prefix + g"
+    print_info "  Switch sessions: Prefix + S"
+}
+
+# Install TPM (Tmux Plugin Manager) and plugins
+install_tmux_plugins() {
+    local tpm_dir="$HOME/.tmux/plugins/tpm"
+    
+    print_info "Installing Tmux Plugin Manager (TPM)..."
+    
+    # Install TPM if not already installed
+    if [ ! -d "$tpm_dir" ]; then
+        mkdir -p "$HOME/.tmux/plugins"
+        git clone https://github.com/tmux-plugins/tpm "$tpm_dir"
+        print_status "TPM installed successfully"
+    else
+        print_status "TPM already installed"
+    fi
+    
+    # Install plugins automatically
+    print_info "Installing tmux plugins..."
+    "$tpm_dir/scripts/install_plugins.sh"
+    print_status "tmux plugins installed: tmux-resurrect, tmux-continuum, tmux-sessionist, vim-tmux-navigator"
+    
+    print_info "Plugin features enabled:"
+    print_info "  • Automatic session saving every 15 minutes"
+    print_info "  • Session restoration across reboots"
+    print_info "  • Enhanced session management commands"
+    print_info "  • Seamless navigation between tmux panes and vim splits"
 }
 
 # Setup automatic tmux session management
@@ -175,6 +233,9 @@ main() {
     
     # Configure tmux
     configure_tmux
+    
+    # Install TPM and plugins
+    install_tmux_plugins
     
     # Setup optional auto-start/attach
     setup_tmux_auto_start
