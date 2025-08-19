@@ -422,7 +422,7 @@
                     <li><strong>Web Browsers (5)</strong> - Chrome, Firefox, Edge, Arc, Brave</li>
                     <li><strong>Code Editors</strong> - Visual Studio Code with extensions, Neovim with distribution choices</li>
                     <li><strong>AI Development Tools</strong> - Claude desktop + CLI with optional agent/MCP configuration</li>
-                    <li><strong>Terminal Applications (7 TUIs)</strong> - htop, tmux, LazyGit, LazSQL, Glances, ncdu, Oxker</li>
+                    <li><strong>Terminal Applications (7 TUIs)</strong> - htop, tmux (with session management), LazyGit, LazSQL, Glances, ncdu, Oxker</li>
                     <li><strong>Productivity Apps (6)</strong> - Rectangle, Bruno, Slack, Google Drive, Maccy, KeyCastr</li>
                     <li><strong>Container Platform</strong> - Podman with Docker compatibility + Desktop GUI</li>
                     <li><strong>Theming & Workspace</strong> - Catppuccin themes, workspace setup, Ghostty terminal</li>
@@ -455,7 +455,8 @@
                                     <li>LunarVim - IDE-like experience with extensive features</li>
                                     <li>Custom Config - Manual setup guide following</li>
                                 </ul>
-                                <p><strong>Git URL Support:</strong> Provide custom git repository for your own configuration</p>
+                                <p><strong>Git URL Support:</strong> Provide custom git repository (must contain `neovim/` directory)</p>
+                                <p><strong>tmux Integration:</strong> All configurations automatically enhanced with tmux navigation</p>
                                 <p><strong>Fallback:</strong> Defaults to NvChad if invalid choice</p>
                             </div>
                         </details>
@@ -488,6 +489,18 @@
                         </details>
                         
                         <details>
+                            <summary><h4>tmux Terminal Multiplexer</h4></summary>
+                            <div class="details-content">
+                                <p><strong>Auto-start Option:</strong> Automatically start/attach tmux when opening new terminals</p>
+                                <p><strong>Session Management:</strong> Save/restore sessions across system restarts</p>
+                                <p><strong>Continuous Saving:</strong> Automatic session backup every 15 minutes</p>
+                                <p><strong>Enhanced Commands:</strong> Advanced session creation, switching, and management</p>
+                                <p><strong>Navigation Integration:</strong> Seamless movement between tmux panes and Neovim splits</p>
+                                <p><strong>Key Bindings:</strong> Ctrl+h/j/k/l for unified navigation, Prefix+Ctrl+s/r for save/restore</p>
+                            </div>
+                        </details>
+
+                        <details>
                             <summary><h4>Claude Code AI Configuration</h4></summary>
                             <div class="details-content">
                                 <p><strong>Basic Setup:</strong> Claude Code CLI installation via official installer</p>
@@ -508,6 +521,7 @@
                         <li><strong>Development Shortcuts:</strong> <code>lg</code> (lazygit), <code>sql</code> (lazysql), <code>top</code> (glances)</li>
                         <li><strong>Smart Navigation:</strong> <code>z</code> command for intelligent directory jumping</li>
                         <li><strong>Enhanced Search:</strong> <code>fzf</code> integration for command history and file finding</li>
+                        <li><strong>Unified Navigation:</strong> <code>Ctrl+h/j/k/l</code> works seamlessly between tmux panes and Neovim splits</li>
                     </ul>
                 </div>
                 

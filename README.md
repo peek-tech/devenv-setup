@@ -68,7 +68,7 @@ The installer runs **70+ scripts** organized into these categories:
 ### Terminal Applications (7 TUIs)
 - **Process Management**: htop (system monitor), Glances (advanced system stats)
 - **File Management**: ncdu (disk usage analyzer)
-- **Development**: LazyGit (git TUI), LazSQL (database client), tmux (terminal multiplexer)
+- **Development**: LazyGit (git TUI), LazSQL (database client), tmux (terminal multiplexer with session management)
 - **Container Management**: Oxker (Docker/Podman TUI)
 
 ### Productivity Applications (6 apps)
@@ -109,12 +109,20 @@ Several scripts will prompt you for choices during installation:
 
 ### Neovim Configuration
 - Choose from popular distributions: LazyVim, AstroNvim, NvChad, LunarVim
-- Provide custom git URL for your own configuration
+- Provide custom git URL for your own configuration (must contain `neovim/` directory)
+- Custom configs automatically enhanced with tmux navigation
 - Falls back to NvChad if invalid choice
 
 ### macOS System Defaults
 - Opt-in to apply developer-friendly system settings
 - Includes dark mode, Finder enhancements, security settings
+
+### tmux Terminal Multiplexer
+- Optional auto-start/attach when opening new terminals
+- Session management plugins: save/restore sessions across reboots
+- Continuous automatic session saving (every 15 minutes)
+- Enhanced session management commands and navigation
+- Seamless navigation between tmux panes and Neovim splits
 
 ### Starship Prompt
 - Choose whether to use Starship as your shell prompt
@@ -133,6 +141,7 @@ The installer adds helpful aliases and integrations:
 - **Development Shortcuts**: `lg` (lazygit), `sql` (lazysql), `top` (glances)
 - **Smart Navigation**: `z` command for intelligent directory jumping
 - **Enhanced Search**: `fzf` integration for command history and file finding
+- **Unified Navigation**: `Ctrl+h/j/k/l` works seamlessly between tmux panes and Neovim splits
 
 ## Theme Management
 
