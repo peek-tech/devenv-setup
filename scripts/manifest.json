@@ -8,7 +8,7 @@
     },
     "tools": {
       "description": "Command line tools",
-      "scripts": ["tools/git.sh", "tools/gh.sh", "tools/wget.sh", "tools/tree.sh", "tools/ripgrep.sh", "tools/fd.sh", "tools/bat.sh", "tools/eza.sh", "tools/fzf.sh", "tools/delta.sh", "tools/dust.sh", "tools/procs.sh", "tools/sd.sh", "tools/tealdeer.sh", "tools/hyperfine.sh", "tools/just.sh", "tools/zoxide.sh", "tools/starship.sh"]
+      "scripts": ["tools/git.sh", "tools/gh.sh", "tools/wget.sh", "tools/tree.sh", "tools/ripgrep.sh", "tools/fd.sh", "tools/bat.sh", "tools/eza.sh", "tools/fzf.sh", "tools/delta.sh", "tools/dust.sh", "tools/procs.sh", "tools/sd.sh", "tools/tealdeer.sh", "tools/hyperfine.sh", "tools/just.sh", "tools/tokei.sh", "tools/zoxide.sh", "tools/starship.sh"]
     },
     "languages": {
       "description": "Programming languages and version managers",
@@ -398,7 +398,7 @@
     },
     {
       "name": "workspaces.sh",
-      "description": "Workspace directories and repository cloning",
+      "description": "Workspace directories and repository cloning from JSON",
       "group": "workspace",
       "depends": []
     },

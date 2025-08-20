@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Omamacy - Workspaces Setup
-# Creates workspace directories and clones repositories from CSV files
+# Creates workspace directories and clones repositories from JSON files
 
 # Load common functions
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -38,90 +38,72 @@ prompt_user() {
     fi
 }
 
-# Validate CSV file format
-validate_csv_file() {
-    local temp_csv="$1"
-    local line_count=0
-    local valid_lines=0
+# Validate JSON file format
+validate_json_file() {
+    local temp_json="$1"
     
-    while IFS= read -r line || [ -n "$line" ]; do
-        line_count=$((line_count + 1))
-        
-        # Skip empty lines
-        if [ -z "$(echo "$line" | xargs)" ]; then
-            continue
-        fi
-        
-        # Check if line has at least one comma (two fields)
-        if [[ "$line" == *","* ]]; then
-            valid_lines=$((valid_lines + 1))
-        fi
-    done < "$temp_csv"
+    # Check if file exists and is not empty
+    if [ ! -s "$temp_json" ]; then
+        return 1
+    fi
     
-    # Need at least 2 lines: header + 1 data line
-    if [ $line_count -lt 2 ] || [ $valid_lines -lt 2 ]; then
+    # Validate JSON structure using jq
+    if ! jq empty "$temp_json" 2>/dev/null; then
+        return 1
+    fi
+    
+    # Check if it's an object with at least one key
+    local type=$(jq 'type' "$temp_json" 2>/dev/null)
+    if [ "$type" != '"object"' ]; then
+        return 1
+    fi
+    
+    # Check if object has at least one folder with repos
+    local has_repos=$(jq 'to_entries | map(.value | type == "array" and length > 0) | any' "$temp_json" 2>/dev/null)
+    if [ "$has_repos" != "true" ]; then
         return 1
     fi
     
     return 0
 }
 
-# Process a CSV file and clone repositories
-process_csv_file() {
-    local csv_url="$1"
+# Process a JSON file and clone repositories
+process_json_file() {
+    local json_url="$1"
     local workspaces_dir="$HOME/Workspaces"
     
-    print_info "Processing CSV from: $csv_url"
+    print_info "Processing JSON from: $json_url"
     
-    # Download the CSV file
-    local temp_csv="/tmp/omamacy_workspaces_$$.csv"
-    if ! curl -fsSL "$csv_url" -o "$temp_csv" 2>/dev/null; then
-        print_error "Failed to download CSV from $csv_url"
+    # Download the JSON file
+    local temp_json="/tmp/omamacy_workspaces_$$.json"
+    if ! curl -fsSL "$json_url" -o "$temp_json" 2>/dev/null; then
+        print_error "Failed to download JSON from $json_url"
         return 1
     fi
     
-    # Validate CSV format
-    if ! validate_csv_file "$temp_csv"; then
-        print_error "Invalid CSV file format. File must have a header line and at least one data line with comma-separated values."
-        rm -f "$temp_csv"
+    # Validate JSON format
+    if ! validate_json_file "$temp_json"; then
+        print_error "Invalid JSON file format. File must be an object with folder names as keys and arrays of git repos as values."
+        rm -f "$temp_json"
         return 1
     fi
     
-    # Process the CSV file (skip header line)
-    local line_num=0
+    # Process the JSON file
     local cloned_count=0
     local failed_count=0
     
-    while IFS=',' read -r directory git_repo || [ -n "$directory" ]; do
-        line_num=$((line_num + 1))
-        
-        # Skip header line
-        if [ $line_num -eq 1 ]; then
-            continue
-        fi
-        
-        # Trim whitespace
-        directory=$(echo "$directory" | xargs)
-        git_repo=$(echo "$git_repo" | xargs)
-        
-        # Skip empty lines
-        if [ -z "$directory" ] || [ -z "$git_repo" ]; then
+    # Get all folder names (keys) from the JSON object
+    local folders=$(jq -r 'keys[]' "$temp_json")
+    
+    # Process each folder
+    while IFS= read -r folder; do
+        # Skip empty folder names
+        if [ -z "$folder" ]; then
             continue
         fi
         
         # Create directory path
-        local workspace_path="$workspaces_dir/$directory"
-        
-        # Extract repo name from git URL
-        local repo_name=""
-        if [[ "$git_repo" =~ /([^/]+)\.git$ ]]; then
-            repo_name="${BASH_REMATCH[1]}"
-        elif [[ "$git_repo" =~ /([^/]+)$ ]]; then
-            repo_name="${BASH_REMATCH[1]}"
-        else
-            print_warning "Could not extract repo name from: $git_repo"
-            continue
-        fi
+        local workspace_path="$workspaces_dir/$folder"
         
         # Create workspace directory if it doesn't exist (non-fatal)
         if [ ! -d "$workspace_path" ]; then
@@ -133,26 +115,50 @@ process_csv_file() {
             fi
         fi
         
-        # Clone the repository (non-fatal)
-        local repo_path="$workspace_path/$repo_name"
-        if [ -d "$repo_path" ]; then
-            print_info "Repository already exists: $repo_path"
-        else
-            print_info "Cloning $repo_name into $workspace_path..."
-            if git clone "$git_repo" "$repo_path" 2>/dev/null; then
-                print_status "Cloned: $repo_name → $repo_path"
-                cloned_count=$((cloned_count + 1))
-            else
-                print_warning "Failed to clone: $git_repo (continuing)"
-                failed_count=$((failed_count + 1))
+        # Get the array of repos for this folder
+        local repo_count=$(jq -r --arg folder "$folder" '.[$folder] | length' "$temp_json")
+        
+        # Process each repository in the folder
+        for i in $(seq 0 $((repo_count - 1))); do
+            local git_repo=$(jq -r --arg folder "$folder" --arg i "$i" '.[$folder][$i | tonumber]' "$temp_json")
+            
+            # Skip if repo is null or empty
+            if [ "$git_repo" = "null" ] || [ -z "$git_repo" ]; then
+                continue
             fi
-        fi
-    done < "$temp_csv"
+            
+            # Extract repo name from git URL
+            local repo_name=""
+            if [[ "$git_repo" =~ /([^/]+)\.git$ ]]; then
+                repo_name="${BASH_REMATCH[1]}"
+            elif [[ "$git_repo" =~ /([^/]+)$ ]]; then
+                repo_name="${BASH_REMATCH[1]}"
+            else
+                print_warning "Could not extract repo name from: $git_repo"
+                continue
+            fi
+            
+            # Clone the repository (non-fatal)
+            local repo_path="$workspace_path/$repo_name"
+            if [ -d "$repo_path" ]; then
+                print_info "Repository already exists: $repo_path"
+            else
+                print_info "Cloning $repo_name into $workspace_path..."
+                if git clone "$git_repo" "$repo_path" 2>/dev/null; then
+                    print_status "Cloned: $repo_name → $repo_path"
+                    cloned_count=$((cloned_count + 1))
+                else
+                    print_warning "Failed to clone: $git_repo (continuing)"
+                    failed_count=$((failed_count + 1))
+                fi
+            fi
+        done
+    done <<< "$folders"
     
     # Clean up temp file
-    rm -f "$temp_csv"
+    rm -f "$temp_json"
     
-    print_info "Processed CSV: $cloned_count repos cloned, $failed_count failed"
+    print_info "Processed JSON: $cloned_count repos cloned, $failed_count failed"
     return 0
 }
 
@@ -169,27 +175,27 @@ setup_workspaces() {
         print_status "Workspaces directory already exists: $workspaces_dir"
     fi
     
-    # Ask user for CSV URLs
-    print_info "You can provide CSV files with workspace configurations."
-    print_info "CSV format: directory, git repo (with header line)"
-    print_info "Example: Work, git@github.com/peek-tech/omamacy"
+    # Ask user for JSON URLs
+    print_info "You can provide JSON files with workspace configurations."
+    print_info "JSON format: Object with folder names as keys and arrays of git repos as values"
+    print_info 'Example: {"Work": ["git@github.com:company/project1.git", "git@github.com:company/project2.git"]}'
     echo ""
     
-    local csv_count=0
+    local json_count=0
     while true; do
-        local csv_url=""
-        if prompt_user "Enter CSV URL (or press Enter to skip): " csv_url; then
+        local json_url=""
+        if prompt_user "Enter JSON URL (or press Enter to skip): " json_url; then
             # Check if URL is empty - if so, break the loop
-            if [ -z "$csv_url" ]; then
+            if [ -z "$json_url" ]; then
                 break
             fi
             
-            # Process the CSV file
-            if process_csv_file "$csv_url"; then
-                csv_count=$((csv_count + 1))
-                print_status "Successfully processed CSV file $csv_url"
+            # Process the JSON file
+            if process_json_file "$json_url"; then
+                json_count=$((json_count + 1))
+                print_status "Successfully processed JSON file $json_url"
             else
-                print_warning "Failed to process CSV file $csv_url, but continuing..."
+                print_warning "Failed to process JSON file $json_url, but continuing..."
             fi
             
             echo ""
@@ -200,10 +206,10 @@ setup_workspaces() {
     done
     
     # Summary after loop completion
-    if [ $csv_count -eq 0 ]; then
-        print_info "No CSV files processed, continuing without repository setup"
+    if [ $json_count -eq 0 ]; then
+        print_info "No JSON files processed, continuing without repository setup"
     else
-        print_info "Finished processing $csv_count CSV file(s)"
+        print_info "Finished processing $json_count JSON file(s)"
     fi
     
     # Create some default workspace directories

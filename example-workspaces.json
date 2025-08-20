@@ -1,0 +1,12 @@
+{
+  "Work": [
+    "git@github.com:company/project1.git",
+    "git@github.com:company/project2.git"
+  ],
+  "Personal": [
+    "git@github.com:username/personal-project.git"
+  ],
+  "Learning": [
+    "https://github.com/educational/tutorial-repo.git"
+  ]
+}
