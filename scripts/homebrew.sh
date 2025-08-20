@@ -16,8 +16,9 @@ install_homebrew() {
         print_info "Running Homebrew installation..."
         
         # Install Homebrew with explicit error handling
+        # Redirect stdin from /dev/tty to ensure interactive mode when run via curl|bash
         set +e
-        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" < /dev/tty
         local brew_install_result=$?
         set -e
         
@@ -29,7 +30,7 @@ install_homebrew() {
             # Wait a moment and retry once
             sleep 3
             set +e
-            /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+            /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" < /dev/tty
             brew_install_result=$?
             set -e
             
