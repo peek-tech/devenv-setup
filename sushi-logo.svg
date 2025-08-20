@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Sushi piece with salmon and rice -->
+  <g id="sushi">
+    <!-- Shadow -->
+    <ellipse cx="100" cy="165" rx="65" ry="12" fill="#000000" opacity="0.15"/>
+    
+    <!-- Rice base (bottom layer) -->
+    <path d="M 40 120 Q 40 100, 60 95 L 140 95 Q 160 100, 160 120 L 160 145 Q 160 155, 150 160 L 50 160 Q 40 155, 40 145 Z" 
+          fill="#FDF9F3" 
+          stroke="#2D3E2E" 
+          stroke-width="4" 
+          stroke-linejoin="round"/>
+    
+    <!-- Salmon topping with stripes -->
+    <g id="salmon">
+      <!-- Main salmon shape -->
+      <path d="M 45 125 Q 45 85, 75 75 L 125 75 Q 155 85, 155 125 L 155 130 Q 155 135, 150 135 L 50 135 Q 45 135, 45 130 Z" 
+            fill="#E07A5F" 
+            stroke="#2D3E2E" 
+            stroke-width="4" 
+            stroke-linejoin="round"/>
+      
+      <!-- Salmon texture lines -->
+      <path d="M 60 90 Q 70 95, 80 105 L 85 125" 
+            fill="none" 
+            stroke="#FDFAF5" 
+            stroke-width="2" 
+            stroke-linecap="round" 
+            opacity="0.8"/>
+      <path d="M 80 85 Q 90 90, 100 100 L 105 125" 
+            fill="none" 
+            stroke="#FDFAF5" 
+            stroke-width="2" 
+            stroke-linecap="round" 
+            opacity="0.8"/>
+      <path d="M 100 83 Q 110 88, 120 98 L 125 125" 
+            fill="none" 
+            stroke="#FDFAF5" 
+            stroke-width="2" 
+            stroke-linecap="round" 
+            opacity="0.8"/>
+      <path d="M 120 85 Q 130 90, 140 100 L 145 125" 
+            fill="none" 
+            stroke="#FDFAF5" 
+            stroke-width="2" 
+            stroke-linecap="round" 
+            opacity="0.8"/>
+    </g>
+    
+    <!-- Wasabi garnish -->
+    <g id="wasabi">
+      <!-- Wasabi stem -->
+      <path d="M 130 75 Q 140 65, 145 55" 
+            fill="none" 
+            stroke="#2D3E2E" 
+            stroke-width="3" 
+            stroke-linecap="round"/>
+      
+      <!-- Wasabi leaf -->
+      <ellipse cx="155" cy="50" 
+               rx="18" ry="12" 
+               fill="#81B366" 
+               stroke="#2D3E2E" 
+               stroke-width="3" 
+               transform="rotate(25 155 50)"/>
+      
+      <!-- Leaf detail -->
+      <path d="M 145 50 L 165 50" 
+            stroke="#2D3E2E" 
+            stroke-width="2" 
+            stroke-linecap="round"/>
+    </g>
+    
+    <!-- Small wasabi dollop on rice -->
+    <ellipse cx="100" cy="145" 
+             rx="8" ry="4" 
+             fill="#81B366" 
+             stroke="#2D3E2E" 
+             stroke-width="2"/>
+  </g>
+</svg>
