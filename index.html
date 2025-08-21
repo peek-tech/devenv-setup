@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Makase - macOS Developer Environment Setup</title>
+    <title>Macose - macOS Developer Environment Setup</title>
     <style>
         :root {
             /* Light theme - based on sushi logo colors */
@@ -458,8 +458,8 @@
     </div>
     <div class="container">
         <header>
-            <h1><img src="sushi-logo.svg" alt="Makase Logo" class="title-logo">Makase - macOS Developer Environment Setup</h1>
-            <p class="subtitle">Like omakase dining where you trust the chef's expertise, Makase curates and installs 70+ development tools and applications for the perfect macOS developer environment</p>
+            <h1><img src="sushi-logo.svg" alt="Macose Logo" class="title-logo">Macose - macOS Developer Environment Setup</h1>
+            <p class="subtitle">Like omacose dining where you trust the chef's expertise, Macose curates and installs 70+ development tools and applications for the perfect macOS developer environment</p>
         </header>
         
         <div class="quick-start">
@@ -469,7 +469,7 @@
                 curl -fsSL https://peek-tech.github.io/devenv-setup/install | bash
                 <button class="copy-btn" onclick="copyToClipboard('curl -fsSL https://peek-tech.github.io/devenv-setup/install | bash')">Copy</button>
             </div>
-            <p><em>The installer downloads the repository to <code>~/.local/share/makase</code> and executes 70+ installation scripts automatically based on a JSON manifest.</em></p>
+            <p><em>The installer downloads the repository to <code>~/.local/share/macose</code> and executes 70+ installation scripts automatically based on a JSON manifest.</em></p>
         </div>
         
         <div class="warning-box">
@@ -509,7 +509,7 @@
                 <h3><span class="emoji">🌈</span> Catppuccin Theming</h3>
                 <p>Unified theming across all applications</p>
                 <ul>
-                    <li>CLI theme management (makase)</li>
+                    <li>CLI theme management (macose)</li>
                     <li>Ghostty, VSCode, Git, Neovim themes</li>
                     <li>Font management across apps</li>
                     <li>Dark and light variants</li>
@@ -658,17 +658,17 @@
                 
                 <div class="custom-selection">
                     <h3>Theme Management CLI</h3>
-                    <p>Includes the <code>makase</code> CLI tool for centralized theme and font management:</p>
+                    <p>Includes the <code>macose</code> CLI tool for centralized theme and font management:</p>
                     <div class="command">
 # Theme management
-makase theme list           # Show available themes
-makase theme set &lt;theme&gt;    # Switch themes across all apps
-makase theme current        # Show current theme
+macose theme list           # Show available themes
+macose theme set &lt;theme&gt;    # Switch themes across all apps
+macose theme current        # Show current theme
 
 # Font management  
-makase font list           # Open Font Book for browsing
-makase font set "Font"     # Set font across supported apps
-                        <button class="copy-btn" onclick="copyToClipboard('makase theme list')">Copy</button>
+macose font list           # Open Font Book for browsing
+macose font set "Font"     # Set font across supported apps
+                        <button class="copy-btn" onclick="copyToClipboard('macose theme list')">Copy</button>
                     </div>
                 </div>
                 
@@ -676,11 +676,11 @@ makase font set "Font"     # Set font across supported apps
                     <h3>Manual Script Execution</h3>
                     <p>All scripts can be run individually for customization:</p>
                     <div class="command">
-cd ~/.local/share/makase/scripts
+cd ~/.local/share/macose/scripts
 bash apps/neovim.sh         # Install and configure Neovim
 bash tools/starship.sh      # Install Starship prompt
 bash languages/nvm.sh       # Install Node.js via NVM
-                        <button class="copy-btn" onclick='copyToClipboard("cd ~/.local/share/makase/scripts\nbash apps/neovim.sh")'>Copy</button>
+                        <button class="copy-btn" onclick='copyToClipboard("cd ~/.local/share/macose/scripts\nbash apps/neovim.sh")'>Copy</button>
                     </div>
                 </div>
             </div>

@@ -1,7 +1,7 @@
-# Claude Code Context - Makase Development Environment
+# Claude Code Context - Macose Development Environment
 
 ## Project Overview
-Makase is a macOS developer environment setup tool (previously called "Omamacy", originally "Omacy"). Like omakase dining where you trust the chef's expertise, Makase provides **automated** installation and configuration of development tools with centralized theme and font management.
+Macose is a macOS developer environment setup tool (previously called "Omamacy", originally "Omacy"). Like omacose dining where you trust the chef's expertise, Macose provides **automated** installation and configuration of development tools with centralized theme and font management.
 
 ### Installation Requirements
 The installation process is **automated** but requires user attention for:
@@ -34,15 +34,15 @@ The installer uses a **manifest-driven approach** with automated script executio
 The project implements a **delegation pattern** for theme management that preserves user customizations while maintaining centralized control.
 
 #### Key Components:
-- **CLI Tool**: `/Users/james/.claude/devenv-setup/bin/makase` - Main interface for theme/font management
+- **CLI Tool**: `/Users/james/.claude/devenv-setup/bin/macose` - Main interface for theme/font management
 - **Theme Scripts**: `/Users/james/.claude/devenv-setup/scripts/themes.sh` - Installation and setup
 - **Theme Configs**: `/Users/james/.claude/devenv-setup/themes/` - Theme configuration files
-- **User Config**: `~/.config/makase/` - User-specific configurations
+- **User Config**: `~/.config/macose/` - User-specific configurations
 
 #### Delegation Pattern:
 Individual app scripts respond to environment variables:
-- `MAKASE_APPLY_THEME_ONLY="theme-name"` - Apply only theme settings
-- `MAKASE_APPLY_FONT_ONLY="font-name"` - Apply only font settings
+- `MACOSE_APPLY_THEME_ONLY="theme-name"` - Apply only theme settings
+- `MACOSE_APPLY_FONT_ONLY="font-name"` - Apply only font settings
 
 #### Supported Applications:
 - **Ghostty** (terminal): `/Users/james/.claude/devenv-setup/scripts/apps/ghostty.sh`
@@ -61,8 +61,8 @@ Centralized font management across applications that support font configuration.
 - **VSCode** - Editor font configuration
 
 #### Commands:
-- `makase font list` - Opens macOS Font Book for browsing
-- `makase font set "Font Name"` - Applies font to supported applications
+- `macose font list` - Opens macOS Font Book for browsing
+- `macose font set "Font Name"` - Applies font to supported applications
 
 ### Technical Implementation Details
 
@@ -139,19 +139,19 @@ themes/
 ### CLI Commands
 
 #### Theme Management:
-- `makase theme list` - Show available themes
-- `makase theme current` - Show current theme
-- `makase theme set <theme>` - Switch to specified theme
+- `macose theme list` - Show available themes
+- `macose theme current` - Show current theme
+- `macose theme set <theme>` - Switch to specified theme
 
 #### Font Management:
-- `makase font list` - Open Font Book for browsing
-- `makase font set "<font>"` - Set font for supported applications
+- `macose font list` - Open Font Book for browsing
+- `macose font set "<font>"` - Set font for supported applications
 
 #### Examples:
 ```bash
-makase theme set catppuccin-latte
-makase font set "JetBrains Mono Nerd Font"
-makase font set "SF Mono"
+macose theme set catppuccin-latte
+macose font set "JetBrains Mono Nerd Font"
+macose font set "SF Mono"
 ```
 
 ### Recent Architectural Decisions
@@ -162,7 +162,7 @@ The original architecture moved theme configurations into individual install scr
 #### Solution Implemented:
 1. **Delegation Pattern**: Individual scripts handle their own configs but respond to env vars for theme-only updates
 2. **Intelligent Parsing**: Only theme/font-specific settings are updated, preserving user customizations
-3. **Centralized Control**: `makase` CLI maintains control over theme/font switching
+3. **Centralized Control**: `macose` CLI maintains control over theme/font switching
 4. **Font Management**: Similar delegation pattern for font management across applications
 
 ### Key Files Created/Modified:
@@ -172,7 +172,7 @@ The original architecture moved theme configurations into individual install scr
 - `/Users/james/.claude/devenv-setup/themes/catppuccin-mocha/tmux.conf` - Developer-friendly tmux config
 
 #### Enhanced Scripts:
-All app scripts now support `MAKASE_APPLY_THEME_ONLY` and `MAKASE_APPLY_FONT_ONLY` environment variables for delegation-based updates.
+All app scripts now support `MACOSE_APPLY_THEME_ONLY` and `MACOSE_APPLY_FONT_ONLY` environment variables for delegation-based updates.
 
 ### Development Commands
 
