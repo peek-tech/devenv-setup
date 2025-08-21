@@ -254,8 +254,8 @@ tty_prompt() {
     local default="$2"
     local var_name="$3"
     
-    # If not a TTY or in non-interactive mode, use default
-    if [ ! -t 0 ] || [ "$MAKASE_NON_INTERACTIVE" = "1" ]; then
+    # If explicitly in non-interactive mode, use default
+    if [ "$MAKASE_NON_INTERACTIVE" = "1" ]; then
         eval "$var_name='$default'"
         printf "→ %s: %s (auto-selected)\n" "$prompt" "$default" >&2
         return 0
@@ -269,7 +269,13 @@ tty_prompt() {
         display_prompt="$prompt: "
     fi
     
-    read -p "$display_prompt" response
+    # If stdin is not a TTY (like when running from curl | bash), use /dev/tty
+    if [ ! -t 0 ]; then
+        printf "%s" "$display_prompt" >&2
+        read response </dev/tty
+    else
+        read -p "$display_prompt" response
+    fi
     
     # Use default if empty response
     if [ -z "$response" ] && [ -n "$default" ]; then
