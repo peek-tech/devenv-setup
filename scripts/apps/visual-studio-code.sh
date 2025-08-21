@@ -95,7 +95,7 @@ prompt_user_for_config() {
     print_info "Visual Studio Code is installed. Would you like to configure it now?"
     print_info "This will install essential extensions and configure settings."
     
-    echo ""
+    printf "\n" >&2
     local configure_choice
     tty_prompt "Configure VSCode? (y/N)" "N" configure_choice
     

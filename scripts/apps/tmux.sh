@@ -187,7 +187,7 @@ install_tmux_plugins() {
 
 # Setup automatic tmux session management
 setup_tmux_auto_start() {
-    echo ""
+    printf "\n" >&2
     local auto_start
     tty_prompt "Do you want tmux to auto-start/attach when opening new terminals? (y/N)" "n" auto_start
     

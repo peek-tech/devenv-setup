@@ -9,19 +9,19 @@ source "$SCRIPT_DIR/../lib/common.sh"
 
 # Configuration functions
 print_config_header() {
-    echo -e "${BLUE}"
-    echo "╔══════════════════════════════════════════════════════════════════════════════╗"
-    echo "║                           🚀 Omamacy Neovim Setup                           ║"
-    echo "║                     Configure Neovim for Development                        ║"
-    echo "╚══════════════════════════════════════════════════════════════════════════════╝"
-    echo -e "${NC}"
+    printf "${BLUE}" >&2
+    printf "╔══════════════════════════════════════════════════════════════════════════════╗\n" >&2
+    printf "║                           🚀 Omamacy Neovim Setup                           ║\n" >&2
+    printf "║                     Configure Neovim for Development                        ║\n" >&2
+    printf "╚══════════════════════════════════════════════════════════════════════════════╝\n" >&2
+    printf "${NC}" >&2
 }
 
 # Check if nvim config already exists
 check_existing_config() {
     if [ -d "$HOME/.config/nvim" ] && [ -f "$HOME/.config/nvim/init.lua" ]; then
         print_warning "Neovim configuration already exists at ~/.config/nvim"
-        echo ""
+        printf "\n" >&2
         local replace_config
         tty_prompt "Do you want to backup and replace it? (y/N)" "N" replace_config
         if [[ ! $replace_config =~ ^[Yy]$ ]]; then
@@ -40,19 +40,19 @@ check_existing_config() {
 
 # Show configuration options
 show_config_options() {
-    echo ""
+    printf "\n" >&2
     print_info "Choose a Neovim configuration:"
-    echo ""
-    echo "  1) LazyVim - Modern Neovim config with sensible defaults"
-    echo "  2) AstroNvim - Community-driven config with great aesthetics"
-    echo "  3) NvChad - Fast and minimal config with beautiful UI"
-    echo "  4) LunarVim - IDE-like experience with extensive features"
-    echo "  5) Custom Config - Follow the medium.com guide for manual setup"
-    echo "  6) Exit - Keep current configuration"
-    echo ""
-    echo "  Or provide a git URL for a custom distribution"
-    echo "    (Repository must contain a 'neovim/' directory with your config)"
-    echo ""
+    printf "\n" >&2
+    printf "  1) LazyVim - Modern Neovim config with sensible defaults\n" >&2
+    printf "  2) AstroNvim - Community-driven config with great aesthetics\n" >&2
+    printf "  3) NvChad - Fast and minimal config with beautiful UI\n" >&2
+    printf "  4) LunarVim - IDE-like experience with extensive features\n" >&2
+    printf "  5) Custom Config - Follow the medium.com guide for manual setup\n" >&2
+    printf "  6) Exit - Keep current configuration\n" >&2
+    printf "\n" >&2
+    printf "  Or provide a git URL for a custom distribution\n" >&2
+    printf "    (Repository must contain a 'neovim/' directory with your config)\n" >&2
+    printf "\n" >&2
 }
 
 # Install LazyVim
@@ -410,9 +410,9 @@ EOF
 
 # Prompt user for configuration
 prompt_user_for_config() {
-    echo ""
+    printf "\n" >&2
     print_info "Neovim is installed. Would you like to configure it now?"
-    echo ""
+    printf "\n" >&2
     local configure_choice
     tty_prompt "Configure Neovim? (y/N)" "N" configure_choice
     
@@ -474,7 +474,7 @@ setup_neovim_config() {
         esac
     fi
     
-    echo ""
+    printf "\n" >&2
     print_status "Neovim configuration complete!"
     
     # Add tmux navigation plugin to any configuration

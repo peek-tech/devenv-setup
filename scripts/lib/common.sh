@@ -61,42 +61,43 @@ else
 fi
 
 # Print functions - always use colors when available
+# All user-visible output goes to stderr for curl|bash compatibility
 print_status() {
-    printf "${GREEN}✅${NC} %s\n" "$1"
+    printf "${GREEN}✅${NC} %s\n" "$1" >&2
 }
 
 print_info() {
-    printf "${BLUE}ℹ️${NC} %s\n" "$1"
+    printf "${BLUE}ℹ️${NC} %s\n" "$1" >&2
 }
 
 print_warning() {
-    printf "${YELLOW}⚠️${NC} %s\n" "$1"
+    printf "${YELLOW}⚠️${NC} %s\n" "$1" >&2
 }
 
 print_error() {
-    printf "${RED}❌${NC} %s\n" "$1"
+    printf "${RED}❌${NC} %s\n" "$1" >&2
 }
 
 print_section() {
-    echo ""
-    printf "${CYAN}===============================================${NC}\n"
-    printf "${CYAN}%s${NC}\n" "$1"
-    printf "${CYAN}===============================================${NC}\n"
+    printf "" >&2
+    printf "${CYAN}===============================================${NC}\n" >&2
+    printf "${CYAN}%s${NC}\n" "$1" >&2
+    printf "${CYAN}===============================================${NC}\n" >&2
 }
 
 print_header() {
-    echo ""
-    printf "${CYAN}### %s ###${NC}\n" "$1"
+    printf "\n" >&2
+    printf "${CYAN}### %s ###${NC}\n" "$1" >&2
 }
 
 print_banner() {
-    printf "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}\n"
-    printf "${CYAN}%s${NC}\n" "$1"
-    printf "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}\n"
+    printf "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}\n" >&2
+    printf "${CYAN}%s${NC}\n" "$1" >&2
+    printf "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}\n" >&2
 }
 
 print_br() {
-    printf "${CYAN}────────────────────────────────────────────────────────────────────────────────${NC}\n"
+    printf "${CYAN}────────────────────────────────────────────────────────────────────────────────${NC}\n" >&2
 }
 
 # Optional: Inform about non-interactive mode for prompts
@@ -256,7 +257,7 @@ tty_prompt() {
     # If not a TTY or in non-interactive mode, use default
     if [ ! -t 0 ] || [ "$OMAMACY_NON_INTERACTIVE" = "1" ]; then
         eval "$var_name='$default'"
-        echo "→ $prompt: $default (auto-selected)"
+        printf "→ %s: %s (auto-selected)\n" "$prompt" "$default" >&2
         return 0
     fi
     

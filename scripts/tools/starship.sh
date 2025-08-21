@@ -233,7 +233,7 @@ main() {
     fi
     
     # Ask if user wants to use starship as their prompt
-    echo ""
+    printf "\n" >&2
     local use_as_prompt
     tty_prompt "Do you want to use Starship as your shell prompt? (Y/n)" "y" use_as_prompt
     

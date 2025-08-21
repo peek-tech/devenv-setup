@@ -18,7 +18,7 @@ main() {
     print_info "This will modify system preferences and may require admin privileges."
     
     # Confirm with user
-    echo ""
+    printf "\n" >&2
     local apply_defaults
     tty_prompt "Apply macOS system defaults? (Y/n)" "y" apply_defaults
     if [[ ! $apply_defaults =~ ^[Yy]$ ]]; then
@@ -151,10 +151,22 @@ main() {
     
     # Enable developer menu
     print_info "Enabling Safari developer features..."
-    defaults write com.apple.Safari IncludeDevelopMenu -bool true
-    defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true
+    # Safari is sandboxed - write to the actual plist file instead of using defaults
+    if [ -f ~/Library/Preferences/com.apple.Safari.plist ]; then
+        # Use PlistBuddy for Safari preferences (works with sandboxed apps)
+        /usr/libexec/PlistBuddy -c "Set :IncludeDevelopMenu true" ~/Library/Preferences/com.apple.Safari.plist 2>/dev/null || \
+        /usr/libexec/PlistBuddy -c "Add :IncludeDevelopMenu bool true" ~/Library/Preferences/com.apple.Safari.plist 2>/dev/null
+        
+        /usr/libexec/PlistBuddy -c "Set :WebKitDeveloperExtrasEnabledPreferenceKey true" ~/Library/Preferences/com.apple.Safari.plist 2>/dev/null || \
+        /usr/libexec/PlistBuddy -c "Add :WebKitDeveloperExtrasEnabledPreferenceKey bool true" ~/Library/Preferences/com.apple.Safari.plist 2>/dev/null
+        
+        /usr/libexec/PlistBuddy -c "Set :\"com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled\" true" ~/Library/Preferences/com.apple.Safari.plist 2>/dev/null || \
+        /usr/libexec/PlistBuddy -c "Add :\"com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled\" bool true" ~/Library/Preferences/com.apple.Safari.plist 2>/dev/null
+    else
+        print_warning "Safari preferences not found - Safari may need to be launched once first"
+    fi
+    # This one can still use defaults as it's a global domain
     defaults write NSGlobalDomain WebKitDeveloperExtras -bool true
-    defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled -bool true
     
     print_header "Energy & Performance"
     

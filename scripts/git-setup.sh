@@ -136,20 +136,20 @@ show_github_setup_instructions() {
     local ssh_key="$HOME/.ssh/github"
     
     print_warning "📋 GitHub SSH key needs to be added to your account:"
-    echo ""
+    printf "\n" >&2
     
     # Read the key content and display it prominently
     if [ -f "${ssh_key}.pub" ]; then
         local key_content=$(cat "${ssh_key}.pub")
         print_banner "$key_content"
-        echo ""
+        printf "\n" >&2
         print_info "☝️  Copy the ENTIRE key above (including ssh-ed25519 at the beginning)"
     else
         print_error "SSH key file not found: ${ssh_key}.pub"
         return 1
     fi
     
-    echo ""
+    printf "\n" >&2
     print_info "To complete GitHub setup:"
     print_info "1. Copy the ENTIRE key above (including ssh-ed25519)"
     print_info "2. Open in browser: https://github.com/settings/ssh/new"

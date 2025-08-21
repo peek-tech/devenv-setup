@@ -100,7 +100,7 @@ setup_claude_config() {
         fi
     else
         # No existing config - ask if user wants to set one up
-        echo ""
+        printf "\n" >&2
         print_info "Claude Code can be configured with custom agents and MCP servers"
         
         local want_config

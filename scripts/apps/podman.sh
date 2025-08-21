@@ -17,7 +17,7 @@ install_podman() {
         print_info "If a GRAPHICAL popup appears asking to install Rosetta 2:"
         print_info "👉 Click 'Install' in the popup window"
         print_info "This is required for x86_64 container compatibility"
-        echo ""
+        printf "\n" >&2
     fi
     
     # Install Podman

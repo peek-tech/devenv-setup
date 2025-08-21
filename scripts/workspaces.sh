@@ -166,8 +166,8 @@ process_json_file() {
 setup_workspaces() {
     print_info "Setting up development workspaces..."
     
-    # Create base Workspaces directory
-    local workspaces_dir="$HOME/Workspaces"
+    # Create base workspaces directory
+    local workspaces_dir="$HOME/workspaces"
     if [ ! -d "$workspaces_dir" ]; then
         mkdir -p "$workspaces_dir"
         print_status "Created base Workspaces directory: $workspaces_dir"
@@ -179,7 +179,7 @@ setup_workspaces() {
     print_info "You can provide JSON files with workspace configurations."
     print_info "JSON format: Object with folder names as keys and arrays of git repos as values"
     print_info 'Example: {"Work": ["git@github.com:company/project1.git", "git@github.com:company/project2.git"]}'
-    echo ""
+    printf "\n" >&2
     
     local json_count=0
     while true; do
@@ -198,7 +198,7 @@ setup_workspaces() {
                 print_warning "Failed to process JSON file $json_url, but continuing..."
             fi
             
-            echo ""
+            printf "\n" >&2
         else
             print_warning "No TTY available, skipping workspace setup"
             break

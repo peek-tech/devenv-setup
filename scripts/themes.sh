@@ -42,16 +42,6 @@ install_themes_system() {
         print_warning "Theme configurations not found in project"
     fi
     
-    # Install omamacy CLI tool
-    if [ -f "$PROJECT_ROOT/bin/omamacy" ]; then
-        print_info "Installing omamacy CLI tool..."
-        sudo cp "$PROJECT_ROOT/bin/omamacy" "$BIN_DIR/omamacy"
-        sudo chmod +x "$BIN_DIR/omamacy"
-        print_status "Omamacy CLI tool installed to $BIN_DIR/omamacy"
-    else
-        print_warning "Omamacy CLI tool not found in project"
-    fi
-    
     # Set default theme
     set_default_theme
 }
