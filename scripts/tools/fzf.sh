@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omamacy - FZF Installation
+# Macose - FZF Installation
 # Fuzzy finder with shell integration
 
 # Load common functions
@@ -10,7 +10,7 @@ source "$SCRIPT_DIR/../lib/common.sh"
 # Apply theme to existing FZF configuration
 apply_fzf_theme() {
     local theme_name="$1"
-    local themes_dir="$HOME/.config/omamacy/themes"
+    local themes_dir="$HOME/.config/makase/themes"
     local theme_file="$themes_dir/$theme_name/fzf.conf"
     
     if [ ! -f "$theme_file" ]; then
@@ -83,8 +83,8 @@ get_shell_config_file() {
 # Main installation
 main() {
     # Check for theme-only mode
-    if [ -n "$OMAMACY_APPLY_THEME_ONLY" ]; then
-        apply_fzf_theme "$OMAMACY_APPLY_THEME_ONLY"
+    if [ -n "$MACOSE_APPLY_THEME_ONLY" ]; then
+        apply_fzf_theme "$MACOSE_APPLY_THEME_ONLY"
         return $?
     fi
     

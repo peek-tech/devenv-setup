@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omamacy - Zoxide Installation
+# Macose - Zoxide Installation
 # Smart directory navigation with shell integration
 
 # Load common functions

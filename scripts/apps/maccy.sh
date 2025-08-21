@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omamacy - Maccy Installation
+# Macose - Maccy Installation
 # Lightweight clipboard manager for macOS
 
 # Load common functions

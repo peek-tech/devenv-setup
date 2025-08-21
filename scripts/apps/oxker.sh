@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omamacy - Oxker Installation
+# Macose - Oxker Installation
 # TUI for Docker/container management
 
 # Load common functions

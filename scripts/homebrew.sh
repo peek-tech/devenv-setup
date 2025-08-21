@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omamacy - Homebrew Installation
+# Macose - Homebrew Installation
 # Installs Homebrew package manager for macOS
 
 # Load common functions

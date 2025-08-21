@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omamacy - macOS System Defaults
+# Macose - macOS System Defaults
 # Configure macOS with reasonable developer-friendly defaults
 
 # Load common functions

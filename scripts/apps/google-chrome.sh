@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omamacy - Google Chrome Installation
+# Macose - Google Chrome Installation
 # Web browser
 
 # Load common functions

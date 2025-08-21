@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omamacy - KeyCastr Installation
+# Macose - KeyCastr Installation
 # Open-source keystroke visualizer for macOS
 
 # Load common functions

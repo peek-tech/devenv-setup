@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omamacy - Microsoft Edge Installation
+# Macose - Microsoft Edge Installation
 # Web browser
 
 # Load common functions

@@ -1,15 +1,15 @@
 #!/bin/bash
 
-# Omamacy - Theme Management CLI
-# Usage: omamacy theme <command>
+# Macose - Theme Management CLI
+# Usage: macose theme <command>
 
 VERSION="2.1.0"
-OMAMACY_DIR="$HOME/.local/share/omamacy"
-OMAMACY_CONFIG_DIR="$HOME/.config/omamacy"
-THEMES_DIR="$OMAMACY_CONFIG_DIR/themes"
-CURRENT_THEME_FILE="$OMAMACY_CONFIG_DIR/current-theme"
-LAST_UPDATE_FILE="$OMAMACY_CONFIG_DIR/last_update"
-UPDATE_HISTORY_FILE="$OMAMACY_CONFIG_DIR/update_history.json"
+MACOSE_DIR="$HOME/.local/share/macose"
+MACOSE_CONFIG_DIR="$HOME/.config/macose"
+THEMES_DIR="$MACOSE_CONFIG_DIR/themes"
+CURRENT_THEME_FILE="$MACOSE_CONFIG_DIR/current-theme"
+LAST_UPDATE_FILE="$MACOSE_CONFIG_DIR/last_update"
+UPDATE_HISTORY_FILE="$MACOSE_CONFIG_DIR/update_history.json"
 
 # Colors for output
 RED='\033[0;31m'
@@ -22,7 +22,7 @@ NC='\033[0m' # No Color
 print_header() {
     echo ""
     echo -e "${CYAN}╔══════════════════════════════════════════════════════════╗${NC}"
-    echo -e "${CYAN}║                    Omamacy v${VERSION}                    ║${NC}"
+    echo -e "${CYAN}║                    Macose v${VERSION}                     ║${NC}"
     echo -e "${CYAN}║              macOS Developer Environment                 ║${NC}"
     echo -e "${CYAN}╚══════════════════════════════════════════════════════════╝${NC}"
     echo ""
@@ -103,7 +103,7 @@ apply_theme() {
     
     print_info "Applying theme: $theme"
     
-    # Find the scripts directory (assuming omamacy is in /usr/local/bin and scripts are relative)
+    # Find the scripts directory (assuming macose is in /usr/local/bin and scripts are relative)
     local scripts_base_dir
     if [ -d "/Users/$(whoami)/.claude/devenv-setup/scripts" ]; then
         scripts_base_dir="/Users/$(whoami)/.claude/devenv-setup/scripts"
@@ -136,7 +136,7 @@ apply_theme() {
         if [ -f "$script_path" ]; then
             print_info "Applying $theme theme to $app_name..."
             # Set environment variable and call script
-            if OMAMACY_APPLY_THEME_ONLY="$theme" "$script_path" 2>/dev/null; then
+            if MACOSE_APPLY_THEME_ONLY="$theme" "$script_path" 2>/dev/null; then
                 print_status "$app_name theme applied via delegation"
                 success_count=$((success_count + 1))
             else
@@ -219,7 +219,7 @@ list_fonts() {
     
     print_status "Font Book opened successfully"
     print_info "Copy the exact font name from Font Book to use with:"
-    print_info "  omamacy font set \"<Font Name>\""
+    print_info "  macose font set \"<Font Name>\""
 }
 
 # Apply font to applications using delegation pattern
@@ -260,7 +260,7 @@ apply_font() {
         if [ -f "$script_path" ]; then
             print_info "Applying font '$font' to $app_name..."
             # Set environment variable and call script
-            if OMAMACY_APPLY_FONT_ONLY="$font" "$script_path" 2>/dev/null; then
+            if MACOSE_APPLY_FONT_ONLY="$font" "$script_path" 2>/dev/null; then
                 print_status "$app_name font applied via delegation"
                 success_count=$((success_count + 1))
             else
@@ -278,7 +278,7 @@ apply_font() {
 
 # Check for available updates
 check_updates() {
-    local updates_dir="$OMAMACY_DIR/updates"
+    local updates_dir="$MACOSE_DIR/updates"
     local last_update=0
     
     if [ -f "$LAST_UPDATE_FILE" ]; then
@@ -319,7 +319,7 @@ check_updates() {
 
 # List all updates
 list_updates() {
-    local updates_dir="$OMAMACY_DIR/updates"
+    local updates_dir="$MACOSE_DIR/updates"
     
     print_info "Available updates:"
     echo ""
@@ -357,7 +357,7 @@ show_update_history() {
 
 # Run updates
 run_updates() {
-    local updates_dir="$OMAMACY_DIR/updates"
+    local updates_dir="$MACOSE_DIR/updates"
     local last_update=0
     
     if [ -f "$LAST_UPDATE_FILE" ]; then
@@ -404,7 +404,7 @@ run_updates() {
             print_status "Update $filename completed successfully"
         else
             print_error "Update $filename failed"
-            print_info "Fix the issue and run 'omamacy upgrade' again"
+            print_info "Fix the issue and run 'macose upgrade' again"
             return 1
         fi
         echo ""
@@ -441,7 +441,7 @@ handle_upgrade() {
             ;;
         *)
             print_error "Unknown upgrade option: $subcommand"
-            echo "Usage: omamacy upgrade [--check|--list|--history]"
+            echo "Usage: macose upgrade [--check|--list|--history]"
             ;;
     esac
 }
@@ -449,7 +449,7 @@ handle_upgrade() {
 # Show help
 show_help() {
     print_header
-    echo "Usage: omamacy <command> [options]"
+    echo "Usage: macose <command> [options]"
     echo ""
     echo "Theme Commands:"
     echo "  theme list         List available themes"
@@ -470,18 +470,18 @@ show_help() {
     echo "  help               Show this help message"
     echo ""
     echo "Examples:"
-    echo "  omamacy theme list"
-    echo "  omamacy theme set catppuccin-latte"
-    echo "  omamacy font set \"FiraCode Nerd Font\""
-    echo "  omamacy font set \"JetBrains Mono Nerd Font\""
-    echo "  omamacy upgrade"
+    echo "  macose theme list"
+    echo "  macose theme set catppuccin-latte"
+    echo "  macose font set \"FiraCode Nerd Font\""
+    echo "  macose font set \"JetBrains Mono Nerd Font\""
+    echo "  macose upgrade"
     echo ""
 }
 
 # Main command dispatcher
 main() {
     # Create config directory if it doesn't exist
-    mkdir -p "$OMAMACY_CONFIG_DIR"
+    mkdir -p "$MACOSE_CONFIG_DIR"
     
     case "${1:-}" in
         "theme")
@@ -497,8 +497,8 @@ main() {
                         apply_theme "$3"
                     else
                         print_error "Please specify a theme name"
-                        echo "Usage: omamacy theme set <theme-name>"
-                        echo "Run 'omamacy theme list' to see available themes"
+                        echo "Usage: macose theme set <theme-name>"
+                        echo "Run 'macose theme list' to see available themes"
                     fi
                     ;;
                 "help"|*)
@@ -516,9 +516,9 @@ main() {
                         apply_font "$3"
                     else
                         print_error "Please specify a font name"
-                        echo "Usage: omamacy font set <font-name>"
-                        echo "Example: omamacy font set \"JetBrains Mono Nerd Font\""
-                        echo "Run 'omamacy font list' to browse available fonts"
+                        echo "Usage: macose font set <font-name>"
+                        echo "Example: macose font set \"JetBrains Mono Nerd Font\""
+                        echo "Run 'macose font list' to browse available fonts"
                     fi
                     ;;
                 "help"|*)

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omamacy - Rectangle Installation
+# Macose - Rectangle Installation
 # Window management tool for macOS
 
 # Load common functions

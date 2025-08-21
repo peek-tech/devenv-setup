@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omamacy - just Installation
+# Macose - just Installation
 # Modern task runner and command organizer
 
 # Load common functions

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omamacy - NVM Installation
+# Macose - NVM Installation
 # Node Version Manager with Node 20
 
 # Load common functions

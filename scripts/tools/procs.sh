@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omamacy - Procs Installation
+# Macose - Procs Installation
 # Enhanced process viewer
 
 # Load common functions

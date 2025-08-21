@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omamacy - Themes System Installation
+# Macose - Themes System Installation
 # Installs the theming system and CLI tool
 
 # Load common functions
@@ -21,16 +21,16 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
 
 # Configuration
-OMAMACY_CONFIG_DIR="$HOME/.config/omamacy"
-THEMES_DIR="$OMAMACY_CONFIG_DIR/themes"
+MACOSE_CONFIG_DIR="$HOME/.config/macose"
+THEMES_DIR="$MACOSE_CONFIG_DIR/themes"
 BIN_DIR="/usr/local/bin"
 
 # Install themes system
 install_themes_system() {
-    print_info "Setting up Omamacy themes system..."
+    print_info "Setting up Macose themes system..."
     
     # Create config directories
-    mkdir -p "$OMAMACY_CONFIG_DIR"
+    mkdir -p "$MACOSE_CONFIG_DIR"
     mkdir -p "$THEMES_DIR"
     
     # Copy theme configurations
@@ -50,7 +50,7 @@ install_themes_system() {
 set_default_theme() {
     print_info "Setting Catppuccin Mocha as default theme..."
     
-    local current_theme_file="$OMAMACY_CONFIG_DIR/current-theme"
+    local current_theme_file="$MACOSE_CONFIG_DIR/current-theme"
     echo "catppuccin-mocha" > "$current_theme_file"
     
     # Apply default theme configurations
@@ -92,7 +92,7 @@ apply_default_configurations() {
         if [ -f "$script_path" ]; then
             print_info "Applying theme to $app_name..."
             # Set environment variable and call script
-            if OMAMACY_APPLY_THEME_ONLY="$default_theme" "$script_path" 2>/dev/null; then
+            if MACOSE_APPLY_THEME_ONLY="$default_theme" "$script_path" 2>/dev/null; then
                 print_status "Applied $app_name theme via delegation"
             else
                 print_warning "Failed to apply theme to $app_name (may not be installed yet)"
@@ -130,7 +130,7 @@ set_default_font() {
         if [ -f "$script_path" ]; then
             print_info "Applying font to $app_name..."
             # Set environment variable and call script
-            if OMAMACY_APPLY_FONT_ONLY="$default_font" "$script_path" 2>/dev/null; then
+            if MACOSE_APPLY_FONT_ONLY="$default_font" "$script_path" 2>/dev/null; then
                 print_status "Applied $app_name font via delegation"
             else
                 print_warning "Failed to apply font to $app_name (may not be installed yet)"

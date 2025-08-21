@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omamacy - tree Installation
+# Macose - tree Installation
 # Directory tree viewer
 
 # Load common functions

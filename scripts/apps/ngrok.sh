@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omamacy - ngrok Installation
+# Macose - ngrok Installation
 # Secure tunnels to localhost
 
 # Load common functions

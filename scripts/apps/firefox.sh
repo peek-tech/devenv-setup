@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omamacy - Firefox Installation
+# Macose - Firefox Installation
 # Web browser
 
 # Load common functions

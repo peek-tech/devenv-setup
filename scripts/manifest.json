@@ -1,14 +1,14 @@
 {
   "version": "2.0",
-  "description": "Omamacy installation script execution manifest",
+  "description": "Macose installation script execution manifest",
   "groups": {
     "core": {
       "description": "Core system setup (required)",
-      "scripts": ["preflight-checks.sh", "git-setup.sh"]
+      "scripts": ["preflight-checks.sh", "git-setup.sh", "macose-binary.sh"]
     },
     "tools": {
       "description": "Command line tools",
-      "scripts": ["tools/git.sh", "tools/gh.sh", "tools/wget.sh", "tools/tree.sh", "tools/ripgrep.sh", "tools/fd.sh", "tools/bat.sh", "tools/eza.sh", "tools/fzf.sh", "tools/delta.sh", "tools/dust.sh", "tools/procs.sh", "tools/sd.sh", "tools/tealdeer.sh", "tools/hyperfine.sh", "tools/just.sh", "tools/tokei.sh", "tools/zoxide.sh", "tools/starship.sh"]
+      "scripts": ["tools/git.sh", "tools/gh.sh", "tools/wget.sh", "tools/tree.sh", "tools/ripgrep.sh", "tools/fd.sh", "tools/bat.sh", "tools/eza.sh", "tools/fzf.sh", "tools/delta.sh", "tools/dust.sh", "tools/procs.sh", "tools/sd.sh", "tools/tealdeer.sh", "tools/hyperfine.sh", "tools/jq.sh", "tools/just.sh", "tools/tokei.sh", "tools/zoxide.sh", "tools/starship.sh"]
     },
     "languages": {
       "description": "Programming languages and version managers",
@@ -211,6 +211,12 @@
       "depends": []
     },
     {
+      "name": "tools/jq.sh",
+      "description": "JSON processor for command line",
+      "group": "tools",
+      "depends": []
+    },
+    {
       "name": "tools/just.sh",
       "description": "Modern task runner and command organizer",
       "group": "tools",
@@ -403,8 +409,8 @@
       "depends": []
     },
     {
-      "name": "omamacy-binary.sh",
-      "description": "Omamacy CLI tool for theme and font management",
+      "name": "macose-binary.sh",
+      "description": "Macose CLI tool for theme and font management",
       "group": "core",
       "depends": []
     }

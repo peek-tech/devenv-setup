@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omamacy - Git Setup  
+# Macose - Git Setup  
 # Configures git credentials and SSH for GitHub
 
 # Load common functions

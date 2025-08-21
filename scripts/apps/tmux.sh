@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omamacy - tmux Installation
+# Macose - tmux Installation
 # Terminal multiplexer with developer-friendly configuration
 
 # Load common functions
@@ -11,7 +11,7 @@ source "$SCRIPT_DIR/../lib/common.sh"
 apply_tmux_theme() {
     local theme_name="$1"
     local tmux_config="$HOME/.tmux.conf"
-    local themes_dir="$HOME/.config/omamacy/themes"
+    local themes_dir="$HOME/.config/makase/themes"
     local theme_file="$themes_dir/$theme_name/tmux.conf"
     
     # For now, tmux themes will be complete configs since it doesn't support includes
@@ -218,8 +218,8 @@ fi'
 # Main installation
 main() {
     # Check for theme-only mode
-    if [ -n "$OMAMACY_APPLY_THEME_ONLY" ]; then
-        apply_tmux_theme "$OMAMACY_APPLY_THEME_ONLY"
+    if [ -n "$MACOSE_APPLY_THEME_ONLY" ]; then
+        apply_tmux_theme "$MACOSE_APPLY_THEME_ONLY"
         return $?
     fi
     

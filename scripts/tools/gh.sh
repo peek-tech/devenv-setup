@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omamacy - GitHub CLI Installation
+# Macose - GitHub CLI Installation
 # GitHub command line interface
 
 # Load common functions

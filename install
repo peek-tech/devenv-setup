@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omamacy - macOS Developer Environment Setup
+# Makase - macOS Developer Environment Setup
 # Usage: curl -fsSL https://peek-tech.github.io/devenv-setup/install | bash
 # Options:
 #   --manifest <path>  Use custom manifest file
@@ -16,8 +16,8 @@ set -e
 
 # Repository configuration
 REPO_URL="https://github.com/peek-tech/devenv-setup.git"
-INSTALL_DIR="$HOME/.local/share/omamacy"
-CONFIG_DIR="$HOME/.config/omamacy"
+INSTALL_DIR="$HOME/.local/share/makase"
+CONFIG_DIR="$HOME/.config/makase"
 
 # Colors for output
 RED='\033[0;31m'
@@ -139,12 +139,19 @@ ensure_xcode_cli_tools() {
 
 # Download repository if not already present
 download_repository() {
-    # Handle migration from old location
+    # Handle migration from old locations
     OLD_INSTALL_DIR="$HOME/.omamacy"
+    OLD_XDG_INSTALL_DIR="$HOME/.local/share/omamacy"
+    
     if [ -d "$OLD_INSTALL_DIR" ] && [ ! -d "$INSTALL_DIR" ]; then
         print_info "Migrating from old installation location..."
         mkdir -p "$(dirname "$INSTALL_DIR")"
         mv "$OLD_INSTALL_DIR" "$INSTALL_DIR"
+        print_status "Migrated to new location: $INSTALL_DIR"
+    elif [ -d "$OLD_XDG_INSTALL_DIR" ] && [ ! -d "$INSTALL_DIR" ]; then
+        print_info "Migrating from old Omamacy installation location..."
+        mkdir -p "$(dirname "$INSTALL_DIR")"
+        mv "$OLD_XDG_INSTALL_DIR" "$INSTALL_DIR"
         print_status "Migrated to new location: $INSTALL_DIR"
     fi
 

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omamacy - Starship Installation
+# Macose - Starship Installation
 # Modern cross-shell prompt with theming support
 
 # Load common functions
@@ -11,7 +11,7 @@ source "$SCRIPT_DIR/../lib/common.sh"
 apply_starship_theme() {
     local theme_name="$1"
     local starship_config="$HOME/.config/starship.toml"
-    local themes_dir="$HOME/.config/omamacy/themes"
+    local themes_dir="$HOME/.config/makase/themes"
     local theme_file="$themes_dir/$theme_name/starship.toml"
     
     # For now, Starship themes will be complete configs since it doesn't support includes
@@ -219,8 +219,8 @@ fi'
 # Main installation
 main() {
     # Check for theme-only mode
-    if [ -n "$OMAMACY_APPLY_THEME_ONLY" ]; then
-        apply_starship_theme "$OMAMACY_APPLY_THEME_ONLY"
+    if [ -n "$MACOSE_APPLY_THEME_ONLY" ]; then
+        apply_starship_theme "$MACOSE_APPLY_THEME_ONLY"
         return $?
     fi
     

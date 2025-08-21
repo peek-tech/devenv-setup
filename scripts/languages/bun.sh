@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omamacy - Bun Installation
+# Macose - Bun Installation
 # Fast JavaScript runtime and package manager
 
 # Load common functions

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omamacy - Dust Installation
+# Macose - Dust Installation
 # Visual disk usage analyzer
 
 # Load common functions

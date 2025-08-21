@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omamacy - Podman Installation
+# Macose - Podman Installation
 # Container runtime with Docker compatibility
 
 # Load common functions

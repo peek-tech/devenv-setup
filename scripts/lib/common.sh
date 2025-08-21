@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omamacy - Common Library Functions
+# Macose - Common Library Functions
 # Shared functions for all installation scripts
 
 # Detect if colors should be used
@@ -104,7 +104,7 @@ print_br() {
 ensure_tty() {
     # Check if we need to use non-interactive mode for prompts
     if [ ! -t 0 ]; then
-        export OMAMACY_NON_INTERACTIVE=1
+        export MAKASE_NON_INTERACTIVE=1
     fi
 }
 
@@ -255,7 +255,7 @@ tty_prompt() {
     local var_name="$3"
     
     # If not a TTY or in non-interactive mode, use default
-    if [ ! -t 0 ] || [ "$OMAMACY_NON_INTERACTIVE" = "1" ]; then
+    if [ ! -t 0 ] || [ "$MAKASE_NON_INTERACTIVE" = "1" ]; then
         eval "$var_name='$default'"
         printf "→ %s: %s (auto-selected)\n" "$prompt" "$default" >&2
         return 0
@@ -288,7 +288,7 @@ run_individual_script() {
     local script_description="$2"
     
     # Skip header if running from main installer
-    if [ "$OMAMACY_FROM_INSTALLER" != "1" ]; then
+    if [ "$MAKASE_FROM_INSTALLER" != "1" ]; then
         print_section "$script_description"
         print_info "Script: $script_name"
     fi

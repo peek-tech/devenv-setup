@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omamacy - Claude Code Installation
+# Macose - Claude Code Installation
 # AI assistant command line tool
 
 # Load common functions
@@ -165,14 +165,14 @@ setup_claude_config() {
 # Main installation
 main() {
     # Handle theme-only application via delegation
-    if [ -n "$OMAMACY_APPLY_THEME_ONLY" ]; then
-        apply_claude_theme "$OMAMACY_APPLY_THEME_ONLY"
+    if [ -n "$MACOSE_APPLY_THEME_ONLY" ]; then
+        apply_claude_theme "$MACOSE_APPLY_THEME_ONLY"
         return $?
     fi
     
     # Handle font-only application via delegation
-    if [ -n "$OMAMACY_APPLY_FONT_ONLY" ]; then
-        apply_claude_font "$OMAMACY_APPLY_FONT_ONLY"
+    if [ -n "$MACOSE_APPLY_FONT_ONLY" ]; then
+        apply_claude_font "$MACOSE_APPLY_FONT_ONLY"
         return $?
     fi
     

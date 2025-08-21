@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omamacy - Twingate Installation
+# Macose - Twingate Installation
 # Zero Trust Network Access platform
 
 # Load common functions

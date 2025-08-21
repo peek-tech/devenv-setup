@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omamacy - Bat Installation
+# Macose - Bat Installation
 # Cat replacement with syntax highlighting
 
 # Load common functions
@@ -12,7 +12,7 @@ apply_bat_theme() {
     local theme_name="$1"
     local bat_config_dir="$HOME/.config/bat"
     local bat_config="$bat_config_dir/config"
-    local themes_dir="$HOME/.config/omamacy/themes"
+    local themes_dir="$HOME/.config/makase/themes"
     local theme_file="$themes_dir/$theme_name/bat.conf"
     
     if [ ! -f "$theme_file" ]; then
@@ -39,8 +39,8 @@ apply_bat_theme() {
 # Main installation
 main() {
     # Check for theme-only mode
-    if [ -n "$OMAMACY_APPLY_THEME_ONLY" ]; then
-        apply_bat_theme "$OMAMACY_APPLY_THEME_ONLY"
+    if [ -n "$MACOSE_APPLY_THEME_ONLY" ]; then
+        apply_bat_theme "$MACOSE_APPLY_THEME_ONLY"
         return $?
     fi
     

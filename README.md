@@ -1,6 +1,6 @@
-# Omamacy - macOS Developer Environment Setup
+# Makase - macOS Developer Environment Setup
 
-Automated and opinionated macOS developer environment installer with **70+ development tools** and applications. Sets up a complete development workstation with modern CLI tools, programming languages, editors, browsers, and productivity apps using a manifest-driven architecture.
+Automated and opinionated macOS developer environment installer with **70+ development tools** and applications. Like omakase dining where you trust the chef's expertise, Makase curates and installs a complete development workstation with modern CLI tools, programming languages, editors, browsers, and productivity apps using a manifest-driven architecture.
 
 ## Quick Start
 
@@ -8,7 +8,7 @@ Automated and opinionated macOS developer environment installer with **70+ devel
 curl -fsSL https://peek-tech.github.io/devenv-setup/install | bash
 ```
 
-The installer downloads the repository to `~/.local/share/omamacy` and executes installation scripts automatically based on a JSON manifest.
+The installer downloads the repository to `~/.local/share/makase` and executes installation scripts automatically based on a JSON manifest.
 
 ## ⚠️ Interactive Installation Required
 
@@ -145,25 +145,25 @@ The installer adds helpful aliases and integrations:
 
 ## Theme Management
 
-Includes the `omamacy` CLI tool for centralized theme and font management:
+Includes the `makase` CLI tool for centralized theme and font management:
 
 ```bash
 # Theme management
-omamacy theme list           # Show available themes
-omamacy theme set <theme>    # Switch themes across all apps
-omamacy theme current        # Show current theme
+makase theme list           # Show available themes
+makase theme set <theme>    # Switch themes across all apps
+makase theme current        # Show current theme
 
 # Font management  
-omamacy font list           # Open Font Book for browsing
-omamacy font set "Font"     # Set font across supported apps
+makase font list           # Open Font Book for browsing
+makase font set "Font"     # Set font across supported apps
 ```
 
 ## File Structure
 
 ```
-~/.local/share/omamacy/     # Repository and scripts
-~/.config/omamacy/          # User configuration and themes
-~/.local/omamacy/           # Claude Code configurations (if used)
+~/.local/share/makase/     # Repository and scripts
+~/.config/makase/          # User configuration and themes
+~/.local/makase/           # Claude Code configurations (if used)
 ```
 
 ## Manual Script Execution
@@ -171,7 +171,7 @@ omamacy font set "Font"     # Set font across supported apps
 All scripts can be run individually:
 
 ```bash
-cd ~/.local/share/omamacy/scripts
+cd ~/.local/share/makase/scripts
 bash apps/neovim.sh         # Install and configure Neovim
 bash tools/starship.sh      # Install Starship prompt
 bash languages/nvm.sh       # Install Node.js via NVM

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omamacy - Workspaces Setup
+# Macose - Workspaces Setup
 # Creates workspace directories and clones repositories from JSON files
 
 # Load common functions

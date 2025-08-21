@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omamacy - Python Development Environment
+# Macose - Python Development Environment
 # Python version manager (pyenv) with Poetry package manager
 
 # Load common functions

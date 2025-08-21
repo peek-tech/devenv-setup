@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omamacy - Go Installation
+# Macose - Go Installation
 # Go programming language
 
 # Load common functions

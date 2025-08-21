@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omamacy - Preflight Checks
+# Macose - Preflight Checks
 # Validates system prerequisites before installation
 
 # Load common functions

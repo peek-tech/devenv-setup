@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omamacy - Tokei Installation
+# Macose - Tokei Installation
 # Fast code statistics tool
 
 # Load common functions

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omamacy - hyperfine Installation
+# Macose - hyperfine Installation
 # Benchmarking tool for command performance
 
 # Load common functions

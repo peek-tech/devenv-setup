@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omamacy - sd Installation
+# Macose - sd Installation
 # Intuitive find and replace tool
 
 # Load common functions

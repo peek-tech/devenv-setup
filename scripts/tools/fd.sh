@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omamacy - fd Installation
+# Macose - fd Installation
 # User-friendly file search tool
 
 # Load common functions

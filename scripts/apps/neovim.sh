@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omamacy - Neovim Installation and Configuration
+# Macose - Neovim Installation and Configuration
 # Modern Vim-based editor with optional configuration setup
 
 # Load common functions
@@ -11,7 +11,7 @@ source "$SCRIPT_DIR/../lib/common.sh"
 print_config_header() {
     printf "${BLUE}" >&2
     printf "╔══════════════════════════════════════════════════════════════════════════════╗\n" >&2
-    printf "║                           🚀 Omamacy Neovim Setup                           ║\n" >&2
+    printf "║                           🚀 Macose Neovim Setup                            ║\n" >&2
     printf "║                     Configure Neovim for Development                        ║\n" >&2
     printf "╚══════════════════════════════════════════════════════════════════════════════╝\n" >&2
     printf "${NC}" >&2

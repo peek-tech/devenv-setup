@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omamacy - Visual Studio Code Installation and Configuration
+# Macose - Visual Studio Code Installation and Configuration
 # Code editor with extensions and configuration
 
 # Load common functions
@@ -12,7 +12,7 @@ source "$SCRIPT_DIR/../lib/common.sh"
 apply_vscode_theme() {
     local theme_name="$1"
     local vscode_settings="$HOME/Library/Application Support/Code/User/settings.json"
-    local themes_dir="$HOME/.config/omamacy/themes"
+    local themes_dir="$HOME/.config/makase/themes"
     local theme_file="$themes_dir/$theme_name/vscode.json"
     
     if [ ! -f "$vscode_settings" ]; then
@@ -155,14 +155,14 @@ configure_vscode_terminal_default() {
 # Setup VSCode configuration
 setup_vscode_config() {
     # Check for theme-only mode
-    if [ -n "$OMAMACY_APPLY_THEME_ONLY" ]; then
-        apply_vscode_theme "$OMAMACY_APPLY_THEME_ONLY"
+    if [ -n "$MACOSE_APPLY_THEME_ONLY" ]; then
+        apply_vscode_theme "$MACOSE_APPLY_THEME_ONLY"
         return $?
     fi
     
     # Check for font-only mode
-    if [ -n "$OMAMACY_APPLY_FONT_ONLY" ]; then
-        apply_vscode_font "$OMAMACY_APPLY_FONT_ONLY"
+    if [ -n "$MACOSE_APPLY_FONT_ONLY" ]; then
+        apply_vscode_font "$MACOSE_APPLY_FONT_ONLY"
         return $?
     fi
     

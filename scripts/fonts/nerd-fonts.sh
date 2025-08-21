@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omamacy - Nerd Fonts Installation
+# Macose - Nerd Fonts Installation
 # Programming fonts with icons and symbols
 
 # Load common functions

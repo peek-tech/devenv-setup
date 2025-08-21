@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omamacy - Google Drive Installation
+# Macose - Google Drive Installation
 # Google Drive for file sync and collaboration
 
 # Load common functions

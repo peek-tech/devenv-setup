@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omamacy - jq Installation
+# Macose - jq Installation
 # JSON processor and query tool
 
 # Load common functions

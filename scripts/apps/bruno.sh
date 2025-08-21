@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omamacy - Bruno Installation
+# Macose - Bruno Installation
 # API client for testing REST, GraphQL, and gRPC
 
 # Load common functions

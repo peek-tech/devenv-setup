@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omamacy - Slack Installation
+# Macose - Slack Installation
 # Team communication and collaboration platform
 
 # Load common functions

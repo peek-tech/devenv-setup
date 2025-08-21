@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omamacy - Git Installation
+# Macose - Git Installation
 # Version control system with helpful aliases
 
 # Load common functions

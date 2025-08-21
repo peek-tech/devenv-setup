@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omamacy - wget Installation
+# Macose - wget Installation
 # Network downloader
 
 # Load common functions

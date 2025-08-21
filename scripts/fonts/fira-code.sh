@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Omamacy - Fira Code Font Installation
+# Macose - Fira Code Font Installation
 # Coding font with ligatures
 
 # Load common functions
