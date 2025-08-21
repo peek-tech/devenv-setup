@@ -107,7 +107,7 @@ apply_vscode_theme() {
 apply_fzf_theme() {
     # Use awk to remove theme blocks while preserving other configurations
     awk '
-        /^# Omamacy FZF Theme/ { skip=1; next }
+        /^# Macose FZF Theme/ { skip=1; next }
         skip && /^export FZF_DEFAULT_OPTS/ { 
             while (getline > 0 && /\\$/) { }
             skip=0; next

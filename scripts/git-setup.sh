@@ -154,7 +154,7 @@ show_github_setup_instructions() {
     print_info "1. Copy the ENTIRE key above (including ssh-ed25519)"
     print_info "2. Open in browser: https://github.com/settings/ssh/new"
     print_info "3. Paste the key and give it a descriptive title"
-    print_info "   (e.g., 'MacBook Pro - Omamacy')"
+    print_info "   (e.g., 'MacBook Pro - Macose')"
     print_info "4. Press Enter here when done"
 }
 

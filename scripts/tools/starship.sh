@@ -53,7 +53,7 @@ configure_starship() {
     
     # Create starship configuration based on AntreasAntoniou's gist
     cat > "$starship_config" << 'EOF'
-# Omamacy Starship Configuration
+# Macose Starship Configuration
 # Based on https://gist.github.com/AntreasAntoniou/3bfe47d51e915e93517ce335c2b1f98b
 
 # Use a light bulb as the prompt symbol 💡, symbolizing creativity

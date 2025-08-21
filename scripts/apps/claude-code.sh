@@ -64,7 +64,7 @@ apply_claude_font() {
 
 # Claude Code configuration
 setup_claude_config() {
-    local config_dir="$HOME/.local/omamacy/claude-config"
+    local config_dir="$HOME/.local/macose/claude-config"
     
     # Check if config repo already exists
     if [ -d "$config_dir" ]; then
@@ -124,8 +124,8 @@ setup_claude_config() {
                 return 1
             fi
             
-            # Create omamacy directory if it doesn't exist
-            mkdir -p "$HOME/.local/omamacy"
+            # Create macose directory if it doesn't exist
+            mkdir -p "$HOME/.local/macose"
             
             # Clone the configuration repository
             print_info "Cloning Claude Code configuration repository..."

@@ -4,13 +4,13 @@
 # Description: Example update that adds new productivity tools
 # Version: 2.1.1
 
-OMAMACY_DIR="$HOME/.local/share/omamacy"
+MACOSE_DIR="$HOME/.local/share/macose"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 MANIFEST="$SCRIPT_DIR/manifests/20250119_manifest.json"
 
 # Source common functions if available
-if [ -f "$OMAMACY_DIR/scripts/lib/common.sh" ]; then
-    source "$OMAMACY_DIR/scripts/lib/common.sh"
+if [ -f "$MACOSE_DIR/scripts/lib/common.sh" ]; then
+    source "$MACOSE_DIR/scripts/lib/common.sh"
 else
     # Fallback print functions
     print_info() { echo "ℹ️ $1"; }
@@ -26,6 +26,6 @@ if [ ! -f "$MANIFEST" ]; then
 fi
 
 # Run installer with specific manifest in update mode
-bash "$OMAMACY_DIR/install" --manifest "$MANIFEST" --update-mode
+bash "$MACOSE_DIR/install" --manifest "$MANIFEST" --update-mode
 
 print_status "Update 20250119 completed successfully"

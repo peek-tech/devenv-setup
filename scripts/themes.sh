@@ -193,9 +193,9 @@ main() {
     install_themes_system
     
     print_status "Themes system installation complete!"
-    print_info "Use 'omamacy theme list' to see available themes"
-    print_info "Use 'omamacy theme set <theme-name>' to switch themes"
-    print_info "Use 'omamacy font set <font-name>' to change fonts"
+    print_info "Use 'macose theme list' to see available themes"
+    print_info "Use 'macose theme set <theme-name>' to switch themes"
+    print_info "Use 'macose font set <font-name>' to change fonts"
     print_info "Current theme: catppuccin-mocha"
     print_info "Default font: FiraCode Nerd Font"
 }

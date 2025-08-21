@@ -34,7 +34,7 @@ apply_fzf_theme() {
     # Remove existing FZF theme block
     local temp_config=$(mktemp)
     awk '
-        /^# Omamacy FZF Theme/ { skip=1; next }
+        /^# Macose FZF Theme/ { skip=1; next }
         skip && /^export FZF_DEFAULT_OPTS/ { 
             # Skip the export line and any continuation lines
             while (getline > 0 && /\\$/) { }
@@ -47,7 +47,7 @@ apply_fzf_theme() {
     
     # Add new theme
     echo "" >> "$temp_config"
-    echo "# Omamacy FZF Theme" >> "$temp_config"
+    echo "# Macose FZF Theme" >> "$temp_config"
     cat "$theme_file" >> "$temp_config"
     
     # Replace shell config

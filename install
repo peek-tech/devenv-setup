@@ -61,7 +61,7 @@ done
 print_header() {
     echo ""
     echo -e "${CYAN}╔══════════════════════════════════════════════════════════╗${NC}"
-    echo -e "${CYAN}║                    Omamacy v${VERSION}                    ║${NC}"
+    echo -e "${CYAN}║                    Macose v${VERSION}                    ║${NC}"
     echo -e "${CYAN}║              macOS Developer Environment                 ║${NC}"
     echo -e "${CYAN}╚══════════════════════════════════════════════════════════╝${NC}"
     echo ""
@@ -140,8 +140,8 @@ ensure_xcode_cli_tools() {
 # Download repository if not already present
 download_repository() {
     # Handle migration from old locations
-    OLD_INSTALL_DIR="$HOME/.omamacy"
-    OLD_XDG_INSTALL_DIR="$HOME/.local/share/omamacy"
+    OLD_INSTALL_DIR="$HOME/.macose"
+    OLD_XDG_INSTALL_DIR="$HOME/.local/share/macose"
     
     if [ -d "$OLD_INSTALL_DIR" ] && [ ! -d "$INSTALL_DIR" ]; then
         print_info "Migrating from old installation location..."
@@ -149,7 +149,7 @@ download_repository() {
         mv "$OLD_INSTALL_DIR" "$INSTALL_DIR"
         print_status "Migrated to new location: $INSTALL_DIR"
     elif [ -d "$OLD_XDG_INSTALL_DIR" ] && [ ! -d "$INSTALL_DIR" ]; then
-        print_info "Migrating from old Omamacy installation location..."
+        print_info "Migrating from old Macose installation location..."
         mkdir -p "$(dirname "$INSTALL_DIR")"
         mv "$OLD_XDG_INSTALL_DIR" "$INSTALL_DIR"
         print_status "Migrated to new location: $INSTALL_DIR"
@@ -177,7 +177,7 @@ download_repository() {
             print_warning "Existing directory is not a git repository, using as-is"
         fi
     else
-        print_info "Downloading Omamacy repository..."
+        print_info "Downloading Macose repository..."
         mkdir -p "$(dirname "$INSTALL_DIR")"
         git clone "$REPO_URL" "$INSTALL_DIR" || {
             print_error "Failed to clone repository from $REPO_URL"
@@ -354,7 +354,7 @@ run_manifest_scripts() {
         # Execute script with environment variable to suppress individual headers
         # Disable exit on error for individual script execution
         set +e
-        OMAMACY_FROM_INSTALLER=1 bash "$script_path"
+        MACOSE_FROM_INSTALLER=1 bash "$script_path"
         local script_exit_code=$?
         set -e
         
@@ -381,9 +381,9 @@ main() {
     local update_type="install"
     if [ "$UPDATE_MODE" = true ]; then
         update_type="update"
-        print_section "Running Omamacy Update"
+        print_section "Running Macose Update"
     else
-        print_section "Starting Omamacy Installation"
+        print_section "Starting Macose Installation"
         
         # Only run preflight checks if not in update mode
         # Ensure Xcode CLI Tools are available before any git operations
@@ -441,7 +441,7 @@ main() {
     log_update "$update_type" "$script_count scripts"
     
     print_section "Installation Complete"
-    print_status "Omamacy $update_type completed successfully!"
+    print_status "Macose $update_type completed successfully!"
     print_info "Executed $script_count script(s)"
     
     if [ "$UPDATE_MODE" != true ]; then

@@ -1,6 +1,6 @@
-# Omamacy Themes
+# Macose Themes
 
-This directory contains theme configurations for the Omamacy development environment, inspired by Omarchy's theming system.
+This directory contains theme configurations for the Macose development environment, inspired by Omarchy's theming system.
 
 ## Available Themes
 
@@ -22,20 +22,20 @@ Each theme includes configurations for:
 
 ## Usage
 
-Use the `omamacy` CLI tool to manage themes:
+Use the `macose` CLI tool to manage themes:
 
 ```bash
 # List available themes
-omamacy theme list
+macose theme list
 
 # Show current theme
-omamacy theme current
+macose theme current
 
 # Switch to a specific theme
-omamacy theme set catppuccin-latte
+macose theme set catppuccin-latte
 
 # Switch to dark theme
-omamacy theme set catppuccin-mocha
+macose theme set catppuccin-mocha
 ```
 
 ## Theme Structure
@@ -53,9 +53,9 @@ Each theme directory contains:
 ## Adding Custom Themes
 
 To add a custom theme:
-1. Create a new directory in `~/.config/omamacy/themes/`
+1. Create a new directory in `~/.config/macose/themes/`
 2. Add the required configuration files
-3. Use `omamacy theme set <theme-name>` to apply
+3. Use `macose theme set <theme-name>` to apply
 
 ## Notes
 

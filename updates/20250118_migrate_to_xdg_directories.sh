@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Update: 20250118_migrate_to_xdg_directories.sh
-# Description: Migrate Omamacy installation to XDG directory structure
+# Description: Migrate Macose installation to XDG directory structure
 # Version: 2.1.0
 
 # Colors for output
@@ -24,11 +24,11 @@ print_warning() {
 }
 
 # Define directories
-OLD_DIR="$HOME/.omamacy"
-NEW_DIR="$HOME/.local/share/omamacy"
-CONFIG_DIR="$HOME/.config/omamacy"
+OLD_DIR="$HOME/.macose"
+NEW_DIR="$HOME/.local/share/macose"
+CONFIG_DIR="$HOME/.config/macose"
 
-print_info "Migrating Omamacy to XDG directory structure..."
+print_info "Migrating Macose to XDG directory structure..."
 
 # Move installation if it exists in old location
 if [ -d "$OLD_DIR" ] && [ ! -d "$NEW_DIR" ]; then
@@ -58,14 +58,14 @@ if [ -f ~/.zshrc ]; then
     # Check if ~/.local/bin is in PATH
     if ! grep -q 'export PATH="$HOME/.local/bin:$PATH"' ~/.zshrc; then
         echo '' >> ~/.zshrc
-        echo '# Omamacy binary path' >> ~/.zshrc
+        echo '# Macose binary path' >> ~/.zshrc
         echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc
         print_status "Added ~/.local/bin to PATH in ~/.zshrc"
     fi
 fi
 
 # Migrate theme configuration if it exists
-OLD_THEME_FILE="$HOME/.config/omamacy/current-theme"
+OLD_THEME_FILE="$HOME/.config/macose/current-theme"
 if [ -f "$OLD_THEME_FILE" ]; then
     print_info "Theme configuration already in correct location"
 else

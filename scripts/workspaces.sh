@@ -75,7 +75,7 @@ process_json_file() {
     print_info "Processing JSON from: $json_url"
     
     # Download the JSON file
-    local temp_json="/tmp/omamacy_workspaces_$$.json"
+    local temp_json="/tmp/macose_workspaces_$$.json"
     if ! curl -fsSL "$json_url" -o "$temp_json" 2>/dev/null; then
         print_error "Failed to download JSON from $json_url"
         return 1
