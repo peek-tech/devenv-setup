@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Makase - macOS Developer Environment Setup
-# Usage: curl -fsSL https://peek-tech.github.io/devenv-setup/install | bash
+# Usage: curl -fsSL https://peek-tech.github.io/macose/install | bash
 # Options:
 #   --manifest <path>  Use custom manifest file
 #   --update-mode      Skip preflight checks (for upgrade system)
@@ -15,7 +15,7 @@ fi
 set -e
 
 # Repository configuration
-REPO_URL="https://github.com/peek-tech/devenv-setup.git"
+REPO_URL="https://github.com/peek-tech/macose.git"
 INSTALL_DIR="$HOME/.local/share/makase"
 CONFIG_DIR="$HOME/.config/makase"
 

@@ -105,8 +105,8 @@ apply_theme() {
     
     # Find the scripts directory (assuming macose is in /usr/local/bin and scripts are relative)
     local scripts_base_dir
-    if [ -d "/Users/$(whoami)/.claude/devenv-setup/scripts" ]; then
-        scripts_base_dir="/Users/$(whoami)/.claude/devenv-setup/scripts"
+    if [ -d "/Users/$(whoami)/.claude/macose/scripts" ]; then
+        scripts_base_dir="/Users/$(whoami)/.claude/macose/scripts"
     else
         print_error "Could not find scripts directory"
         return 1
@@ -235,8 +235,8 @@ apply_font() {
     
     # Find the scripts directory
     local scripts_base_dir
-    if [ -d "/Users/$(whoami)/.claude/devenv-setup/scripts" ]; then
-        scripts_base_dir="/Users/$(whoami)/.claude/devenv-setup/scripts"
+    if [ -d "/Users/$(whoami)/.claude/macose/scripts" ]; then
+        scripts_base_dir="/Users/$(whoami)/.claude/macose/scripts"
     else
         print_error "Could not find scripts directory"
         return 1

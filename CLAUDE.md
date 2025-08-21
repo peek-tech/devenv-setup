@@ -34,9 +34,9 @@ The installer uses a **manifest-driven approach** with automated script executio
 The project implements a **delegation pattern** for theme management that preserves user customizations while maintaining centralized control.
 
 #### Key Components:
-- **CLI Tool**: `/Users/james/.claude/devenv-setup/bin/macose` - Main interface for theme/font management
-- **Theme Scripts**: `/Users/james/.claude/devenv-setup/scripts/themes.sh` - Installation and setup
-- **Theme Configs**: `/Users/james/.claude/devenv-setup/themes/` - Theme configuration files
+- **CLI Tool**: `/Users/james/.claude/macose/bin/macose` - Main interface for theme/font management
+- **Theme Scripts**: `/Users/james/.claude/macose/scripts/themes.sh` - Installation and setup
+- **Theme Configs**: `/Users/james/.claude/macose/themes/` - Theme configuration files
 - **User Config**: `~/.config/macose/` - User-specific configurations
 
 #### Delegation Pattern:
@@ -45,13 +45,13 @@ Individual app scripts respond to environment variables:
 - `MACOSE_APPLY_FONT_ONLY="font-name"` - Apply only font settings
 
 #### Supported Applications:
-- **Ghostty** (terminal): `/Users/james/.claude/devenv-setup/scripts/apps/ghostty.sh`
-- **VSCode**: `/Users/james/.claude/devenv-setup/scripts/apps/vscode-config.sh`
-- **tmux**: `/Users/james/.claude/devenv-setup/scripts/apps/tmux.sh`
-- **Bat** (syntax highlighting): `/Users/james/.claude/devenv-setup/scripts/tools/bat.sh`
-- **Starship** (prompt): `/Users/james/.claude/devenv-setup/scripts/tools/starship.sh`
-- **FZF** (fuzzy finder): `/Users/james/.claude/devenv-setup/scripts/tools/fzf.sh`
-- **Delta** (git diff): `/Users/james/.claude/devenv-setup/scripts/tools/delta.sh`
+- **Ghostty** (terminal): `/Users/james/.claude/macose/scripts/apps/ghostty.sh`
+- **VSCode**: `/Users/james/.claude/macose/scripts/apps/vscode-config.sh`
+- **tmux**: `/Users/james/.claude/macose/scripts/apps/tmux.sh`
+- **Bat** (syntax highlighting): `/Users/james/.claude/macose/scripts/tools/bat.sh`
+- **Starship** (prompt): `/Users/james/.claude/macose/scripts/tools/starship.sh`
+- **FZF** (fuzzy finder): `/Users/james/.claude/macose/scripts/tools/fzf.sh`
+- **Delta** (git diff): `/Users/james/.claude/macose/scripts/tools/delta.sh`
 
 ### Font Management System
 Centralized font management across applications that support font configuration.
@@ -69,7 +69,7 @@ Centralized font management across applications that support font configuration.
 #### Intelligent Config Parsing
 Scripts use sophisticated parsing to update only theme/font-specific settings:
 
-**Ghostty Example** (`/Users/james/.claude/devenv-setup/scripts/apps/ghostty.sh`):
+**Ghostty Example** (`/Users/james/.claude/macose/scripts/apps/ghostty.sh`):
 ```bash
 # Theme settings that can be safely updated
 theme_settings=(
@@ -91,7 +91,7 @@ apply_ghostty_theme() {
 }
 ```
 
-**VSCode Example** (`/Users/james/.claude/devenv-setup/scripts/apps/vscode-config.sh`):
+**VSCode Example** (`/Users/james/.claude/macose/scripts/apps/vscode-config.sh`):
 ```bash
 apply_vscode_theme() {
     # Use jq for precise JSON manipulation
@@ -102,7 +102,7 @@ apply_vscode_theme() {
 }
 ```
 
-**FZF Example** (`/Users/james/.claude/devenv-setup/scripts/tools/fzf.sh`):
+**FZF Example** (`/Users/james/.claude/macose/scripts/tools/fzf.sh`):
 ```bash
 apply_fzf_theme() {
     # Use awk to remove theme blocks while preserving other configurations
@@ -168,8 +168,8 @@ The original architecture moved theme configurations into individual install scr
 ### Key Files Created/Modified:
 
 #### New Theme Files:
-- `/Users/james/.claude/devenv-setup/themes/catppuccin-mocha/starship.toml` - Creative prompt with symbols
-- `/Users/james/.claude/devenv-setup/themes/catppuccin-mocha/tmux.conf` - Developer-friendly tmux config
+- `/Users/james/.claude/macose/themes/catppuccin-mocha/starship.toml` - Creative prompt with symbols
+- `/Users/james/.claude/macose/themes/catppuccin-mocha/tmux.conf` - Developer-friendly tmux config
 
 #### Enhanced Scripts:
 All app scripts now support `MACOSE_APPLY_THEME_ONLY` and `MACOSE_APPLY_FONT_ONLY` environment variables for delegation-based updates.

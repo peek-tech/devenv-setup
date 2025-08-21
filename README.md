@@ -5,7 +5,7 @@ Automated and opinionated macOS developer environment installer with **70+ devel
 ## Quick Start
 
 ```bash
-curl -fsSL https://peek-tech.github.io/devenv-setup/install | bash
+curl -fsSL https://peek-tech.github.io/macose/install | bash
 ```
 
 The installer downloads the repository to `~/.local/share/macose` and executes installation scripts automatically based on a JSON manifest.
@@ -189,7 +189,7 @@ bash languages/nvm.sh       # Install Node.js via NVM
 Re-run the installer to update to the latest version:
 
 ```bash
-curl -fsSL https://peek-tech.github.io/devenv-setup/install | bash
+curl -fsSL https://peek-tech.github.io/macose/install | bash
 ```
 
 The installer automatically pulls the latest repository version and updates existing installations.
