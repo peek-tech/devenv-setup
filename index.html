@@ -6,84 +6,123 @@
     <title>Omamacy - macOS Developer Environment Setup</title>
     <style>
         :root {
-            /* Light theme - inspired by sushi colors */
-            --primary: #e07a5f; /* Salmon orange from sushi */
-            --primary-hover: #d45d3a; /* Darker salmon for hover */
-            --accent: #81b366; /* Wasabi green accent */
-            --bg: #fdf9f3; /* Rice/cream background */
-            --bg-secondary: #f4ebe2; /* Slightly darker cream */
-            --border: #d4c4b0; /* Light tan border */
-            --text: #2d3e2e; /* Dark nori green for text */
-            --text-secondary: #5a6b5b; /* Medium green for secondary text */
-            --success: #81b366; /* Wasabi green */
-            --warning: #daa520; /* Ginger/golden */
+            /* Light theme - based on sushi logo colors */
+            --primary: #5E8F49; /* Wasabi green from logo */
+            --primary-hover: #4a7239;
+            --accent: #e07a5f; /* Salmon accent */
+            --bg: #FDF3DD; /* Rice cream from logo */
+            --bg-secondary: #FBE8D2; /* Slightly darker cream from logo */
+            --border: #d4c4b0;
+            --text: #172016; /* Nori black from logo */
+            --text-secondary: #4a5246;
+            --success: #5E8F49;
+            --warning: #daa520;
         }
         
         @media (prefers-color-scheme: dark) {
             :root {
-                /* Dark theme - deeper sushi colors */
-                --primary: #ff8c69; /* Brighter salmon for dark mode */
-                --primary-hover: #ff6b47; /* Even brighter on hover */
-                --accent: #98d982; /* Brighter wasabi green */
-                --bg: #1a1f1a; /* Deep nori black-green */
-                --bg-secondary: #252d25; /* Slightly lighter nori */
-                --border: #3a453a; /* Dark green border */
-                --text: #f4ebe2; /* Cream text on dark */
-                --text-secondary: #c4b5a0; /* Muted cream */
-                --success: #98d982; /* Bright wasabi green */
-                --warning: #f4a460; /* Light ginger */
+                /* Dark theme - inverted sushi colors */
+                --primary: #7ab85f; /* Brighter wasabi for dark */
+                --primary-hover: #8fc970;
+                --accent: #ff8c69; /* Bright salmon accent */
+                --bg: #172016; /* Nori black from logo */
+                --bg-secondary: #252d25;
+                --border: #3a453a;
+                --text: #FDF3DD; /* Cream from logo */
+                --text-secondary: #c4b5a0;
+                --success: #7ab85f;
+                --warning: #f4a460;
             }
         }
         
-        /* Manual theme toggle button */
-        .theme-toggle {
+        /* Theme toggle slider */
+        .theme-toggle-container {
             position: fixed;
             top: 1rem;
             right: 1rem;
-            background: var(--primary);
-            color: var(--bg);
-            border: none;
-            border-radius: 50%;
-            width: 3rem;
-            height: 3rem;
-            cursor: pointer;
-            font-size: 1.5rem;
             display: flex;
             align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
+            gap: 0.5rem;
+            background: var(--bg-secondary);
+            padding: 0.5rem;
+            border-radius: 2rem;
+            border: 1px solid var(--border);
             z-index: 1000;
         }
         
-        .theme-toggle:hover {
-            background: var(--primary-hover);
-            transform: rotate(180deg);
+        .theme-toggle-label {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+        }
+        
+        .theme-toggle-input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .theme-toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--border);
+            transition: 0.4s;
+            border-radius: 30px;
+        }
+        
+        .theme-toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background: var(--bg);
+            transition: 0.4s;
+            border-radius: 50%;
+        }
+        
+        .theme-toggle-input:checked + .theme-toggle-slider {
+            background: var(--primary);
+        }
+        
+        .theme-toggle-input:checked + .theme-toggle-slider:before {
+            transform: translateX(30px);
+        }
+        
+        .theme-icon {
+            font-size: 1.2rem;
         }
         
         /* Override for manual theme selection */
         body.light-theme {
-            --primary: #e07a5f;
-            --primary-hover: #d45d3a;
-            --accent: #81b366;
-            --bg: #fdf9f3;
-            --bg-secondary: #f4ebe2;
+            --primary: #5E8F49;
+            --primary-hover: #4a7239;
+            --accent: #e07a5f;
+            --bg: #FDF3DD;
+            --bg-secondary: #FBE8D2;
             --border: #d4c4b0;
-            --text: #2d3e2e;
-            --text-secondary: #5a6b5b;
-            --success: #81b366;
+            --text: #172016;
+            --text-secondary: #4a5246;
+            --success: #5E8F49;
             --warning: #daa520;
         }
         
         body.dark-theme {
-            --primary: #ff8c69;
-            --primary-hover: #ff6b47;
-            --accent: #98d982;
-            --bg: #1a1f1a;
+            --primary: #7ab85f;
+            --primary-hover: #8fc970;
+            --accent: #ff8c69;
+            --bg: #172016;
             --bg-secondary: #252d25;
             --border: #3a453a;
-            --text: #f4ebe2;
+            --text: #FDF3DD;
             --text-secondary: #c4b5a0;
-            --success: #98d982;
+            --success: #7ab85f;
             --warning: #f4a460;
         }
         
@@ -100,6 +139,25 @@
             background: var(--bg);
         }
         
+        /* Load Google Fonts for cartoony alternatives */
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Emoji:wght@300..700&display=swap');
+        
+        /* Cartoony style for emojis and icons */
+        .emoji, .theme-icon {
+            font-family: "Noto Emoji", "Apple Color Emoji", "Segoe UI Emoji", sans-serif;
+            font-size: 1.2em;
+            font-weight: 400;
+            display: inline-block;
+        }
+        
+        /* Replace checkmarks with cartoony alternatives */
+        .feature li:before {
+            content: "🌟";
+            font-family: "Noto Emoji", "Apple Color Emoji", sans-serif;
+            font-size: 1.1em;
+            font-weight: 400;
+        }
+        
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -113,11 +171,10 @@
             margin-bottom: 3rem;
         }
         
-        .logo {
-            width: 100px;
-            height: 100px;
-            margin: 0 auto 1.5rem;
-            display: block;
+        .title-logo {
+            height: 2.2em;
+            vertical-align: middle;
+            margin-right: 0.5rem;
         }
         
         h1 {
@@ -203,7 +260,7 @@
             content: "✓";
             position: absolute;
             left: 0;
-            color: var(--accent);
+            color: var(--primary);
         }
         
         .components {
@@ -391,13 +448,17 @@
     </style>
 </head>
 <body>
-    <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
-        <span id="theme-icon">🌙</span>
-    </button>
+    <div class="theme-toggle-container">
+        <span class="theme-icon">🌞</span>
+        <label class="theme-toggle-label">
+            <input type="checkbox" class="theme-toggle-input" id="theme-toggle" onchange="toggleTheme()">
+            <span class="theme-toggle-slider"></span>
+        </label>
+        <span class="theme-icon">🌛</span>
+    </div>
     <div class="container">
         <header>
-            <img src="sushi-logo.svg" alt="Omamacy Logo" class="logo">
-            <h1>Omamacy - macOS Developer Environment Setup</h1>
+            <h1><img src="sushi-logo.svg" alt="Omamacy Logo" class="title-logo">Omamacy - macOS Developer Environment Setup</h1>
             <p class="subtitle">Automated and opinionated macOS developer environment installer with 70+ development tools and applications</p>
         </header>
         
@@ -412,7 +473,7 @@
         </div>
         
         <div class="warning-box">
-            <h3>⚠️ Interactive Installation Required</h3>
+            <h3><span class="emoji">⚠️</span> Interactive Installation Required</h3>
             <p><strong>This is NOT a hands-off installation.</strong> You must be present during the process for:</p>
             <ul>
                 <li><strong>Multiple sudo password prompts</strong> throughout installation</li>
@@ -434,7 +495,7 @@
         
         <div class="features">
             <div class="feature">
-                <h3>🎯 Complete Development Stack</h3>
+                <h3><span class="emoji">🚀</span> Complete Development Stack</h3>
                 <p>70+ tools across 11 categories</p>
                 <ul>
                     <li>21 modern CLI tools with aliases</li>
@@ -445,7 +506,7 @@
             </div>
             
             <div class="feature">
-                <h3>🎨 Catppuccin Theming</h3>
+                <h3><span class="emoji">🌈</span> Catppuccin Theming</h3>
                 <p>Unified theming across all applications</p>
                 <ul>
                     <li>CLI theme management (omamacy)</li>
@@ -456,7 +517,7 @@
             </div>
             
             <div class="feature">
-                <h3>📋 Manifest-Driven</h3>
+                <h3><span class="emoji">⚡</span> Manifest-Driven</h3>
                 <p>JSON-based execution with dependencies</p>
                 <ul>
                     <li>Smart dependency management</li>
@@ -467,7 +528,7 @@
             </div>
             
             <div class="feature">
-                <h3>🍎 macOS Optimized</h3>
+                <h3><span class="emoji">🍎</span> macOS Optimized</h3>
                 <p>Native macOS integration</p>
                 <ul>
                     <li>Homebrew package management</li>
@@ -626,7 +687,7 @@ bash languages/nvm.sh       # Install Node.js via NVM
         </div>
         
         <div style="margin: 3rem 0; padding: 2rem; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 8px;">
-            <h2 style="margin-top: 0; color: var(--primary);">🙏 Acknowledgments</h2>
+            <h2 style="margin-top: 0; color: var(--primary);"><span class="emoji">🙌</span> Acknowledgments</h2>
             <p>This project was inspired by:</p>
             <ul style="margin: 1rem 0; padding-left: 2rem;">
                 <li style="margin: 0.75rem 0;"><strong><a href="https://github.com/basecamp/omarchy">Omarchy</a></strong> - DHH's opinionated Arch Linux + Hyprland setup that inspired the single-command installation approach. Thanks to the contributors for the ideas and motivation.</li>
@@ -649,30 +710,37 @@ bash languages/nvm.sh       # Install Node.js via NVM
     <script>
         // Theme management
         function initTheme() {
+            const toggle = document.getElementById('theme-toggle');
             const savedTheme = localStorage.getItem('theme');
             const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
             
-            if (savedTheme) {
+            // If user has a saved preference, use it
+            if (savedTheme !== null) {
+                const isDark = savedTheme === 'dark';
                 document.body.className = savedTheme + '-theme';
-                updateThemeIcon(savedTheme === 'dark');
+                toggle.checked = isDark;
             } else {
-                updateThemeIcon(prefersDark);
+                // Otherwise, use system preference
+                toggle.checked = prefersDark;
+                // Don't set body class, let CSS media query handle it
             }
+            
+            // Listen for system theme changes
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+                // Only update if user hasn't set a manual preference
+                if (!localStorage.getItem('theme')) {
+                    toggle.checked = e.matches;
+                }
+            });
         }
         
         function toggleTheme() {
-            const currentTheme = document.body.className;
-            const isDark = currentTheme === 'dark-theme' || 
-                          (!currentTheme && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            const toggle = document.getElementById('theme-toggle');
+            const isDark = toggle.checked;
+            const newTheme = isDark ? 'dark' : 'light';
             
-            const newTheme = isDark ? 'light' : 'dark';
             document.body.className = newTheme + '-theme';
             localStorage.setItem('theme', newTheme);
-            updateThemeIcon(newTheme === 'dark');
-        }
-        
-        function updateThemeIcon(isDark) {
-            document.getElementById('theme-icon').textContent = isDark ? '☀️' : '🌙';
         }
         
         // Copy to clipboard
@@ -686,7 +754,7 @@ bash languages/nvm.sh       # Install Node.js via NVM
         }
         
         // Initialize theme on load
-        initTheme();
+        document.addEventListener('DOMContentLoaded', initTheme);
     </script>
 </body>
 </html>
